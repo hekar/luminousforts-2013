@@ -116,13 +116,12 @@ public:
 	virtual const CViewVectors* GetViewVectors() const;
 	const HL2MPViewVectors* GetHL2MPViewVectors() const;
 
-	virtual float GetMapRemainingTime();
-
-#ifndef CLIENT_DLL
-	virtual void CleanUpMap();
-	virtual void CheckRestartGame();
-	virtual void RestartGame();
+	float GetMapRemainingTime();
+	void CleanUpMap();
+	void CheckRestartGame();
+	void RestartGame();
 	
+#ifndef CLIENT_DLL
 	virtual Vector VecItemRespawnSpot( CItem *pItem );
 	virtual QAngle VecItemRespawnAngles( CItem *pItem );
 	virtual float	FlItemRespawnTime( CItem *pItem );
@@ -135,17 +134,19 @@ public:
 	void    CheckChatForReadySignal( CHL2MP_Player *pPlayer, const char *chatmsg );
 	const char *GetChatFormat( bool bTeamOnly, CBasePlayer *pPlayer );
 
-	virtual void	CheckAllPlayersReady( void );
 #endif
 	virtual void ClientDisconnected( edict_t *pClient );
 
-	virtual bool CheckGameOver( void );
-	virtual bool IsIntermission( void );
+	bool CheckGameOver( void );
+	bool IsIntermission( void );
 
-	virtual void PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &info );
+	void PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &info );
 
 	
-	virtual bool	IsTeamplay( void ) { return m_bTeamPlayEnabled;	}
+	bool	IsTeamplay( void ) { return m_bTeamPlayEnabled;	}
+	void	CheckAllPlayersReady( void );
+
+	virtual bool IsConnectedUserInfoChangeAllowed( CBasePlayer *pPlayer );
 	
 private:
 	
@@ -161,18 +162,6 @@ private:
 #ifndef CLIENT_DLL
 	bool m_bChangelevelDone;
 #endif
-
-protected:
-#ifdef CLIENT_DLL
-	float m_flPhaseTimeLeft;
-	int m_iCurrentPhaseID;
-	// Is this currently a Sourceforts map?
-	bool m_bSourcefortsMap;
-#else
-	CNetworkVar( float, m_flPhaseTimeLeft );
-	CNetworkVar( int, m_iCurrentPhaseID );
-	CNetworkVar( bool, m_bSourcefortsMap );
-#endif // CLIENT_DLL + else
 };
 
 inline CHL2MPRules* HL2MPRules()
