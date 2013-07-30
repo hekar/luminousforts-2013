@@ -224,5 +224,58 @@
 				"width"		"32"
 				"height"	"32"
 		}
+	"flag_icon_blue"
+		{
+				"font""Crosshairs"
+				"character""L"
+		}
+
+		"flag_icon_red"
+		{
+				"font""Crosshairs"
+				"character""L"
+		}        
+        
+		"frozen"
+		{
+				"font""Crosshairs"
+				"character""E"
+		}
+
+		"unfrozen"
+		{
+				"font""Crosshairs"
+				"character""F"
+		}
+
+		"build_phase"
+		{
+				"font""Crosshairs"
+				"character""G"
+		}
+
+		"combat_phase"
+		{
+				"font""Crosshairs"
+				"character""H"
+		}
+
+		"flag_icon_small"
+		{
+				"font" "Crosshairs"
+				"character""I"
+		}
+		
+		"game_logo"
+		{
+				"font""Crosshairs"
+				"character""a"
+		}
+		
+		"timer_icon"
+		{
+				"font""Crosshairs"
+				"character""e"
+		}
 	}	
 }

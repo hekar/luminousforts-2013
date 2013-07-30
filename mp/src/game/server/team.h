@@ -13,9 +13,12 @@
 
 #include "shareddefs.h"
 #include "utlvector.h"
+#include "playerclass_info_parse.h"
 
 class CBasePlayer;
 class CTeamSpawnPoint;
+
+typedef CUtlLinkedList< PLAYERCLASS_FILE_INFO_HANDLE, int > PlayerClassInfoList;
 
 class CTeam : public CBaseEntity
 {
@@ -27,6 +30,8 @@ public:
 	DECLARE_SERVERCLASS();
 
 	virtual void Precache( void ) { return; };
+
+	const unsigned char *GetEncryptionKey( void ) { return g_pGameRules->GetEncryptionKey(); }
 
 	virtual void Think( void );
 	virtual int  UpdateTransmitState( void );
@@ -78,6 +83,27 @@ public:
 
 	virtual int GetAliveMembers( void );
 
+	void AddCapturePoints( int Points );
+	int GetCapturePoints();
+	void SetCapturePoints( int Points );
+
+	void AddBlockCount( int Count );
+	int GetBlockCount();
+	void SetBlockCount( int Count );
+
+	void AddStolenBlockCount( int Count );
+	int GetStolenBlockCount();
+	void SetStolenBlockCount( int Count );
+
+	bool IsClassOnTeam( const char *pszClassName, int &iClassNum ) const;
+
+	FilePlayerClassInfo_t const &GetPlayerClassInfo( int iPlayerClass ) const;
+
+	virtual void LoadPlayerClassInfo( void );
+	virtual void ClearPlayerClassInfo( void );
+
+	virtual void AddPlayerClass( const char *pszClassName );
+
 public:
 	CUtlVector< CTeamSpawnPoint * > m_aSpawnPoints;
 	CUtlVector< CBasePlayer * >		m_aPlayers;
@@ -92,6 +118,12 @@ public:
 	int		m_iLastSpawn;		// Index of the last spawnpoint used
 
 	CNetworkVar( int, m_iTeamNum );			// Which team is this?
+
+private:
+	CUtlVector < PLAYERCLASS_FILE_INFO_HANDLE >		m_hPlayerClassInfoHandles;
+	CNetworkVar (int, m_iCapturePoints);
+	CNetworkVar (int, m_iBlockCount);
+	CNetworkVar (int, m_iStolenBlockCount);
 };
 
 extern CUtlVector< CTeam * > g_Teams;

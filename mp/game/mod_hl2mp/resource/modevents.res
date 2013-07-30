@@ -48,4 +48,64 @@
 		"player"	"byte"		// entindex of the player
 		"achievement"	"short"		// achievement ID
 	}
+	
+	"player_hurt"
+	{
+		"userid"	"short"   	// user ID who was hurt			
+		"attacker"	"short"	 	// user ID who attacked
+		"weapon"	"string" 	// weapon name attacker used
+	}
+	
+	"player_changeclass"
+	{
+		"userid"	"short"		// user ID who changed class
+		"class"		"short"		// class that they changed to
+	}
+
+	"spec_target_updated"
+	{
+	}
+    
+    "phase_switch"
+    {
+        "phaseid"   short   // the ID of the new phase
+    }
+    
+    "phase_time"
+    {
+        "newtime"   float   // new phase time in seconds
+    }    
+	
+	"block_frozen"
+	{
+		"userid"	short  	// user ID who froze/unfroze the block
+		"blockid"	short 	// block ID
+	}
+
+    "flag_request_drop"
+	{
+		"userid"	short  	// user ID who requested drop
+		"teamid"	short 	// teamnumber of player
+	}
+    
+    "flag_pickup"
+	{
+		"userid"	short  	// user ID who picked flag
+		"teamid"	short 	// teamnumber of player
+		"flagteamid"	short 	// teamnumber of player
+	}
+    
+	"flag_dropped"
+	{
+		"userid"	short  	// user ID who dropped flag
+		"teamid"	short 	// teamnumber of player
+		"flagteamid"	short 	// teamnumber of player
+	}
+    
+    "flag_returned"
+	{
+		"userid"	short  	// user who returned the flag
+		"teamid"	short 	// teamnumber of player
+		"flagteamid"	short 	// teamnumber of player
+	}
 }

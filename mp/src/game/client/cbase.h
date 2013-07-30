@@ -36,6 +36,7 @@ struct studiohdr_t;
 
 #include <icvar.h>
 #include <baseentity_shared.h>
+#include "Mod/SharedMod.h"
 
 
 // This is a precompiled header.  Include a bunch of common stuff.

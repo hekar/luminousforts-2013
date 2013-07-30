@@ -25,8 +25,6 @@
 
 using namespace vgui;
 
-#define TEAM_MAXCOUNT			5
-
 // id's of sections used in the scoreboard
 enum EScoreboardSections
 {

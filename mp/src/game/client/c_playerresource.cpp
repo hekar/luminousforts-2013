@@ -332,3 +332,4 @@ bool C_PlayerResource::IsConnected( int iIndex )
 	else
 		return m_bConnected[iIndex];
 }
+

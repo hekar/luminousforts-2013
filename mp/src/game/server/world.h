@@ -56,6 +56,7 @@ private:
 	DECLARE_DATADESC();
 
 	string_t m_iszChapterTitle;
+	int m_iGameMode;
 
 	CNetworkVar( float, m_flWaveHeight );
 	CNetworkVector( m_WorldMins );

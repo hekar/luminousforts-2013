@@ -77,14 +77,9 @@ CGameRulesRegister* CGameRulesRegister::FindByName( const char *pName )
 	// On the client, we respond to string table changes on the server.
 	void InstallStringTableCallback_GameRules()
 	{
-		if ( !g_StringTableGameRules )
-		{
-			g_StringTableGameRules = networkstringtable->FindTable( GAMERULES_STRINGTABLE_NAME );
-			if ( g_StringTableGameRules )
-			{
-				g_StringTableGameRules->SetStringChangedCallback( NULL, OnGameRulesCreationStringChanged );
-			}
-		}
+		g_StringTableGameRules = networkstringtable->FindTable( GAMERULES_STRINGTABLE_NAME );
+		if ( g_StringTableGameRules )
+			g_StringTableGameRules->SetStringChangedCallback( NULL, OnGameRulesCreationStringChanged );
 	}
 
 #else

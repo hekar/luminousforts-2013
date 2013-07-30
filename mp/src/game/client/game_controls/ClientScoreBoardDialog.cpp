@@ -66,7 +66,7 @@ CClientScoreBoardDialog::CClientScoreBoardDialog(IViewPort *pViewPort) : Editabl
 	m_pPlayerList = new SectionedListPanel(this, "PlayerList");
 	m_pPlayerList->SetVerticalScrollbar(false);
 
-	LoadControlSettings("Resource/UI/ScoreBoard.res");
+	LoadControlSettings("resource/ui/ScoreBoard.res");
 	m_iDesiredHeight = GetTall();
 	m_pPlayerList->SetVisible( false ); // hide this until we load the images in applyschemesettings
 

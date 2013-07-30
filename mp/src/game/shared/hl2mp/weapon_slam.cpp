@@ -26,6 +26,8 @@
 #include "tier0/memdbgon.h"
 
 #define	SLAM_PRIMARY_VOLUME		450
+#define SLAM_REFIRE_DELAY		0.05f
+#define SLAM_ATTACH_DELAY		1.15f
 
 IMPLEMENT_NETWORKCLASS_ALIASED( Weapon_SLAM, DT_Weapon_SLAM )
 
@@ -69,8 +71,8 @@ END_PREDICTION_DATA()
 
 #endif
 
-LINK_ENTITY_TO_CLASS( weapon_slam, CWeapon_SLAM );
-PRECACHE_WEAPON_REGISTER(weapon_slam);
+LINK_ENTITY_TO_CLASS( weapon_hl2_slam, CWeapon_SLAM );
+PRECACHE_WEAPON_REGISTER(weapon_hl2_slam);
 
 #ifndef CLIENT_DLL
 
@@ -203,7 +205,7 @@ void CWeapon_SLAM::PrimaryAttack( void )
 		return;
 	}
 
-	if (pOwner->GetAmmoCount(m_iSecondaryAmmoType) <= 0)
+	if (pOwner->GetAmmoCount(m_iPrimaryAmmoType) <= 0)
 	{
 		return;
 	}
@@ -327,8 +329,8 @@ void CWeapon_SLAM::StartSatchelDetonate()
 	}
 	SatchelDetonate();
 
-	m_flNextPrimaryAttack	= gpGlobals->curtime + SequenceDuration();
-	m_flNextSecondaryAttack = gpGlobals->curtime + SequenceDuration();
+	// needs a higher delay on all of these, a minimum time really - to elimiate refires.
+	m_flNextPrimaryAttack	= m_flNextSecondaryAttack = SLAM_REFIRE_DELAY + gpGlobals->curtime + SequenceDuration();
 }
 
 
@@ -379,7 +381,7 @@ void CWeapon_SLAM::TripmineAttach( void )
 
 #endif
 
-			pOwner->RemoveAmmo( 1, m_iSecondaryAmmoType );
+			pOwner->RemoveAmmo( 1, m_iPrimaryAmmoType );
 		}
 	}
 }
@@ -444,8 +446,8 @@ void CWeapon_SLAM::StartTripmineAttach( void )
 		}
 	}
 	
-	m_flNextPrimaryAttack	= gpGlobals->curtime + SequenceDuration();
-	m_flNextSecondaryAttack	= gpGlobals->curtime + SequenceDuration();
+	// needs a higher delay on all of these, a minimum time really - to elimiate refires.
+	m_flNextPrimaryAttack	= m_flNextSecondaryAttack = SLAM_ATTACH_DELAY + gpGlobals->curtime + SequenceDuration();
 //	SetWeaponIdleTime( gpGlobals->curtime + SequenceDuration() );
 }
 
@@ -797,7 +799,7 @@ void CWeapon_SLAM::Weapon_Switch( void )
 
 #ifndef CLIENT_DLL
 	// If not armed and have no ammo
-	if (!m_bDetonatorArmed && pOwner->GetAmmoCount(m_iSecondaryAmmoType) <= 0)
+	if (!m_bDetonatorArmed && pOwner->GetAmmoCount(m_iPrimaryAmmoType) <= 0)
 	{
 		pOwner->ClearActiveWeapon();
 	}
@@ -861,7 +863,7 @@ void CWeapon_SLAM::WeaponIdle( void )
 		else if ( m_bNeedReload )
 		{	
 			// If owner had ammo draw the correct SLAM type
-			if (pOwner->GetAmmoCount(m_iSecondaryAmmoType) > 0)
+			if (pOwner->GetAmmoCount(m_iPrimaryAmmoType) > 0)
 			{
 				switch( m_tSlamState)
 				{
@@ -923,7 +925,7 @@ void CWeapon_SLAM::WeaponIdle( void )
 #endif
 			}
 		}
-		else if (pOwner->GetAmmoCount(m_iSecondaryAmmoType) <= 0)
+		else if (pOwner->GetAmmoCount(m_iPrimaryAmmoType) <= 0)
 		{
 #ifndef CLIENT_DLL
 			pOwner->Weapon_Drop( this );
@@ -1000,7 +1002,7 @@ bool CWeapon_SLAM::Deploy( void )
 	m_bNeedReload = false;
 	if (m_bDetonatorArmed)
 	{
-		if (pOwner->GetAmmoCount(m_iSecondaryAmmoType) <= 0)
+		if (pOwner->GetAmmoCount(m_iPrimaryAmmoType) <= 0)
 		{
 			iActivity = ACT_SLAM_DETONATOR_DRAW;
 			m_bNeedReload = true;

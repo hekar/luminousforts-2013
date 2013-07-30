@@ -53,7 +53,7 @@ static PLAYERCLASS_FILE_INFO_HANDLE FindPlayerClassInfoSlot( const char *name )
 		return lookup;
 	}
 
-	FilePlayerClassInfo_t *insert = CreatePlayerClassInfo();
+	FilePlayerClassInfo_t *insert = new FilePlayerClassInfo_t();
 
 	lookup = m_PlayerClassInfoDatabase.Insert( name, insert );
 	Assert( lookup != m_PlayerClassInfoDatabase.InvalidIndex() );
@@ -77,7 +77,7 @@ static FilePlayerClassInfo_t gNullPlayerClassInfo;
 // Input  : handle - 
 // Output : FilePlayerClassInfo_t
 //-----------------------------------------------------------------------------
-FilePlayerClassInfo_t *GetFilePlayerClassInfoFromHandle( PLAYERCLASS_FILE_INFO_HANDLE handle )
+CPlayerClassInfo *GetFilePlayerClassInfoFromHandle( PLAYERCLASS_FILE_INFO_HANDLE handle )
 {
 	if ( handle == GetInvalidPlayerClassInfoHandle() )
 	{

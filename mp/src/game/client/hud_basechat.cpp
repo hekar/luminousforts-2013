@@ -1325,10 +1325,10 @@ Color CBaseHudChat::GetTextColorForClient( TextColor colorNum, int clientIndex )
 
 	case COLOR_ACHIEVEMENT:
 		{
-			vgui::IScheme *pSourceScheme = vgui::scheme()->GetIScheme( vgui::scheme()->GetScheme( "SourceScheme" ) ); 
-			if ( pSourceScheme )
+			vgui::IScheme *psourcescheme = vgui::scheme()->GetIScheme( vgui::scheme()->GetScheme( "sourcescheme" ) ); 
+			if ( psourcescheme )
 			{
-				c = pSourceScheme->GetColor( "SteamLightGreen", GetBgColor() );
+				c = psourcescheme->GetColor( "SteamLightGreen", GetBgColor() );
 			}
 			else
 			{

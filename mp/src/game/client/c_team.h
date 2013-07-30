@@ -14,6 +14,7 @@
 #include "shareddefs.h"
 #include "utlvector.h"
 #include "client_thinklist.h"
+#include "playerclass_info_parse.h"
 
 
 class C_BasePlayer;
@@ -30,6 +31,8 @@ public:
 
 	virtual void	PreDataUpdate( DataUpdateType_t updateType );
 
+	const unsigned char *GetEncryptionKey( void ) { return g_pGameRules->GetEncryptionKey(); }
+
 	// Data Handling
 	virtual char	*Get_Name( void );
 	virtual int		Get_Score( void );
@@ -41,6 +44,23 @@ public:
 	virtual bool	ContainsPlayer( int iPlayerIndex );
 	C_BasePlayer*	GetPlayer( int idx );
 
+	virtual void AddPlayerClass( const char *pszClassName );
+
+	virtual void LoadPlayerClassInfo( void ) { };
+	virtual void ClearPlayerClassInfo( void );
+
+	virtual const CPlayerClassInfo &GetPlayerClassInfo( int iPlayerClass ) const;
+
+	bool IsClassOnTeam( const char *pszClassName, int &iClassNum ) const;
+	bool IsClassOnTeam( int iClassNum ) const;
+	int GetNumPlayerClasses( void ) { return m_hPlayerClassInfoHandles.Count(); }
+
+	int CountPlayersOfThisClass( int iPlayerClass );
+
+	int GetCapturePoints();
+	int GetBlockCount();
+	int GetStolenBlockCount();
+
 	// for shared code, use the same function name
 	virtual int		GetNumPlayers( void ) { return Get_Number_Players(); }
 
@@ -49,10 +69,6 @@ public:
 	int		GetRoundsWon(void) { return m_iRoundsWon; }
 
 	void	RemoveAllPlayers();
-
-
-// IClientThinkable overrides.
-public:
 
 	virtual	void				ClientThink();
 
@@ -70,6 +86,12 @@ public:
 	int		m_iPing;
 	int		m_iPacketloss;
 	int		m_iTeamNum;
+
+private:
+	CUtlVector < PLAYERCLASS_FILE_INFO_HANDLE >		m_hPlayerClassInfoHandles;
+	CNetworkVar (int, m_iCapturePoints);
+	CNetworkVar (int, m_iBlockCount);
+	CNetworkVar (int, m_iStolenBlockCount);
 };
 
 

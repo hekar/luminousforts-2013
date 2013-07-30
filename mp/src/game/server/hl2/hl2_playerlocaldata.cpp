@@ -28,6 +28,8 @@ BEGIN_SEND_TABLE_NOBASE( CHL2PlayerLocalData, DT_HL2Local )
 	SendPropBool( SENDINFO(m_bDisplayReticle) ),
 	SendPropBool( SENDINFO(m_bStickyAutoAim) ),
 	SendPropBool( SENDINFO(m_bAutoAimTarget) ),
+	SendPropInt( SENDINFO(m_iPlayerClass), 8, SPROP_UNSIGNED ),
+	SendPropInt( SENDINFO(m_iDesiredPlayerClass), 8, SPROP_UNSIGNED ),
 #ifdef HL2_EPISODIC
 	SendPropFloat( SENDINFO(m_flFlashBattery) ),
 	SendPropVector( SENDINFO(m_vecLocatorOrigin) ),
@@ -62,6 +64,8 @@ CHL2PlayerLocalData::CHL2PlayerLocalData()
 	m_hLadder.Set(NULL);
 	m_vecAutoAimPoint.GetForModify().Init();
 	m_bDisplayReticle = false;
+	m_iPlayerClass = PLAYERCLASS_UNDEFINED;
+	m_iDesiredPlayerClass = PLAYERCLASS_UNDEFINED;
 #ifdef HL2_EPISODIC
 	m_flFlashBattery = 0.0f;
 #endif

@@ -19,6 +19,9 @@
 #include "hl2mptextwindow.h"
 #include "ienginevgui.h"
 
+#include "Mod/GUI_ClassMenu.h"
+#include "Mod/GUI_TeamMenu.h"
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 //-----------------------------------------------------------------------------
@@ -84,6 +87,26 @@ IViewPortPanel* CHudViewport::CreatePanelByName( const char *szPanelName )
 	else if ( Q_strcmp(PANEL_SPECGUI, szPanelName) == 0 )
 	{
 		newpanel = new CHL2MPSpectatorGUI( this );	
+		return newpanel;
+	}
+	else if ( Q_strcmp(PANEL_TEAM, szPanelName) == 0 )
+	{
+		newpanel = new CModTeamMenu( this );
+		return newpanel;
+	}
+	else if ( Q_strcmp(PANEL_CLASS_RED, szPanelName) == 0 )
+	{
+		newpanel = new CModClassMenu_Red( this );
+		return newpanel;
+	}
+	else if ( Q_strcmp(PANEL_CLASS_BLUE, szPanelName) == 0 )
+	{
+		newpanel = new CModClassMenu_Blue( this );
+		return newpanel;
+	}
+	else if ( Q_strcmp(PANEL_CLASS, szPanelName) == 0 )
+	{
+		newpanel = new CModClassMenu_NoTeams( this );
 		return newpanel;
 	}
 

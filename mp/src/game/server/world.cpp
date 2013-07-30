@@ -32,6 +32,8 @@
 #include "particle_parse.h"
 #include "globalstate.h"
 
+#include "Mod/GameRuleMaker.h"
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -378,6 +380,7 @@ BEGIN_DATADESC( CWorld )
 	DEFINE_KEYFIELD( m_iszChapterTitle, FIELD_STRING, "chaptertitle" ),
 	DEFINE_KEYFIELD( m_bStartDark,		FIELD_BOOLEAN, "startdark" ),
 	DEFINE_KEYFIELD( m_bDisplayTitle,	FIELD_BOOLEAN, "gametitle" ),
+	DEFINE_KEYFIELD( m_iGameMode, FIELD_INTEGER, "gamemode" ),
 	DEFINE_FIELD( m_WorldMins, FIELD_VECTOR ),
 	DEFINE_FIELD( m_WorldMaxs, FIELD_VECTOR ),
 #ifdef _X360
@@ -593,9 +596,7 @@ void CWorld::Precache( void )
 		delete g_pGameRules;
 	}
 
-	InstallGameRules();
-	Assert( g_pGameRules );
-	g_pGameRules->Init();
+	CreateGameRule( ( GameModeID_enum )m_iGameMode );
 
 	CSoundEnt::InitSoundEnt();
 

@@ -25,6 +25,7 @@
 	
 	#include "baseentity.h"
 	#include "recipientfilter.h"
+	#include "Mod/CSpawnPoint.h"
 
 #endif
 
@@ -176,13 +177,20 @@ public:
 	//Allow thirdperson camera.
 	virtual bool AllowThirdPersonCamera( void ) { return false; }
 
-	virtual void ClientCommandKeyValues( edict_t *pEntity, KeyValues *pKeyValues ) {} 
+	virtual void ClientCommandKeyValues( edict_t *pEntity, KeyValues *pKeyValues ) {}
 
 	// IsConnectedUserInfoChangeAllowed allows to override FCVAR_NOT_CONNECTED rule when
 	// player is on team spectator or team unassigned for example
 	// Default and previous engine implementation will never allow FCVAR_NOT_CONNECTED cvars
 	// to be changed while connected to a game server
 	virtual bool IsConnectedUserInfoChangeAllowed( CBasePlayer *pPlayer ) { return !IsMultiplayer(); }
+
+
+	virtual int GetGameMode( void ) { return GAMEMODE_NOGAME; }
+	virtual int GetGameModeMask( void ) { return GAMEMODE_NOGAME; }
+
+	virtual char **GetClassNames( int TeamNum );
+	virtual int GetClassCount( void );
 
 #ifdef CLIENT_DLL
 
@@ -260,7 +268,7 @@ public:
 	virtual bool IsDeathmatch( void ) = 0;//is this a deathmatch game?
 	virtual bool IsTeamplay( void ) { return FALSE; };// is this deathmatch game being played with team rules?
 	virtual bool IsCoOp( void ) = 0;// is this a coop game?
-	virtual const char *GetGameDescription( void ) { return "Half-Life 2"; }  // this is the game name that gets seen in the server browser
+	virtual const char *GetGameDescription( void ) { return "LuminousForts Subversion"; }  // this is the game name that gets seen in the server browser
 	
 // Client connection/disconnection
 	virtual bool ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char *reject, int maxrejectlen ) = 0;// a client just connected to the server (player hasn't spawned yet)
