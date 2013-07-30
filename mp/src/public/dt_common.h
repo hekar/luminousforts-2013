@@ -143,6 +143,7 @@ public:
 					switch ( m_Type )
 					{
 						case DPT_Int : 
+							#pragma GCC diagnostic ignored "-Wformat"
 							Q_snprintf( text, sizeof(text), "%i", m_Int );
 							break;
 						case DPT_Float :

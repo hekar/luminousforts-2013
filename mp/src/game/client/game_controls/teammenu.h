@@ -24,8 +24,6 @@ namespace vgui
 	class RichText;
 	class HTML;
 }
-class TeamFortressViewport;
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Displays the team menu

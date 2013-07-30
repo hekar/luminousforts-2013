@@ -33,6 +33,21 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
+#define GAMERULES_CLASSCOUNT 1 + 1 // For NULL termination
+
+static char *g_GameRules_Classes_Blue [GAMERULES_CLASSCOUNT] =
+{
+	"default_blue",
+	NULL
+};
+
+static char *g_GameRules_Classes_Red [GAMERULES_CLASSCOUNT] =
+{
+	"default_red",
+	NULL
+};
+
+
 
 ConVar g_Language( "g_Language", "0", FCVAR_REPLICATED );
 ConVar sk_autoaim_mode( "sk_autoaim_mode", "1", FCVAR_ARCHIVE | FCVAR_REPLICATED );
@@ -650,6 +665,27 @@ CGameRules::~CGameRules()
 {
 	Assert( g_pGameRules == this );
 	g_pGameRules = NULL;
+}
+
+char **CGameRules::GetClassNames( int TeamNum )
+{
+	Assert( TeamNum == SDK_TEAM_RED || TeamNum == SDK_TEAM_BLUE );
+	if (TeamNum == SDK_TEAM_RED)
+	{
+		return g_GameRules_Classes_Red;
+	}
+	else if (TeamNum == SDK_TEAM_BLUE)
+	{
+		return g_GameRules_Classes_Blue;
+	}
+	
+	Msg( "Bad Team Request\n" );
+	return NULL;
+}
+
+int CGameRules::GetClassCount( void )
+{
+	return GAMERULES_CLASSCOUNT;
 }
 
 bool CGameRules::SwitchToNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon )

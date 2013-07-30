@@ -42,6 +42,8 @@ vgui::IInputInternal *g_InputInternal = NULL;
 
 #include <vgui_controls/Controls.h>
 
+#include "Mod/BaseGUI.h"
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -220,6 +222,9 @@ void VGui_CreateGlobalPanels( void )
 #ifdef SIXENSE
 	g_pSixenseInput->CreateGUI( gameToolParent );
 #endif
+
+	g_pGUIManager = new CGUILoader();
+	g_pGUIManager->InitPanels();
 }
 
 void VGui_Shutdown()
@@ -240,6 +245,11 @@ void VGui_Shutdown()
 	messagechars->Destroy();
 	loadingdisc->Destroy();
 	internalCenterPrint->Destroy();
+
+	g_pGUIManager->DestroyPanels();
+
+	delete g_pGUIManager;
+
 
 	if ( g_pClientMode )
 	{

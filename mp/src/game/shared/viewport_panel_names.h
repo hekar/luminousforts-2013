@@ -18,6 +18,8 @@
 #define PANEL_SCOREBOARD	"scores"
 #define PANEL_OVERVIEW		"overview"
 #define PANEL_CLASS			"class"
+#define PANEL_CLASS_RED		"class_red"
+#define PANEL_CLASS_BLUE	"class_blue"
 #define PANEL_TEAM			"team"
 #define PANEL_SPECGUI		"specgui"	// passive spectator elements (top/bottom bars)
 #define PANEL_SPECMENU		"specmenu"  // active spectator elements (options menus etc)

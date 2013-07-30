@@ -380,6 +380,9 @@ public:
 	// data description
 	DECLARE_DATADESC();
 	
+	virtual bool IsBlock() { return false; }
+	virtual bool IsFlag() { return false; }
+
 	// memory handling
     void *operator new( size_t stAllocateBlock );
     void *operator new( size_t stAllocateBlock, int nBlockUse, const char *pFileName, int nLine );

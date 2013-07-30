@@ -46,6 +46,12 @@ void RegisterUserMessages( void )
 	usermessages->Register( "AchievementEvent", -1 );
 	usermessages->Register( "UpdateJalopyRadar", -1 );
 
+	usermessages->Register( "NewTime", -1 );
+	usermessages->Register( "GamePhase", -1 );
+	usermessages->Register( "BlockFreeze", -1 );
+	usermessages->Register( "UpdateFreezeProgress", -1 );
+	usermessages->Register( "UpdateFlagCarrier", -1 );
+
 #ifndef _X360
 	// NVNT register haptic user messages
 	RegisterHapticMessages();

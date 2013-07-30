@@ -184,6 +184,8 @@ public:
 	DECLARE_CLIENTCLASS();
 	DECLARE_PREDICTABLE();
 
+	virtual bool IsBlock() { return false; }
+
 									C_BaseEntity();
 	virtual							~C_BaseEntity();
 

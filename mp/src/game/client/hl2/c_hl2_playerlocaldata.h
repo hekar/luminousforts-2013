@@ -41,6 +41,8 @@ public:
 	bool	m_bDisplayReticle;
 	bool	m_bStickyAutoAim;
 	bool	m_bAutoAimTarget;
+	int 	m_iPlayerClass;
+	int		m_iDesiredPlayerClass;
 #ifdef HL2_EPISODIC
 	float	m_flFlashBattery;
 	Vector	m_vecLocatorOrigin;

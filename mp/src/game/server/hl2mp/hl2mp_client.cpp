@@ -28,6 +28,8 @@
 
 #include "tier0/vprof.h"
 
+#include "Mod/CModPlayer.h"
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -86,8 +88,7 @@ called each time a player is spawned into the game
 */
 void ClientPutInServer( edict_t *pEdict, const char *playername )
 {
-	// Allocate a CBaseTFPlayer for pev, and call spawn
-	CHL2MP_Player *pPlayer = CHL2MP_Player::CreatePlayer( "player", pEdict );
+	CModPlayer *pPlayer = CModPlayer::CreatePlayer( "player", pEdict );
 	pPlayer->SetPlayerName( playername );
 }
 

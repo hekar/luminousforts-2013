@@ -6,8 +6,9 @@
 
 #ifndef WEAPON_PHYSCANNON_H
 #define WEAPON_PHYSCANNON_H
+
 #ifdef _WIN32
-#pragma once
+	#pragma once
 #endif
 
 

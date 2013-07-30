@@ -70,7 +70,7 @@ CClassMenu::CClassMenu(IViewPort *pViewPort) : Frame(NULL, PANEL_CLASS)
 	// info window about this class
 	m_pPanel = new EditablePanel( this, "ClassInfo" );
 
-	LoadControlSettings( "Resource/UI/ClassMenu.res" );
+	LoadControlSettings( "resource/ui/Classmenu.res" );
 }
 
 //-----------------------------------------------------------------------------

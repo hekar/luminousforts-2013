@@ -37,7 +37,6 @@ extern IGameUIFuncs *gameuifuncs; // for key binding details
 using namespace vgui;
 
 void UpdateCursorState();
-// void DuckMessage(const char *str);
 
 // helper function
 const char *GetStringTeamColor( int i )
@@ -87,12 +86,9 @@ CTeamMenu::CTeamMenu(IViewPort *pViewPort) : Frame(NULL, PANEL_TEAM )
 
 	// info window about this map
 	m_pMapInfo = new RichText( this, "MapInfo" );
-
-#if defined( ENABLE_HTML_WINDOW )
 	m_pMapInfoHTML = new HTML( this, "MapInfoHTML");
-#endif
 
-	LoadControlSettings("Resource/UI/TeamMenu.res");
+	LoadControlSettings("resource/ui/Teammenu.res");
 	InvalidateLayout();
 
 	m_szMapName[0] = 0;
@@ -221,10 +217,9 @@ void CTeamMenu::LoadMapPage( const char *mapName )
 
 		m_pMapInfo->SetVisible( false );
 
-#if defined( ENABLE_HTML_WINDOW )
 		m_pMapInfoHTML->SetVisible( true );
 		m_pMapInfoHTML->OpenURL( localURL, NULL );
-#endif
+
 		InvalidateLayout();
 		Repaint();		
 
@@ -233,10 +228,7 @@ void CTeamMenu::LoadMapPage( const char *mapName )
 	else
 	{
 		m_pMapInfo->SetVisible( true );
-
-#if defined( ENABLE_HTML_WINDOW )
 		m_pMapInfoHTML->SetVisible( false );
-#endif
 	}
 
 	Q_snprintf( mapRES, sizeof( mapRES ), "maps/%s.txt", mapName);

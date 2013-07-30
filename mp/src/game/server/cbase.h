@@ -57,6 +57,7 @@
 
 // Shared header between the client DLL and the game DLLs
 #include "shareddefs.h"
+#include "Mod/SharedMod.h"
 #include "ehandle.h"
 
 // app

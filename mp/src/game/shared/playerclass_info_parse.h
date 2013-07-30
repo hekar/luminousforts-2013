@@ -80,5 +80,6 @@ extern KeyValues* ReadEncryptedKVPlayerClassFile( IFileSystem *filesystem, const
 // Each game implements this. It can return a derived class and override Parse() if it wants.
 extern FilePlayerClassInfo_t* CreatePlayerClassInfo();
 
+typedef FilePlayerClassInfo_t CPlayerClassInfo;
 
 #endif // PLAYERCLASS_INFO_PARSE_H

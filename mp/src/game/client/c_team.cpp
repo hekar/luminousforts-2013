@@ -6,6 +6,9 @@
 //=============================================================================//
 #include "cbase.h"
 #include "c_team.h"
+#include "c_playerresource.h"
+
+#include "Mod/C_ModPlayer.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -34,6 +37,9 @@ IMPLEMENT_CLIENTCLASS_DT_NOBASE(C_Team, DT_Team, CTeam)
 	RecvPropInt( RECVINFO(m_iScore)),
 	RecvPropInt( RECVINFO(m_iRoundsWon) ),
 	RecvPropString( RECVINFO(m_szTeamname)),
+	RecvPropInt( RECVINFO( m_iCapturePoints ) ),
+	RecvPropInt( RECVINFO( m_iBlockCount ) ),
+	RecvPropInt( RECVINFO( m_iStolenBlockCount ) ),
 	
 	RecvPropArray2( 
 		RecvProxyArrayLength_PlayerArray,
@@ -171,6 +177,107 @@ bool C_Team::ContainsPlayer( int iPlayerIndex )
 
 void C_Team::ClientThink()
 {
+}
+
+
+void C_Team::AddPlayerClass( const char *szClassName )
+{
+	PLAYERCLASS_FILE_INFO_HANDLE hPlayerClassInfo;
+
+	if ( ReadPlayerClassDataFromFileForSlot( filesystem, szClassName, &hPlayerClassInfo, GetEncryptionKey() ) )
+	{
+		m_hPlayerClassInfoHandles.AddToTail( hPlayerClassInfo );
+	}
+	else
+	{
+		Assert( !"missing playerclass script file" );
+		Msg( "Missing playerclass script file for class: %s\n", szClassName );
+	}
+}
+
+void C_Team::ClearPlayerClassInfo( void )
+{
+	m_hPlayerClassInfoHandles.RemoveAll();
+}
+
+const CPlayerClassInfo &C_Team::GetPlayerClassInfo( int iPlayerClass ) const
+{
+	Assert( iPlayerClass >= 0 && iPlayerClass < m_hPlayerClassInfoHandles.Count() );
+
+	const CPlayerClassInfo *pPlayerClassInfo = GetFilePlayerClassInfoFromHandle( m_hPlayerClassInfoHandles[iPlayerClass] );
+	const CPlayerClassInfo *info;
+
+#ifdef _DEBUG
+	info = dynamic_cast< const CPlayerClassInfo* >( pPlayerClassInfo );
+	Assert( info );
+#else
+	info = static_cast< const CPlayerClassInfo* >( pPlayerClassInfo );
+#endif
+
+	return *info;
+}
+
+bool C_Team::IsClassOnTeam( const char *pszClassName, int &iClassNum ) const
+{
+	iClassNum = PLAYERCLASS_UNDEFINED;
+
+	// Random is always on every team
+	if( FStrEq( pszClassName, "cls_random" ) )
+	{
+		iClassNum = PLAYERCLASS_RANDOM;
+		return true;
+	}
+
+	for( int i=0;i<m_hPlayerClassInfoHandles.Count(); i++ )
+	{
+		FilePlayerClassInfo_t *pPlayerClassInfo = GetFilePlayerClassInfoFromHandle( m_hPlayerClassInfoHandles[i] );
+
+		if( stricmp( pszClassName, pPlayerClassInfo->m_szSelectCmd ) == 0 )
+		{
+			iClassNum = i;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool C_Team::IsClassOnTeam( int iClassNum ) const
+{
+	return ( iClassNum >= 0 && iClassNum < m_hPlayerClassInfoHandles.Count() );
+}
+
+int C_Team::CountPlayersOfThisClass( int iPlayerClass )
+{
+	int count = 0;
+
+	C_PlayerResource *playerResource = dynamic_cast<C_PlayerResource *>(g_PR);
+
+	Assert( playerResource );
+
+	for ( int i=0;i<Get_Number_Players();i++ )
+	{
+		C_ModPlayer *player = ToModPlayer( GetPlayer(i) );
+		if ( iPlayerClass == player->m_HL2Local.m_iPlayerClass )
+			count++;
+	}
+
+	return count;
+}
+
+int C_Team::GetCapturePoints()
+{
+	return m_iCapturePoints;
+}
+
+int C_Team::GetBlockCount()
+{
+	return m_iBlockCount;
+}
+
+int C_Team::GetStolenBlockCount()
+{
+	return m_iStolenBlockCount;
 }
 
 

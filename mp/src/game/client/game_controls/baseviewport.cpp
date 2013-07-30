@@ -231,8 +231,10 @@ void CBaseViewport::CreateDefaultPanels( void )
 	AddNewPanel( CreatePanelByName( PANEL_SPECGUI ), "PANEL_SPECGUI" );
 	AddNewPanel( CreatePanelByName( PANEL_SPECMENU ), "PANEL_SPECMENU" );
 	AddNewPanel( CreatePanelByName( PANEL_NAV_PROGRESS ), "PANEL_NAV_PROGRESS" );
-	// AddNewPanel( CreatePanelByName( PANEL_TEAM ), "PANEL_TEAM" );
-	// AddNewPanel( CreatePanelByName( PANEL_CLASS ), "PANEL_CLASS" );
+	AddNewPanel( CreatePanelByName( PANEL_TEAM ), "PANEL_TEAM" );
+	AddNewPanel( CreatePanelByName( PANEL_CLASS ), "PANEL_CLASS" );
+	AddNewPanel( CreatePanelByName( PANEL_CLASS_BLUE ), "PANEL_CLASS_BLUE" );
+	AddNewPanel( CreatePanelByName( PANEL_CLASS_RED ), "PANEL_CLASS_RED" );
 	// AddNewPanel( CreatePanelByName( PANEL_BUY ), "PANEL_BUY" );
 #endif
 }

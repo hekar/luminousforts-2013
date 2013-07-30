@@ -35,6 +35,9 @@ POSTBUILDCOMMAND = true
 
 
 
+
+# List more files: ls -1 *.cpp | awk '{print "Mod/" $1,"\\\\"}
+# ls -1 *.cpp | awk '{print "../../game/shared/Mod/" $1,"\\\\"}
 CPPFILES= \
     ../../common/compiledcaptionswap.cpp \
     ../../common/language.cpp \
@@ -148,6 +151,7 @@ CPPFILES= \
     ../../game/shared/voice_banmgr.cpp \
     ../../game/shared/voice_status.cpp \
     ../../game/shared/weapon_parse.cpp \
+    ../../game/shared/playerclass_info_parse.cpp \
     ../../public/bone_accessor.cpp \
     ../../public/bone_setup.cpp \
     ../../public/client_class.cpp \
@@ -368,6 +372,7 @@ CPPFILES= \
     game_controls/NavProgress.cpp \
     game_controls/SpectatorGUI.cpp \
     game_controls/teammenu.cpp \
+    game_controls/classmenu.cpp \
     game_controls/vguitextwindow.cpp \
     geiger.cpp \
     glow_outline_effect.cpp \
@@ -553,6 +558,109 @@ CPPFILES= \
     weapons_resource.cpp \
     weapon_selection.cpp \
     WorldDimsProxy.cpp \
+    ../../game/shared/Mod/BalanceMacros.cpp \
+    ../../game/shared/Mod/CBasePlayerClass.cpp \
+    ../../game/shared/Mod/ClassicCommands.cpp \
+    ../../game/shared/Mod/ClassicGameRules.cpp \
+    ../../game/shared/Mod/Classic_SharedDefs.cpp \
+    ../../game/shared/Mod/CSpawnDoorBasic.cpp \
+    ../../game/shared/Mod/CustomCvars.cpp \
+    ../../game/shared/Mod/CustomGameRules.cpp \
+    ../../game/shared/Mod/CustomManagerGameRules.cpp \
+    ../../game/shared/Mod/Dom_CaptureArea.cpp \
+    ../../game/shared/Mod/Dom_GameRules.cpp \
+    ../../game/shared/Mod/Dom_SharedDefs.cpp \
+    ../../game/shared/Mod/FileConfig.cpp \
+    ../../game/shared/Mod/MiscCvars.cpp \
+    ../../game/shared/Mod/SF132_GameRules.cpp \
+    ../../game/shared/Mod/SF132_SharedDefs.cpp \
+    ../../game/shared/Mod/SF132_Spawnpoint.cpp \
+    ../../game/shared/Mod/SF132_WPN_Freezer.cpp \
+    ../../game/shared/Mod/SF132_WPN_Physcannon.cpp \
+    ../../game/shared/Mod/SF194_SpawnPoint.cpp \
+    ../../game/shared/Mod/SharedGlobals.cpp \
+    ../../game/shared/Mod/SharedMessage.cpp \
+    ../../game/shared/Mod/SharedModCvars.cpp \
+    ../../game/shared/Mod/SharedModDefs.cpp \
+    ../../game/shared/Mod/StallableTimer.cpp \
+    ../../game/shared/Mod/WPN_BuildCannon.cpp \
+    ../../game/shared/Mod/WPN_BuildTool.cpp \
+    ../../game/shared/Mod/WPN_CombatCannon.cpp \
+    ../../game/shared/Mod/WPN_Railgun.cpp \
+    Mod/AutoUpdateCheck_Thread.cpp \
+    Mod/AutoUpdate_Thread.cpp \
+    Mod/BaseGUI.cpp \
+    Mod/C_BlockBase.cpp \
+    Mod/C_CustomBlockManager.cpp \
+    Mod/C_CustomHudControl.cpp \
+    Mod/C_Dom_CaptureZone.cpp \
+    Mod/C_FlagBase.cpp \
+    Mod/ClientCommands.cpp \
+    Mod/ClientGlobals.cpp \
+    Mod/C_ModPlayer.cpp \
+    Mod/CModPlayerMovement.cpp \
+    Mod/CURL.cpp \
+    Mod/GUI_BinkVideoPlayer.cpp \
+    Mod/GUI_BlockSpawn.cpp \
+    Mod/GUI_Community.cpp \
+    Mod/GUI_CreditsWindow.cpp \
+    Mod/GUI_Editor.cpp \
+    Mod/GUI_JoinChat.cpp \
+    Mod/GUI_ListenServer.cpp \
+    Mod/GUI_MainMenu.cpp \
+    Mod/GUI_Message.cpp \
+    Mod/GUI_MP3Panel.cpp \
+    Mod/GUI_Options.cpp \
+    Mod/GUI_ReportBug.cpp \
+    Mod/GUI_SideMenu.cpp \
+    Mod/GUI_Titlescreen.cpp \
+    Mod/GUI_Tutorial.cpp \
+    Mod/GUI_TeamMenu.cpp \
+    Mod/GUI_ClassMenu.cpp \
+    Mod/GUI_WebWindow.cpp \
+    Mod/Gwen.cpp \
+    Mod/GwenFrame.cpp \
+    Mod/Gwen_Update.cpp \
+    Mod/Hud_Base.cpp \
+    Mod/Hud_BlockHealth.cpp \
+    Mod/Hud_CapPoints.cpp \
+    Mod/Hud_CapPos.cpp \
+    Mod/Hud_DomScore.cpp \
+    Mod/Hud_FlagCarrier.cpp \
+    Mod/Hud_FlagPos.cpp \
+    Mod/Hud_FreezeProgress.cpp \
+    Mod/Hud_FreezeStatus.cpp \
+    Mod/Hud_Health.cpp \
+    Mod/HudH_MarkerTools.cpp \
+    Mod/HudH_Utils.cpp \
+    Mod/HudH_View.cpp \
+    Mod/Hud_Intermission.cpp \
+    Mod/Hud_Message.cpp \
+    Mod/Hud_Notification.cpp \
+    Mod/Hud_PhaseTime.cpp \
+    Mod/Hud_Stamina.cpp \
+    Mod/IRC_Client.cpp \
+    Mod/MGUI_Base.cpp \
+    Mod/MGUI_BorderLessButton.cpp \
+    Mod/MGUI_Button.cpp \
+    Mod/MGUI_ComboBox.cpp \
+    Mod/MGUI_CvarCheckButton.cpp \
+    Mod/MGUI_CvarSlider.cpp \
+    Mod/MGUI_CvarToggleButton.cpp \
+    Mod/MGUI_EditablePanel.cpp \
+    Mod/MGUI_Factory.cpp \
+    Mod/MGUI_Frame.cpp \
+    Mod/MGUI_Panel.cpp \
+    Mod/MGUI_PropertyPage.cpp \
+    Mod/MGUI_PropertySheet.cpp \
+    Mod/Panel_Listen_Main.cpp \
+    Mod/Panel_Options_About.cpp \
+    Mod/Panel_Options_FMOD.cpp \
+    Mod/Panel_Options_Game.cpp \
+    Mod/Panel_Options_Hud.cpp \
+    Mod/Panel_Options_Misc.cpp \
+    Mod/Panel_Options_Title.cpp \
+    Mod/SF132_Hud_Buy.cpp \
 
 
 LIBFILES = \
@@ -614,7 +722,7 @@ $(OBJ_DIR)/_other_deps.P : $(OTHER_DEPENDENCIES)
 
 -include $(OBJ_DIR)/_other_deps.P
 
-
+# BEGIN_TARGET
 
 ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
 -include $(OBJ_DIR)/compiledcaptionswap.P
@@ -1509,6 +1617,14 @@ ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
 endif
 
 $(OBJ_DIR)/weapon_parse.o : $(PWD)/../../game/shared/weapon_parse.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/playerclass_info_parse.P
+endif
+
+$(OBJ_DIR)/playerclass_info_parse.o : $(PWD)/../../game/shared/playerclass_info_parse.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
 	$(PRE_COMPILE_FILE)
 	$(COMPILE_FILE) $(POST_COMPILE_FILE)
 
@@ -3273,6 +3389,14 @@ $(OBJ_DIR)/teammenu.o : $(PWD)/game_controls/teammenu.cpp $(THIS_MAKEFILE) $(MAK
 	$(COMPILE_FILE) $(POST_COMPILE_FILE)
 
 ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/classmenu.P
+endif
+
+$(OBJ_DIR)/classmenu.o : $(PWD)/game_controls/classmenu.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
 -include $(OBJ_DIR)/vguitextwindow.P
 endif
 
@@ -4751,6 +4875,832 @@ endif
 $(OBJ_DIR)/WorldDimsProxy.o : $(PWD)/WorldDimsProxy.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
 	$(PRE_COMPILE_FILE)
 	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/BalanceMacros.P
+endif
+
+$(OBJ_DIR)/BalanceMacros.o : $(PWD)/../../game/shared/Mod/BalanceMacros.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/CBasePlayerClass.P
+endif
+
+$(OBJ_DIR)/CBasePlayerClass.o : $(PWD)/../../game/shared/Mod/CBasePlayerClass.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/ClassicCommands.P
+endif
+
+$(OBJ_DIR)/ClassicCommands.o : $(PWD)/../../game/shared/Mod/ClassicCommands.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/ClassicGameRules.P
+endif
+
+$(OBJ_DIR)/ClassicGameRules.o : $(PWD)/../../game/shared/Mod/ClassicGameRules.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Classic_SharedDefs.P
+endif
+
+$(OBJ_DIR)/Classic_SharedDefs.o : $(PWD)/../../game/shared/Mod/Classic_SharedDefs.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/CSpawnDoorBasic.P
+endif
+
+$(OBJ_DIR)/CSpawnDoorBasic.o : $(PWD)/../../game/shared/Mod/CSpawnDoorBasic.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/CustomCvars.P
+endif
+
+$(OBJ_DIR)/CustomCvars.o : $(PWD)/../../game/shared/Mod/CustomCvars.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/CustomGameRules.P
+endif
+
+$(OBJ_DIR)/CustomGameRules.o : $(PWD)/../../game/shared/Mod/CustomGameRules.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/CustomManagerGameRules.P
+endif
+
+$(OBJ_DIR)/CustomManagerGameRules.o : $(PWD)/../../game/shared/Mod/CustomManagerGameRules.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Dom_CaptureArea.P
+endif
+
+$(OBJ_DIR)/Dom_CaptureArea.o : $(PWD)/../../game/shared/Mod/Dom_CaptureArea.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Dom_GameRules.P
+endif
+
+$(OBJ_DIR)/Dom_GameRules.o : $(PWD)/../../game/shared/Mod/Dom_GameRules.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Dom_SharedDefs.P
+endif
+
+$(OBJ_DIR)/Dom_SharedDefs.o : $(PWD)/../../game/shared/Mod/Dom_SharedDefs.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/FileConfig.P
+endif
+
+$(OBJ_DIR)/FileConfig.o : $(PWD)/../../game/shared/Mod/FileConfig.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MiscCvars.P
+endif
+
+$(OBJ_DIR)/MiscCvars.o : $(PWD)/../../game/shared/Mod/MiscCvars.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SF132_GameRules.P
+endif
+
+$(OBJ_DIR)/SF132_GameRules.o : $(PWD)/../../game/shared/Mod/SF132_GameRules.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SF132_SharedDefs.P
+endif
+
+$(OBJ_DIR)/SF132_SharedDefs.o : $(PWD)/../../game/shared/Mod/SF132_SharedDefs.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SF132_Spawnpoint.P
+endif
+
+$(OBJ_DIR)/SF132_Spawnpoint.o : $(PWD)/../../game/shared/Mod/SF132_Spawnpoint.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SF132_WPN_Freezer.P
+endif
+
+$(OBJ_DIR)/SF132_WPN_Freezer.o : $(PWD)/../../game/shared/Mod/SF132_WPN_Freezer.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SF132_WPN_Physcannon.P
+endif
+
+$(OBJ_DIR)/SF132_WPN_Physcannon.o : $(PWD)/../../game/shared/Mod/SF132_WPN_Physcannon.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SF194_SpawnPoint.P
+endif
+
+$(OBJ_DIR)/SF194_SpawnPoint.o : $(PWD)/../../game/shared/Mod/SF194_SpawnPoint.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SharedGlobals.P
+endif
+
+$(OBJ_DIR)/SharedGlobals.o : $(PWD)/../../game/shared/Mod/SharedGlobals.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SharedMessage.P
+endif
+
+$(OBJ_DIR)/SharedMessage.o : $(PWD)/../../game/shared/Mod/SharedMessage.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SharedModCvars.P
+endif
+
+$(OBJ_DIR)/SharedModCvars.o : $(PWD)/../../game/shared/Mod/SharedModCvars.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SharedModDefs.P
+endif
+
+$(OBJ_DIR)/SharedModDefs.o : $(PWD)/../../game/shared/Mod/SharedModDefs.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/StallableTimer.P
+endif
+
+$(OBJ_DIR)/StallableTimer.o : $(PWD)/../../game/shared/Mod/StallableTimer.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/WPN_BuildCannon.P
+endif
+
+$(OBJ_DIR)/WPN_BuildCannon.o : $(PWD)/../../game/shared/Mod/WPN_BuildCannon.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/WPN_BuildTool.P
+endif
+
+$(OBJ_DIR)/WPN_BuildTool.o : $(PWD)/../../game/shared/Mod/WPN_BuildTool.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/WPN_CombatCannon.P
+endif
+
+$(OBJ_DIR)/WPN_CombatCannon.o : $(PWD)/../../game/shared/Mod/WPN_CombatCannon.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/WPN_Railgun.P
+endif
+
+$(OBJ_DIR)/WPN_Railgun.o : $(PWD)/../../game/shared/Mod/WPN_Railgun.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/AutoUpdateCheck_Thread.P
+endif
+
+$(OBJ_DIR)/AutoUpdateCheck_Thread.o : $(PWD)/Mod/AutoUpdateCheck_Thread.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/AutoUpdate_Thread.P
+endif
+
+$(OBJ_DIR)/AutoUpdate_Thread.o : $(PWD)/Mod/AutoUpdate_Thread.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/BaseGUI.P
+endif
+
+$(OBJ_DIR)/BaseGUI.o : $(PWD)/Mod/BaseGUI.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/C_BlockBase.P
+endif
+
+$(OBJ_DIR)/C_BlockBase.o : $(PWD)/Mod/C_BlockBase.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/C_CustomBlockManager.P
+endif
+
+$(OBJ_DIR)/C_CustomBlockManager.o : $(PWD)/Mod/C_CustomBlockManager.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/C_CustomHudControl.P
+endif
+
+$(OBJ_DIR)/C_CustomHudControl.o : $(PWD)/Mod/C_CustomHudControl.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/C_Dom_CaptureZone.P
+endif
+
+$(OBJ_DIR)/C_Dom_CaptureZone.o : $(PWD)/Mod/C_Dom_CaptureZone.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/C_FlagBase.P
+endif
+
+$(OBJ_DIR)/C_FlagBase.o : $(PWD)/Mod/C_FlagBase.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/ClientCommands.P
+endif
+
+$(OBJ_DIR)/ClientCommands.o : $(PWD)/Mod/ClientCommands.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/ClientGlobals.P
+endif
+
+$(OBJ_DIR)/ClientGlobals.o : $(PWD)/Mod/ClientGlobals.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/C_ModPlayer.P
+endif
+
+$(OBJ_DIR)/C_ModPlayer.o : $(PWD)/Mod/C_ModPlayer.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/CModPlayerMovement.P
+endif
+
+$(OBJ_DIR)/CModPlayerMovement.o : $(PWD)/Mod/CModPlayerMovement.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/CURL.P
+endif
+
+$(OBJ_DIR)/CURL.o : $(PWD)/Mod/CURL.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_BinkVideoPlayer.P
+endif
+
+$(OBJ_DIR)/GUI_BinkVideoPlayer.o : $(PWD)/Mod/GUI_BinkVideoPlayer.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_BlockSpawn.P
+endif
+
+$(OBJ_DIR)/GUI_BlockSpawn.o : $(PWD)/Mod/GUI_BlockSpawn.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_Community.P
+endif
+
+$(OBJ_DIR)/GUI_Community.o : $(PWD)/Mod/GUI_Community.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_CreditsWindow.P
+endif
+
+$(OBJ_DIR)/GUI_CreditsWindow.o : $(PWD)/Mod/GUI_CreditsWindow.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_Editor.P
+endif
+
+$(OBJ_DIR)/GUI_Editor.o : $(PWD)/Mod/GUI_Editor.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_JoinChat.P
+endif
+
+$(OBJ_DIR)/GUI_JoinChat.o : $(PWD)/Mod/GUI_JoinChat.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_ListenServer.P
+endif
+
+$(OBJ_DIR)/GUI_ListenServer.o : $(PWD)/Mod/GUI_ListenServer.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_MainMenu.P
+endif
+
+$(OBJ_DIR)/GUI_MainMenu.o : $(PWD)/Mod/GUI_MainMenu.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_Message.P
+endif
+
+$(OBJ_DIR)/GUI_Message.o : $(PWD)/Mod/GUI_Message.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_MP3Panel.P
+endif
+
+$(OBJ_DIR)/GUI_MP3Panel.o : $(PWD)/Mod/GUI_MP3Panel.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_Options.P
+endif
+
+$(OBJ_DIR)/GUI_Options.o : $(PWD)/Mod/GUI_Options.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_ReportBug.P
+endif
+
+$(OBJ_DIR)/GUI_ReportBug.o : $(PWD)/Mod/GUI_ReportBug.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_SideMenu.P
+endif
+
+$(OBJ_DIR)/GUI_SideMenu.o : $(PWD)/Mod/GUI_SideMenu.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_Titlescreen.P
+endif
+
+$(OBJ_DIR)/GUI_Titlescreen.o : $(PWD)/Mod/GUI_Titlescreen.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_Tutorial.P
+endif
+
+$(OBJ_DIR)/GUI_Tutorial.o : $(PWD)/Mod/GUI_Tutorial.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_TeamMenu.P
+endif
+
+$(OBJ_DIR)/GUI_TeamMenu.o : $(PWD)/Mod/GUI_TeamMenu.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_ClassMenu.P
+endif
+
+$(OBJ_DIR)/GUI_ClassMenu.o : $(PWD)/Mod/GUI_ClassMenu.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GUI_WebWindow.P
+endif
+
+$(OBJ_DIR)/GUI_WebWindow.o : $(PWD)/Mod/GUI_WebWindow.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Gwen.P
+endif
+
+$(OBJ_DIR)/Gwen.o : $(PWD)/Mod/Gwen.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/GwenFrame.P
+endif
+
+$(OBJ_DIR)/GwenFrame.o : $(PWD)/Mod/GwenFrame.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Gwen_Update.P
+endif
+
+$(OBJ_DIR)/Gwen_Update.o : $(PWD)/Mod/Gwen_Update.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_Base.P
+endif
+
+$(OBJ_DIR)/Hud_Base.o : $(PWD)/Mod/Hud_Base.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_BlockHealth.P
+endif
+
+$(OBJ_DIR)/Hud_BlockHealth.o : $(PWD)/Mod/Hud_BlockHealth.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_CapPoints.P
+endif
+
+$(OBJ_DIR)/Hud_CapPoints.o : $(PWD)/Mod/Hud_CapPoints.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_CapPos.P
+endif
+
+$(OBJ_DIR)/Hud_CapPos.o : $(PWD)/Mod/Hud_CapPos.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_DomScore.P
+endif
+
+$(OBJ_DIR)/Hud_DomScore.o : $(PWD)/Mod/Hud_DomScore.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_FlagCarrier.P
+endif
+
+$(OBJ_DIR)/Hud_FlagCarrier.o : $(PWD)/Mod/Hud_FlagCarrier.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_FlagPos.P
+endif
+
+$(OBJ_DIR)/Hud_FlagPos.o : $(PWD)/Mod/Hud_FlagPos.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_FreezeProgress.P
+endif
+
+$(OBJ_DIR)/Hud_FreezeProgress.o : $(PWD)/Mod/Hud_FreezeProgress.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_FreezeStatus.P
+endif
+
+$(OBJ_DIR)/Hud_FreezeStatus.o : $(PWD)/Mod/Hud_FreezeStatus.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_Health.P
+endif
+
+$(OBJ_DIR)/Hud_Health.o : $(PWD)/Mod/Hud_Health.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/HudH_MarkerTools.P
+endif
+
+$(OBJ_DIR)/HudH_MarkerTools.o : $(PWD)/Mod/HudH_MarkerTools.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/HudH_Utils.P
+endif
+
+$(OBJ_DIR)/HudH_Utils.o : $(PWD)/Mod/HudH_Utils.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/HudH_View.P
+endif
+
+$(OBJ_DIR)/HudH_View.o : $(PWD)/Mod/HudH_View.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_Intermission.P
+endif
+
+$(OBJ_DIR)/Hud_Intermission.o : $(PWD)/Mod/Hud_Intermission.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_Message.P
+endif
+
+$(OBJ_DIR)/Hud_Message.o : $(PWD)/Mod/Hud_Message.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_Notification.P
+endif
+
+$(OBJ_DIR)/Hud_Notification.o : $(PWD)/Mod/Hud_Notification.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_PhaseTime.P
+endif
+
+$(OBJ_DIR)/Hud_PhaseTime.o : $(PWD)/Mod/Hud_PhaseTime.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Hud_Stamina.P
+endif
+
+$(OBJ_DIR)/Hud_Stamina.o : $(PWD)/Mod/Hud_Stamina.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/IRC_Client.P
+endif
+
+$(OBJ_DIR)/IRC_Client.o : $(PWD)/Mod/IRC_Client.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_Base.P
+endif
+
+$(OBJ_DIR)/MGUI_Base.o : $(PWD)/Mod/MGUI_Base.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_BorderLessButton.P
+endif
+
+$(OBJ_DIR)/MGUI_BorderLessButton.o : $(PWD)/Mod/MGUI_BorderLessButton.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_Button.P
+endif
+
+$(OBJ_DIR)/MGUI_Button.o : $(PWD)/Mod/MGUI_Button.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_ComboBox.P
+endif
+
+$(OBJ_DIR)/MGUI_ComboBox.o : $(PWD)/Mod/MGUI_ComboBox.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_CvarCheckButton.P
+endif
+
+$(OBJ_DIR)/MGUI_CvarCheckButton.o : $(PWD)/Mod/MGUI_CvarCheckButton.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_CvarSlider.P
+endif
+
+$(OBJ_DIR)/MGUI_CvarSlider.o : $(PWD)/Mod/MGUI_CvarSlider.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_CvarToggleButton.P
+endif
+
+$(OBJ_DIR)/MGUI_CvarToggleButton.o : $(PWD)/Mod/MGUI_CvarToggleButton.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_EditablePanel.P
+endif
+
+$(OBJ_DIR)/MGUI_EditablePanel.o : $(PWD)/Mod/MGUI_EditablePanel.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_Factory.P
+endif
+
+$(OBJ_DIR)/MGUI_Factory.o : $(PWD)/Mod/MGUI_Factory.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_Frame.P
+endif
+
+$(OBJ_DIR)/MGUI_Frame.o : $(PWD)/Mod/MGUI_Frame.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_Panel.P
+endif
+
+$(OBJ_DIR)/MGUI_Panel.o : $(PWD)/Mod/MGUI_Panel.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_PropertyPage.P
+endif
+
+$(OBJ_DIR)/MGUI_PropertyPage.o : $(PWD)/Mod/MGUI_PropertyPage.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/MGUI_PropertySheet.P
+endif
+
+$(OBJ_DIR)/MGUI_PropertySheet.o : $(PWD)/Mod/MGUI_PropertySheet.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Panel_Listen_Main.P
+endif
+
+$(OBJ_DIR)/Panel_Listen_Main.o : $(PWD)/Mod/Panel_Listen_Main.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Panel_Options_About.P
+endif
+
+$(OBJ_DIR)/Panel_Options_About.o : $(PWD)/Mod/Panel_Options_About.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Panel_Options_FMOD.P
+endif
+
+$(OBJ_DIR)/Panel_Options_FMOD.o : $(PWD)/Mod/Panel_Options_FMOD.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Panel_Options_Game.P
+endif
+
+$(OBJ_DIR)/Panel_Options_Game.o : $(PWD)/Mod/Panel_Options_Game.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Panel_Options_Hud.P
+endif
+
+$(OBJ_DIR)/Panel_Options_Hud.o : $(PWD)/Mod/Panel_Options_Hud.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Panel_Options_Misc.P
+endif
+
+$(OBJ_DIR)/Panel_Options_Misc.o : $(PWD)/Mod/Panel_Options_Misc.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/Panel_Options_Title.P
+endif
+
+$(OBJ_DIR)/Panel_Options_Title.o : $(PWD)/Mod/Panel_Options_Title.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+ifneq (clean, $(findstring clean, $(MAKECMDGOALS)))
+-include $(OBJ_DIR)/SF132_Hud_Buy.P
+endif
+
+$(OBJ_DIR)/SF132_Hud_Buy.o : $(PWD)/Mod/SF132_Hud_Buy.cpp $(THIS_MAKEFILE) $(MAKEFILE_BASE)
+	$(PRE_COMPILE_FILE)
+	$(COMPILE_FILE) $(POST_COMPILE_FILE)
+
+# END_TARGET
 
 # Uncomment this, and set FILENAME to file you want built without optimizations enabled.
 # $(OBJ_DIR)/FILENAME.o : CFLAGS := $(subst -O2,-O0,$(CFLAGS))
