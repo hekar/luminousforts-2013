@@ -649,6 +649,7 @@ $Project
 			$File	"game_controls\teammenu.cpp"
 			$File	"game_controls\vguitextwindow.cpp"
 			$File	"game_controls\IconPanel.cpp"
+			$File	"game_controls\ClassMenu.cpp"
 		}
 
 	}
