@@ -55,29 +55,19 @@ public:
 	void AutoAssign();
 	
 protected:
-
-	// int GetNumTeams() { return m_iNumTeams; }
-	
 	// VGUI2 overrides
 	virtual void ApplySchemeSettings(vgui::IScheme *pScheme);
 	virtual void OnKeyCodePressed(vgui::KeyCode code);
 
 	// helper functions
 	virtual void SetLabelText(const char *textEntryName, const char *text);
-	virtual void LoadMapPage( const char *mapName );
-	// virtual void MakeTeamButtons( void );
 	
 	// command callbacks
 	// MESSAGE_FUNC_INT( OnTeamButton, "TeamButton", team );
 
 	IViewPort	*m_pViewPort;
-	vgui::RichText *m_pMapInfo;
-	vgui::HTML *m_pMapInfoHTML;
-//	int m_iNumTeams;
 	ButtonCode_t m_iJumpKey;
 	ButtonCode_t m_iScoreBoardKey;
-
-	char m_szMapName[ MAX_PATH ];
 };
 
 

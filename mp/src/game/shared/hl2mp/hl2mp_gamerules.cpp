@@ -61,8 +61,16 @@ BEGIN_NETWORK_TABLE_NOBASE( CHL2MPRules, DT_HL2MPRules )
 
 	#ifdef CLIENT_DLL
 		RecvPropBool( RECVINFO( m_bTeamPlayEnabled ) ),
+		RecvPropFloat( RECVINFO( m_flGameStartTime ) ),
+		RecvPropInt( RECVINFO( m_iCurrentPhaseID ) ),
+		RecvPropFloat( RECVINFO( m_flPhaseTimeLeft ) ),
+		RecvPropBool( RECVINFO( m_bSourcefortsMap ) ),
 	#else
 		SendPropBool( SENDINFO( m_bTeamPlayEnabled ) ),
+		SendPropFloat( SENDINFO( m_flGameStartTime ), 32, SPROP_NOSCALE ),
+		SendPropInt( SENDINFO( m_iCurrentPhaseID ), 8, SPROP_UNSIGNED ),
+		SendPropFloat( SENDINFO( m_flPhaseTimeLeft ), 0, SPROP_NOSCALE ),
+		SendPropBool( SENDINFO( m_bSourcefortsMap ) ),
 	#endif
 
 END_NETWORK_TABLE()
@@ -195,7 +203,7 @@ CHL2MPRules::CHL2MPRules()
 		g_Teams.AddToTail( pTeam );
 	}
 
-	m_bTeamPlayEnabled = teamplay.GetBool();
+	m_bTeamPlayEnabled = true; //teamplay.GetBool();
 	m_flIntermissionEndTime = 0.0f;
 	m_flGameStartTime = 0;
 
@@ -882,6 +890,56 @@ bool CHL2MPRules::ShouldCollide( int collisionGroup0, int collisionGroup1 )
 		collisionGroup1 == COLLISION_GROUP_WEAPON )
 	{
 		return false;
+	}
+
+	if ( collisionGroup0 == COLLISION_GROUP_PLAYER && collisionGroup1 == COLLISION_GROUP_BLOCKBASE )
+	{
+		return true;
+	}
+
+	if ( collisionGroup0 == COLLISION_GROUP_BLOCKBASE && collisionGroup1 == COLLISION_GROUP_BLOCKBASE )
+	{
+		return true;
+	}
+
+	if ( collisionGroup0 == COLLISION_GROUP_BLOCKHELD && collisionGroup1 == COLLISION_GROUP_BLOCKHELD )
+	{
+		return true;
+	}
+
+	if( collisionGroup0 == COLLISION_GROUP_BLOCKBASE && collisionGroup1 == COLLISION_GROUP_BLOCKHELD )
+	{
+		return true;
+	}
+
+	if( ( collisionGroup0 == COLLISION_GROUP_PLAYER || collisionGroup0 == COLLISION_GROUP_PLAYER_MOVEMENT ) &&
+		collisionGroup1 == COLLISION_GROUP_BLOCKHELD )
+	{
+		return false;
+	}
+
+	if( ( collisionGroup0 == COLLISION_GROUP_PLAYER || collisionGroup0 == COLLISION_GROUP_PLAYER_MOVEMENT ) &&
+		collisionGroup1 == COLLISION_GROUP_FLAG )
+	{
+		return false;
+	}
+
+	// Stop nade from colliding with flag
+	if( collisionGroup0 == COLLISION_GROUP_WEAPON &&
+		collisionGroup1 == COLLISION_GROUP_FLAG )
+	{
+		return false;
+	}
+
+	if ( collisionGroup1 == COLLISION_GROUP_FLAG )
+	{
+		if ( collisionGroup0 == COLLISION_GROUP_VEHICLE ||
+			collisionGroup0 == COLLISION_GROUP_PLAYER ||
+			collisionGroup0 == COLLISION_GROUP_NPC ||
+			collisionGroup0 == COLLISION_GROUP_PROJECTILE)
+		{
+			return false;
+		}
 	}
 
 	return BaseClass::ShouldCollide( collisionGroup0, collisionGroup1 ); 

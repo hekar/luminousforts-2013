@@ -59,6 +59,7 @@ public:
 	virtual void PlayerDeathThink( void );
 	virtual void SetAnimation( PLAYER_ANIM playerAnim );
 	virtual bool HandleCommand_JoinTeam( int team );
+	virtual bool HandleCommand_JoinClass( int iClass );
 	virtual bool ClientCommand( const CCommand &args );
 	virtual void CreateViewModel( int viewmodelindex = 0 );
 	virtual bool BecomeRagdollOnClient( const Vector &force );
@@ -86,10 +87,7 @@ public:
 
 	Vector GetAttackSpread( CBaseCombatWeapon *pWeapon, CBaseEntity *pTarget = NULL );
 
-	void CheatImpulseCommands( int iImpulse );
 	void CreateRagdollEntity( void );
-	void GiveAllItems( void );
-	void GiveDefaultItems( void );
 
 	void NoteWeaponFired( void );
 
@@ -100,7 +98,6 @@ public:
 	
 	float GetNextModelChangeTime( void ) { return m_flNextModelChangeTime; }
 	float GetNextTeamChangeTime( void ) { return m_flNextTeamChangeTime; }
-	void  PickDefaultSpawnTeam( void );
 	void  SetupPlayerSoundsByModel( const char *pModelName );
 	const char *GetPlayerModelSoundPrefix( void );
 	int	  GetPlayerModelType( void ) { return m_iPlayerSoundType;	}
@@ -124,10 +121,18 @@ public:
 	void State_PreThink_ACTIVE();
 	void State_Enter_OBSERVER_MODE();
 	void State_PreThink_OBSERVER_MODE();
+	void State_Enter_ENTER();
+	void State_Leave_ENTER();
+	void State_Enter_TEAM_REQUIRED();
+	virtual void State_PreThink_TEAM_REQUIRED();
+	void State_Enter_CLASS_REQUIRED();
+	virtual void State_PreThink_CLASS_REQUIRED();
 
 
 	virtual bool StartObserverMode( int mode );
 	virtual void StopObserverMode( void );
+
+	virtual HL2MPPlayerState GetPlayerState() { return m_iPlayerState; }
 
 
 	Vector m_vecTotalBulletForce;	//Accumulator for bullet force in a single frame
@@ -137,7 +142,6 @@ public:
 
 	virtual bool	CanHearAndReadChatFrom( CBasePlayer *pPlayer );
 
-		
 private:
 
 	CNetworkQAngle( m_angEyeAngles );

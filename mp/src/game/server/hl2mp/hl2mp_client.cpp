@@ -43,6 +43,20 @@ extern bool			g_fGameOver;
 void FinishClientPutInServer( CHL2MP_Player *pPlayer )
 {
 	pPlayer->InitialSpawn();
+
+	const ConVar *hostname = cvar->FindVar( "hostname" );
+	const char *title = (hostname) ? hostname->GetString() : "MESSAGE OF THE DAY";
+
+	KeyValues *data = new KeyValues("data");
+	data->SetString( "title", title );		// info panel title
+	data->SetString( "type", "1" );			// show userdata from stringtable entry
+	data->SetString( "msg",	"motd" );		// use this stringtable entry
+	data->SetBool( "unload", sv_motd_unload_on_dismissal.GetBool() );
+
+	pPlayer->ShowViewPortPanel( PANEL_INFO, true, data );
+
+	data->deleteThis();
+
 	pPlayer->Spawn();
 
 
@@ -64,19 +78,6 @@ void FinishClientPutInServer( CHL2MP_Player *pPlayer )
 	{
 		ClientPrint( pPlayer, HUD_PRINTTALK, "You are on team %s1\n", pPlayer->GetTeam()->GetName() );
 	}
-
-	const ConVar *hostname = cvar->FindVar( "hostname" );
-	const char *title = (hostname) ? hostname->GetString() : "MESSAGE OF THE DAY";
-
-	KeyValues *data = new KeyValues("data");
-	data->SetString( "title", title );		// info panel title
-	data->SetString( "type", "1" );			// show userdata from stringtable entry
-	data->SetString( "msg",	"motd" );		// use this stringtable entry
-	data->SetBool( "unload", sv_motd_unload_on_dismissal.GetBool() );
-
-	pPlayer->ShowViewPortPanel( PANEL_INFO, true, data );
-
-	data->deleteThis();
 }
 
 /*

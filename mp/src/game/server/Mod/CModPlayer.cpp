@@ -41,7 +41,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #include "cbase.h"
 
-#ifdef MOD_ALPHA_PLAYER
 #include "team.h"
 #include "hl2mp_player.h"
 
@@ -161,13 +160,17 @@ void CModPlayer::ChangeTeam( int iTeamNum )
 		DropFlag();
 	}
 
+	if ( GetPlayerClass() == PLAYERCLASS_UNDEFINED )
+	{
+		State_Transition( STATE_CLASS_REQUIRED );
+	}
+
 	BaseClass::ChangeTeam( iTeamNum );
 }
 
 void CModPlayer::Event_Disconnected()
 {
 	// TODO: Fix
-#if 0
 	if ( HasFlag() )
 	{
 		DropFlag();
@@ -175,6 +178,7 @@ void CModPlayer::Event_Disconnected()
 
 	m_bHasTouched = false;
 
+#if 0
 	// Remove all the player's beacons
 	RemoveBeacons();
 
@@ -185,7 +189,6 @@ void CModPlayer::Event_Disconnected()
 void CModPlayer::Event_Killed( const CTakeDamageInfo &info )
 {
 	// TODO: Fix
-#if 0
 	if ( HasFlag() )
 	{
 		DropFlag();
@@ -196,7 +199,8 @@ void CModPlayer::Event_Killed( const CTakeDamageInfo &info )
 	// Detonate all the slams!
 	DetonateTripmines();
 
-	auto wpn = GetActiveWeapon();
+#if 0
+	const CBaseCombatWeapon *wpn = GetActiveWeapon();
 	if ( wpn && wpn->GetWeaponID() == LF_WEAPON_COMBATCANNON )
 	{
 		CWeaponCombatCannon *combatcannon = dynamic_cast< CWeaponCombatCannon* >( wpn );
@@ -236,9 +240,32 @@ void CModPlayer::Precache()
 	BaseClass::Precache();
 }
 
+void CModPlayer::InitialSpawn()
+{
+	State_Enter( STATE_ENTER );
+	BaseClass::InitialSpawn();
+}
+
 void CModPlayer::Spawn()
 {
 	BaseClass::Spawn();
+
+	if ( GetPlayerState() != STATE_ENTER )
+	{
+		if ( GetTeamNumber() == TEAM_UNASSIGNED )
+		{
+			State_Transition( STATE_TEAM_REQUIRED );
+		}
+		else if ( GetPlayerClass() == PLAYERCLASS_UNDEFINED &&
+				( GetTeamNumber() == TEAM_SPECTATOR || GetTeamNumber() == TEAM_UNASSIGNED ) )
+		{
+			State_Transition( STATE_CLASS_REQUIRED );
+		}
+		else if ( GetTeamNumber() != TEAM_SPECTATOR && GetMoveType() == MOVETYPE_WALK )
+		{
+			State_Transition( STATE_ACTIVE );
+		}
+	}
 
 	// Send Flag info if in classic mode
 	if ( GameRules()->GetGameModeMask() & GAMEMODE_CLASSIC )
@@ -464,6 +491,69 @@ bool CModPlayer::SelectSpawnSpot( const char *pEntClassName, CBaseEntity* &pSpot
 	return false;
 }
 
+void CModPlayer::RemoveFromHud( unsigned int hud )
+{
+	m_Local.m_iHideHUD &= ~hud;
+}
+
+void CModPlayer::AddToHud( unsigned int hud )
+{
+	m_Local.m_iHideHUD |= hud;
+}
+
+bool CModPlayer::HandleCommand_JoinClass( int iClass )
+{
+	Assert( GetTeamNumber() != TEAM_SPECTATOR );
+	Assert( GetTeamNumber() != TEAM_UNASSIGNED );
+
+	if( GetTeamNumber() == TEAM_SPECTATOR )
+		return false;
+
+	if( iClass == PLAYERCLASS_UNDEFINED )
+		return false;
+
+	int iOldPlayerClass = m_HL2Local.m_iDesiredPlayerClass;
+
+	if( iClass == iOldPlayerClass )
+	{
+		return true;
+	}
+
+	/*if( !ClassicGameRules()->IsPlayerClassOnTeam( iClass, GetTeamNumber() ) )
+	{
+		return false;
+	}*/
+
+	const char *classname = "";//ClassicGameRules()->GetPlayerClassName( iClass, GetTeamNumber() );
+
+	m_HL2Local.m_iDesiredPlayerClass = iClass ;
+
+	if( IsAlive() )
+	{
+		ClientPrint(this, HUD_PRINTTALK, "#game_respawn_as", classname );
+	}
+	else
+	{
+		ClientPrint(this, HUD_PRINTTALK, "#game_spawn_as", classname );
+	}
+
+	IGameEvent * event = gameeventmanager->CreateEvent( "player_changeclass" );
+	if ( event )
+	{
+		event->SetInt( "userid", GetUserID() );
+		event->SetInt( "class", iClass );
+
+		gameeventmanager->FireEvent( event );
+	}
+
+	if ( GetPlayerState() == STATE_CLASS_REQUIRED )
+	{
+		State_Transition( STATE_ACTIVE );
+	}
+
+	return true;
+}
+
 #ifdef MOD_SF132
 CItemRegister *CModPlayer::GetItemRegister()
 {
@@ -475,5 +565,3 @@ CModPlayer *ToModPlayer( CBaseEntity *pEntity )
 {
 	return dynamic_cast< CModPlayer * > ( pEntity );
 }
-
-#endif // MOD_ALPHA_PLAYER

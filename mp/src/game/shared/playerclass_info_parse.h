@@ -34,12 +34,8 @@ public:
 	
 	// Each game can override this to get whatever values it wants from the script.
 	virtual void Parse( KeyValues *pKeyValuesData, const char *szClassName );
-
 	
-public:	
 	bool		m_bParsedScript;
-
-public:
 	// Class properties
 
 	// todo : better lengths for these arrays ?
@@ -48,6 +44,27 @@ public:
 	char		m_szPrintName[MAX_PLAYERCLASS_NAME_LENGTH];		// localization key for print name
 	char		m_szPlayerModel[MAX_PLAYERCLASS_NAME_LENGTH];
 	char		m_szSelectCmd[32];		//command the player can issue to switch to this class
+
+	int m_iTeam;		//which team. 2 == team 1, 3 == team 2
+
+	char m_szLimitCvar[64];	//which cvar controls the class limit for this class
+
+	char m_szClassImage[SDK_PLAYERCLASS_IMAGE_LENGTH];
+	char m_szClassImageBG[SDK_PLAYERCLASS_IMAGE_LENGTH];
+
+	float m_flRunSpeed;
+	float m_flSprintSpeed;
+	float m_flProneSpeed;
+	float m_flStaminaDrainRate;
+	float m_flStaminaRestoreRate;
+
+	int m_iHealth;
+	int m_iArmor;
+
+	int m_iWeaponCount;
+	CUtlVector <int> m_WeaponVector;
+	CUtlVector <int> m_AmmoVector; // Primary Ammo, add one for secondary when needed
+
 };
 
 // The weapon parse function

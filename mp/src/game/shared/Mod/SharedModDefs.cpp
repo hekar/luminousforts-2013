@@ -106,3 +106,35 @@ static const char * s_WeaponAliasInfo[] =
 	NULL,		// WEAPON_NONE
 };
 
+
+
+//--------------------------------------------------------------------------------------------------------
+//
+// Given an alias, return the associated weapon ID
+//
+int AliasToWeaponID( const char *alias )
+{
+	if (alias)
+	{
+		for( int i=0; s_WeaponAliasInfo[i] != NULL; ++i )
+			if (!Q_stricmp( s_WeaponAliasInfo[i], alias ))
+				return i;
+	}
+
+	return WEAPON_NONE;
+}
+
+//--------------------------------------------------------------------------------------------------------
+//
+// Given a weapon ID, return its alias
+//
+const char *WeaponIDToAlias( int id )
+{
+	if ( (id >= WEAPON_MAX) || (id < 0) )
+		return NULL;
+
+	return s_WeaponAliasInfo[id];
+}
+
+
+

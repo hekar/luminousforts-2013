@@ -1,5 +1,21 @@
 # Files to ignore when considering what GIT should commit.
 
+*.vpc_crc
+*.filters
+*.pdb
+*sentinel
+*\.pb.cc
+*\.pb.h
+*.unsuccessfulbuild
+
+.idea/
+sp/
+*.iml
+*.dbg
+*.swp
+*~
+mp/game/
+
 # Visual Studio 
 *.suo
 *.user

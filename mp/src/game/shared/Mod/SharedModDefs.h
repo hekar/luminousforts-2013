@@ -30,7 +30,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #endif
 
 
-#define SDK_GAME_DESCRIPTION	"LuminousForts 0.1"
+#define SDK_GAME_DESCRIPTION	"LuminousForts 13.0"
 
 #define SDK_USE_TEAMS
 #define SDK_USE_PLAYERCLASSES
@@ -125,6 +125,8 @@ typedef enum
 
 	WEAPON_MAX,		// number of weapons weapon index
 } SDKWeaponID;
+
+#define MAX_WEAPON_COUNT WEAPON_MAX
 
 typedef enum
 {

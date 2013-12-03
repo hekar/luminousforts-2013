@@ -23,9 +23,21 @@ enum
 
 enum HL2MPPlayerState
 {
+	// Entered the game, seeing MOTD screen
+	STATE_ENTER,
+
+	// Player requires team selection
+	STATE_TEAM_REQUIRED,
+
+	// Player requires player class selection
+	STATE_CLASS_REQUIRED,
+
 	// Happily running around in the game.
-	STATE_ACTIVE=0,
-	STATE_OBSERVER_MODE,		// Noclipping around, watching players, etc.
+	STATE_ACTIVE,
+
+	// Noclipping around, watching players, etc.
+	STATE_OBSERVER_MODE,
+
 	NUM_PLAYER_STATES
 };
 
