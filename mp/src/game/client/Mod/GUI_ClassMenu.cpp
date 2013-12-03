@@ -126,6 +126,7 @@ CModClassMenu::CModClassMenu(IViewPort *pViewPort, const char *panelName, const 
 	m_iLastPlayerClassCount = -1;
 	m_iLastClassLimit = -1;
 }
+
 //Destructor
 CModClassMenu::~CModClassMenu()
 {
@@ -163,10 +164,11 @@ void CModClassMenu::OnKeyCodePressed( KeyCode code )
 			// Shift keys over to zero offset :/
 			// HACK HACK HACK HACK
 			int KeyIndex = code - KEY_1;
+
 			char changeclass [128] = {0};
-			Q_snprintf( changeclass, sizeof( changeclass ), "cls_%s", GameRules()->GetClassNames( LocalTeamNumber() )[KeyIndex] );
+			Q_snprintf( changeclass, sizeof( changeclass ), "joinclass %d", KeyIndex );
 			
-			OnCommand( changeclass );
+			engine->ClientCmd( changeclass );
 
 			ShowPanel( false );
 		}
@@ -254,7 +256,7 @@ void CModClassMenu::OnShowPage( const char *pagename )
 
 	Q_snprintf( buf, sizeof(buf), "cls_%s", pagename );
 
-	C_Team *pTeam = dynamic_cast<C_Team *>( GetGlobalTeam(GetTeamNumber()) );
+	C_Team *pTeam = GetGlobalTeam( GetTeamNumber() );
 
 	if( !pTeam )
 		return;

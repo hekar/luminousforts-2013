@@ -79,3 +79,4 @@ ConVar lf_hand_spawn_enabled( "lf_hand_spawn_enabled", "0", FCVAR_REPLICATED,
 	"Disable Hand Spawner: 0 - Disabled, 6 - All, 2 - Blue, 4 - Red", true, 0, true, 6 );
 
 ConVar lf_hand_spawn_distance( "lf_hand_spawn_distance", "128.0f", FCVAR_NOTIFY, "Maximum distance to spawn block" );
+

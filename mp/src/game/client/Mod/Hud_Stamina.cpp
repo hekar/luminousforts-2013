@@ -119,8 +119,6 @@ void CHudStamina::OnThink( void )
 		return;
 	}
 
-	//TD Do animation stuff
-
 	m_flStamina = flCurrentStamina;
 }
 

@@ -39,6 +39,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "Mod/SharedColors.h"
 #include "Mod/SharedGlobals.h"
 #include "Mod/SharedModDefs.h"
+#include "Mod/SharedModCvars.h"
 #include "Mod/BalanceMacros.h"
 #ifdef CLIENT_DLL
 	#include "Mod/ClientGlobals.h"

@@ -4,6 +4,9 @@
 //
 // $NoKeywords: $
 //=============================================================================//
+
+#if 0
+
 #if !defined( HUD_SUITPOWER_H )
 #define HUD_SUITPOWER_H
 #ifdef _WIN32
@@ -55,3 +58,5 @@ private:
 };	
 
 #endif // HUD_SUITPOWER_H
+
+#endif // 0

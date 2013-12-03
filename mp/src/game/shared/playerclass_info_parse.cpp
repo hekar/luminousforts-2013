@@ -10,6 +10,7 @@
 #include "filesystem.h"
 #include "utldict.h"
 #include "ammodef.h"
+#include "Mod/SharedModCvars.h"
 
 #include "playerclass_info_parse.h"
 
@@ -209,6 +210,16 @@ FilePlayerClassInfo_t::FilePlayerClassInfo_t()
 	m_szPrintName[0] = 0;
 	m_szPlayerModel[0] = 0;
 	m_szSelectCmd[0] = 0;
+
+	m_iTeam				= TEAM_UNASSIGNED;
+
+	m_szLimitCvar[0]	= '\0';
+	m_flRunSpeed		= SDK_DEFAULT_PLAYER_RUNSPEED;
+	m_flSprintSpeed		= SDK_DEFAULT_PLAYER_SPRINTSPEED;
+	m_flProneSpeed		= SDK_DEFAULT_PLAYER_PRONESPEED;
+
+	m_iHealth			= 0;
+	m_iArmor			= 0;
 }
 
 void FilePlayerClassInfo_t::Parse( KeyValues *pKeyValuesData, const char *szPlayerClassName )
@@ -227,6 +238,74 @@ void FilePlayerClassInfo_t::Parse( KeyValues *pKeyValuesData, const char *szPlay
 
 	// Select command
 	Q_strncpy( m_szSelectCmd, pKeyValuesData->GetString( "selectcmd", "!! Missing selectcmd on Player Class" ), 32 );
+
+	m_iTeam = TEAM_UNASSIGNED;
+
+	const char *pTeam = pKeyValuesData->GetString( "team", NULL );
+	if ( pTeam )
+	{
+		if ( Q_stricmp( pTeam, "BLUE" ) == 0 )
+		{
+			m_iTeam = SDK_TEAM_BLUE;
+		}
+		else if ( Q_stricmp( pTeam, "RED" ) == 0 )
+		{
+			m_iTeam = SDK_TEAM_RED;
+		}
+		else
+		{
+			Assert( false );
+		}
+	}
+	else
+	{
+		Assert( false );
+	}
+
+	for (int i = 1; i <= WEAPON_MAX; i++)
+	{
+		int Length = strlen ("weapon_") + 2;
+		char *WeaponKeyName = new char [Length];
+		Q_snprintf (WeaponKeyName, Length, "weapon_%d", i);
+		const char *pszWeapon = pKeyValuesData->GetString( WeaponKeyName, NULL );
+
+		if (!pszWeapon) // At the end of the weaponlist, give up
+		{
+			break;
+		}
+
+		int iWeapon = AliasToWeaponID( pszWeapon );
+
+		m_WeaponVector.AddToTail (iWeapon);
+		delete WeaponKeyName;
+
+		int AmmoLength = strlen ("weapon_ammo") + 3;
+		char *AmmoKeyName = new char [AmmoLength];
+		Q_snprintf (AmmoKeyName, AmmoLength, "weapon_%d_ammo", i);
+		int iAmmoCount = pKeyValuesData->GetInt( AmmoKeyName, 0 );
+
+		m_AmmoVector.AddToTail (iAmmoCount);
+		delete AmmoKeyName;
+
+		m_iWeaponCount = i;
+	}
+
+	Q_strncpy( m_szLimitCvar, pKeyValuesData->GetString( "limitcvar", "!! Missing limit cvar on Player Class" ), sizeof(m_szLimitCvar) );
+
+	Assert( Q_strlen( m_szLimitCvar ) > 0 && "Every class must specify a limitcvar" );
+
+	// HUD player status health images (when the player is hurt)
+	Q_strncpy( m_szClassImage, pKeyValuesData->GetString( "classimage", "white" ), sizeof( m_szClassImage ) );
+	Q_strncpy( m_szClassImageBG, pKeyValuesData->GetString( "classimagebg", "white" ), sizeof( m_szClassImageBG ) );
+
+	m_iHealth		= pKeyValuesData->GetFloat( "Health", 100 );
+	m_flRunSpeed		= pKeyValuesData->GetFloat( "RunSpeed", SDK_DEFAULT_PLAYER_RUNSPEED );
+	m_flSprintSpeed		= pKeyValuesData->GetFloat( "SprintSpeed", SDK_DEFAULT_PLAYER_SPRINTSPEED );
+	m_flProneSpeed		= pKeyValuesData->GetFloat( "ProneSpeed", SDK_DEFAULT_PLAYER_PRONESPEED );
+	m_flStaminaDrainRate = pKeyValuesData->GetFloat( "StaminaDrainRate", lf_combat_default_drainrate.GetFloat() );
+	m_flStaminaRestoreRate = pKeyValuesData->GetFloat( "StaminaRestoreRate", lf_combat_default_restorerate.GetFloat() );
+
+	m_iArmor			= pKeyValuesData->GetInt( "armor", 0 );
 
 
 #if defined(_DEBUG) && defined(HL2_CLIENT_DLL)

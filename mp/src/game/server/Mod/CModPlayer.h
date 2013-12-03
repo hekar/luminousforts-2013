@@ -74,6 +74,7 @@ public:
 	virtual void Event_Killed( const CTakeDamageInfo &info );
 
 	virtual void Precache();
+	virtual void InitialSpawn();
 	virtual void Spawn();
 
 	virtual void DetonateTripmines();
@@ -87,11 +88,19 @@ public:
 	virtual int GetPlayerClass() const { return m_HL2Local.m_iPlayerClass; }
 	virtual void SetPlayerClass(int playerclass) { m_HL2Local.m_iPlayerClass = playerclass; }
 
+	virtual int GetDesiredPlayerClass() const { return m_HL2Local.m_iDesiredPlayerClass; }
+	virtual void SetDesiredPlayerClass(int playerclass) { m_HL2Local.m_iDesiredPlayerClass = playerclass; }
+
 	virtual float GetRunSpeed() const  { return 400; }
 	virtual void SetRunSpeed(float speed) { }
 
 	virtual float GetSprintSpeed() const { return 420; }
 	virtual void SetSprintSpeed(float speed) { }
+
+	virtual void RemoveFromHud( unsigned int hud );
+	virtual void AddToHud( unsigned int hud );
+
+	virtual bool HandleCommand_JoinClass( int iClass );
 
 private:
 	bool m_bHasFlag;

@@ -33,7 +33,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 ===============================================================*/
 
 #include "cbase.h"
-#include "Mod/ClassicGameRules.h"
 #include "ammodef.h"
 #include "KeyValues.h"
 #include "Mod/MiscCvars.h"
@@ -56,6 +55,8 @@ the terms of any one of the MPL, the GPL or the LGPL.
 	#include "Mod/CModPlayer.h"
 #endif
 
+#include "Mod/ClassicGameRules.h"
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -72,7 +73,7 @@ CFileConfig g_CGRConfig( "classicgamerules", "config/gamemode/classic.txt" );
 
 #define CLASSIC_GAME_CLASSCOUNT 5
 
-char *g_ClassicGameRules_Classes_Blue [CLASSIC_GAME_CLASSCOUNT + 1] =
+char *g_ClassicGameRules_Classes_Blue[ CLASSIC_GAME_CLASSCOUNT + 1 ] =
 {
 	"blue_classscout",
 	"blue_classengineer",
@@ -82,7 +83,7 @@ char *g_ClassicGameRules_Classes_Blue [CLASSIC_GAME_CLASSCOUNT + 1] =
 	NULL
 };
 
-char *g_ClassicGameRules_Classes_Red [CLASSIC_GAME_CLASSCOUNT + 1] =
+char *g_ClassicGameRules_Classes_Red[ CLASSIC_GAME_CLASSCOUNT + 1 ] =
 {
 	"red_classscout",
 	"red_classengineer",
@@ -410,99 +411,92 @@ void CClassicGameRules::GoToIntermission()
 
 bool CClassicGameRules::GivePlayerClassAttributes( CModPlayer *pPlayer )
 {
-//		if( pPlayer->m_Shared.DesiredPlayerClass() == PLAYERCLASS_RANDOM )
-//		{
-//			ChooseRandomClass( pPlayer );
-//			ClientPrint( pPlayer, HUD_PRINTTALK, "#game_now_as", GetPlayerClassName( pPlayer->m_Shared.PlayerClass(), pPlayer->GetTeamNumber() ) );
-//		}
-//		else
-//		{
-//			pPlayer->m_Shared.SetPlayerClass( pPlayer->m_Shared.DesiredPlayerClass() );
-//		}
-//
-//		int playerclass = pPlayer->m_Shared.PlayerClass();
-//
-//		if( playerclass == PLAYERCLASS_UNDEFINED )
-//		{
-//			pPlayer->SetModel( pszPossiblePlayerModels [0] );
-//			pPlayer->SetMaxSpeed( BALANCE_VALUE( Int, lfm_class_undefined_maxspeed ) );
-//			return false;
-//		}
-//
-//		CTeam *pTeam = GetGlobalSDKTeam( pPlayer->GetTeamNumber() );
-//
-//		const CPlayerClassInfo &pClassInfo = pTeam->GetPlayerClassInfo( playerclass );
-//
-//		Assert( playerclass < CLASSIC_GAME_CLASSCOUNT && playerclass >= 0 );
-//		Assert( pClassInfo.m_iTeam == pPlayer->GetTeamNumber() );
-//
-//		pPlayer->SetHealth( pClassInfo.m_iHealth );
-//		pPlayer->SetMaxHealth( pClassInfo.m_iHealth );
-//		pPlayer->SetModel( pClassInfo.m_szPlayerModel );
-//		pPlayer->SetHitboxSet( 0 );
+	pPlayer->SetPlayerClass( pPlayer->GetDesiredPlayerClass() );
 
-		return true;
+	int playerclass = pPlayer->GetPlayerClass();
+
+	if( playerclass == PLAYERCLASS_UNDEFINED )
+	{
+		pPlayer->SetModel( pszPossiblePlayerModels [0] );
+		pPlayer->SetMaxSpeed( BALANCE_VALUE( Int, lfm_class_undefined_maxspeed ) );
+		return false;
+	}
+
+	CTeam *pTeam = GetGlobalTeam( pPlayer->GetTeamNumber() );
+
+	const CPlayerClassInfo &pClassInfo = pTeam->GetPlayerClassInfo( playerclass );
+
+	Assert( playerclass < CLASSIC_GAME_CLASSCOUNT && playerclass >= 0 );
+	Assert( pClassInfo.m_iTeam == pPlayer->GetTeamNumber() );
+
+	pPlayer->SetHealth( pClassInfo.m_iHealth );
+	pPlayer->SetMaxHealth( pClassInfo.m_iHealth );
+	pPlayer->SetModel( pClassInfo.m_szPlayerModel );
+	pPlayer->SetHitboxSet( 0 );
+
+	return true;
 }
 
 void CClassicGameRules::GivePlayerWeapons( CModPlayer *pPlayer )
 {
-//	CWeaponSDKBase *pPrimaryWeapon = NULL;
-//
-//	CTeam *pTeam = GetGlobalSDKTeam( pPlayer->GetTeamNumber() );
-//	int playerclass = pPlayer->m_Shared.PlayerClass();
-//	const CPlayerClassInfo &pClassInfo = pTeam->GetPlayerClassInfo( playerclass );
-//
-//	for (int i = 0; i < pClassInfo.m_iWeaponCount; i++)
-//	{
-//		if (pClassInfo.m_WeaponVector [i] != WEAPON_NONE)
-//		{
-//			char buf[ 64 ];
-//			Q_snprintf( buf, sizeof( buf ), "weapon_%s", WeaponIDToAlias( pClassInfo.m_WeaponVector[ i ] ) );
-//
-//			// Primary Ammo
-//			CWeaponSDKBase *pWeapon = dynamic_cast< CWeaponSDKBase * > ( pPlayer->GiveNamedItem( buf ) );
-//
-//			Assert( pWeapon );
-//			if ( !pWeapon )
-//			{
-//				continue;
-//			}
-//
-//			int iAmmoCount = pClassInfo.m_AmmoVector[ i ];
-//			if ( iAmmoCount == 0 )
-//			{
-//				int iNumClip = pWeapon->GetSDKWpnData().m_iDefaultAmmoClips - 1; //account for one clip in the gun
-//				int iClipSize = pWeapon->GetSDKWpnData().iMaxClip1;
-//				pPlayer->GiveAmmo( iNumClip * iClipSize, pWeapon->GetSDKWpnData().szAmmo1 );
-//			}
-//			else
-//			{
-//				pPlayer->GiveAmmo( iAmmoCount, pWeapon->GetSDKWpnData().szAmmo1 );
-//			}
-//
-//			if ( i == 0 )
-//			{
-//				pPrimaryWeapon = pWeapon;
-//			}
-//		}
-//	}
-//
-//	pPlayer->m_Shared.m_flSprintSpeed = pClassInfo.m_flSprintSpeed;
-//	pPlayer->m_Shared.m_flRunSpeed = pClassInfo.m_flRunSpeed;
-//
-//	pPlayer->SetMaxSpeed( pClassInfo.m_flSprintSpeed );
+	CBaseCombatWeapon *pPrimaryWeapon = NULL;
 
-	//Assert( pPrimaryWeapon );
-	//pPlayer->Weapon_Switch( (CBaseCombatWeapon *)pPrimaryWeapon );
+	CTeam *pTeam = GetGlobalTeam( pPlayer->GetTeamNumber() );
+	int playerclass = pPlayer->GetPlayerClass();
+	const CPlayerClassInfo &pClassInfo = pTeam->GetPlayerClassInfo( playerclass );
+
+	for (int i = 0; i < pClassInfo.m_iWeaponCount; i++)
+	{
+		if (pClassInfo.m_WeaponVector [i] != WEAPON_NONE)
+		{
+			char buf[ 64 ];
+			Q_snprintf( buf, sizeof( buf ), "weapon_%s", WeaponIDToAlias( pClassInfo.m_WeaponVector[ i ] ) );
+
+			// Primary Ammo
+			CBaseCombatWeapon *pWeapon = dynamic_cast< CBaseCombatWeapon * > ( pPlayer->GiveNamedItem( buf ) );
+
+			Msg( "Weapon %s found %d\n", buf, pWeapon );
+			Assert( pWeapon );
+			if ( !pWeapon )
+			{
+				continue;
+			}
+
+			int iAmmoCount = pClassInfo.m_AmmoVector[ i ];
+			if ( iAmmoCount == 0 )
+			{
+				int iNumClip = pWeapon->GetWpnData().iDefaultClip1 - 1; //account for one clip in the gun
+				int iClipSize = pWeapon->GetWpnData().iMaxClip1;
+				pPlayer->GiveAmmo( iNumClip * iClipSize, GetAmmoDef()->Index(pWeapon->GetWpnData().szAmmo1), true );
+			}
+			else
+			{
+				pPlayer->GiveAmmo( iAmmoCount, GetAmmoDef()->Index(pWeapon->GetWpnData().szAmmo1), true );
+			}
+
+			if ( i == 0 )
+			{
+				pPrimaryWeapon = pWeapon;
+			}
+		}
+	}
+
+	pPlayer->SetSprintSpeed( pClassInfo.m_flSprintSpeed );
+	pPlayer->SetRunSpeed( pClassInfo.m_flRunSpeed );
+
+	pPlayer->SetMaxSpeed( pClassInfo.m_flSprintSpeed );
+
+	Assert( pPrimaryWeapon );
+	pPlayer->Weapon_Switch( (CBaseCombatWeapon *)pPrimaryWeapon );
 }
 
 void CClassicGameRules::GiveBuildPhaseItems( CModPlayer *pPlayer )
 {
 	pPlayer->SetHitboxSet( 0 );
-	pPlayer->GiveNamedItem( "weapon_lf_build_tool" );
+	pPlayer->GiveNamedItem( "weapon_lf_build_cannon" );
 	pPlayer->GiveNamedItem( "weapon_lf_beacon" );
-	//pPlayer->SetMaxSpeed( BALANCE_VALUE( Int, lfm_builder_maxspeed ) );
-	//pPlayer->m_Shared.m_flRunSpeed = BALANCE_VALUE( Float, lfm_builder_runspeed );
+//	pPlayer->SetMaxSpeed( BALANCE_VALUE( Int, lfm_builder_maxspeed ) );
+//	pPlayer->SetRunSpeed( BALANCE_VALUE( Float, lfm_builder_runspeed ) );
 
 	pPlayer->SetRunSpeed(lf_build_player_runspeed.GetFloat());
 	pPlayer->SetSprintSpeed(lf_build_player_sprintspeed.GetFloat());
@@ -513,7 +507,8 @@ void CClassicGameRules::PlayerSpawn( CBasePlayer *pBasePlayer )
 {	
 	CModPlayer *player = ToModPlayer( pBasePlayer );
 
-	if( player->GetTeamNumber() != TEAM_SPECTATOR )
+	int team = player->GetTeamNumber();
+	if( team != TEAM_SPECTATOR && team != TEAM_UNASSIGNED )
 	{
 		if ( !GivePlayerClassAttributes( player ) )
 		{
@@ -543,19 +538,18 @@ void CClassicGameRules::PlayerSpawn( CBasePlayer *pBasePlayer )
 			}
 
 			GivePlayerWeapons( player );
-			//pPlayer->m_Local.m_iHideHUD &= ~HIDEHUD_BUILDPHASE;
+			player->RemoveFromHud( HIDEHUD_BUILDPHASE );
 		}
 		else // Is buildphase
 		{
 			GiveBuildPhaseItems( player );
-			//pPlayer->m_Local.m_iHideHUD |= HIDEHUD_BUILDPHASE;
+			player->AddToHud( HIDEHUD_BUILDPHASE );
 		}
 	}
 }
 
 const char *CClassicGameRules::GetChatPrefix( bool bTeamOnly, CBasePlayer *pPlayer )
 {
-	//Tony; no prefix for now, it isn't needed.
 	return "";
 }
 
@@ -651,12 +645,65 @@ void CClassicGameRules::ClientDisconnected(edict_t* pClient)
 	BaseClass::ClientDisconnected(pClient);
 }
 
+bool CClassicGameRules::IsPlayerClassOnTeam( int cls, int team )
+{
+	CTeam *pTeam = GetGlobalTeam( team );
+	return ( cls >= 0 && cls < CLASSIC_GAME_CLASSCOUNT );
+}
+
+int CClassicGameRules::CountPlayerClass( int team, int cls )
+{
+	int num = 0;
+
+	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CModPlayer *pModPlayer = ToModPlayer( UTIL_PlayerByIndex( i ) );
+
+		if (pModPlayer == NULL)
+			continue;
+
+		if (FNullEnt( pModPlayer->edict() ))
+			continue;
+
+		if( pModPlayer->GetTeamNumber() != team )
+			continue;
+
+		if( pModPlayer->GetDesiredPlayerClass() == cls )
+			num++;
+	}
+
+	return num;
+}
+
+const char *CClassicGameRules::GetPlayerClassName( int cls, int team )
+{
+	if ( team == TEAM_SPECTATOR )
+	{
+		return "Spectator";
+	}
+
+	CTeam *pTeam = GetGlobalTeam( team );
+
+	if( cls == PLAYERCLASS_RANDOM )
+	{
+		return "#class_random";
+	}
+
+	if( cls < 0 || cls >= CLASSIC_GAME_CLASSCOUNT )
+	{
+		Assert( false );
+		return NULL;
+	}
+
+	return pTeam->GetPlayerClassInfo( cls ).m_szPrintName;
+}
+
 void CClassicGameRules::PlayerKilled(CBasePlayer* pVictim, const CTakeDamageInfo& info)
 {
 	BaseClass::PlayerKilled(pVictim, info);
 }
 
-void CClassicGameRules::RespawnPlayers ()
+void CClassicGameRules::RespawnPlayers()
 {
 	int iPlayersSpawned = 0;
 
@@ -707,4 +754,5 @@ void CClassicGameRules::RespawnPlayers ()
 		iPlayersSpawned++;
 	}
 }
+
 #endif // !CLIENT_DLL

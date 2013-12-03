@@ -58,7 +58,7 @@ public:
 	DECLARE_CLASS( CClassicGameRules, CHL2MPRules );
 
 	CClassicGameRules();
-	virtual ~CClassicGameRules();
+	~CClassicGameRules();
 
 	virtual bool Init( void );
 
@@ -74,6 +74,10 @@ public:
 	virtual const char *GetGameDescription( void );
 	virtual bool IsAllowedToSpawn( CBaseEntity *pEntity );
 	virtual void Think();
+
+	virtual bool IsPlayerClassOnTeam( int cls, int team );
+	virtual int CountPlayerClass( int team, int cls );
+	virtual const char *GetPlayerClassName( int cls, int team );
 
 	virtual void CheckWinningTeam();
 
@@ -101,8 +105,6 @@ public:
 	virtual void ClientDisconnected( edict_t *pClient );
 	virtual void PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &info );
 
-
-public:
 	virtual const char *GetChatPrefix( bool bTeamOnly, CBasePlayer *pPlayer );
 	virtual const char *GetChatFormat( bool bTeamOnly, CBasePlayer *pPlayer );
 
@@ -118,7 +120,7 @@ private:
 	CPhaseManager m_PhaseManager;
 	float m_flPhaseLength;
 	CountdownTimer m_PhaseTimer;
-#endif // CLIENT_DLL
+#endif // !CLIENT_DLL
 
 public:
 	virtual char **GetClassNames( int TeamNum );

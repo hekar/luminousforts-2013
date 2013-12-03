@@ -6,6 +6,7 @@
 //=============================================================================//
 
 #include "cbase.h"
+#if 0
 #include "hud.h"
 #include "hud_suitpower.h"
 #include "hud_macros.h"
@@ -255,3 +256,4 @@ void CHudSuitPower::Paint()
 }
 
 
+#endif // 0

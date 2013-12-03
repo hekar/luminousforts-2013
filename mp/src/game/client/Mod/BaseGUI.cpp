@@ -62,9 +62,6 @@ CGUILoader::~CGUILoader()
 
 void CGUILoader::InitPanels()
 {
-	g_pVGuiLocalize->AddFile( "resource/mod_%language%.txt", "MOD" );
-
-
 	creditspanel->Create( m_GameUI ); 
 	webwindowpanel->Create( m_GameUI );
 //	mp3windowpanel->Create( m_GameUI );
