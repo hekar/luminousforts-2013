@@ -587,16 +587,6 @@ bool CModPlayer::ClientCommand( const CCommand &args )
 		HandleCommand_JoinClass( iClass );
 		return true;
 	}
-	/*else if ( FStrEq( pcmd, "menuopen" ) )
-	{
-		SetClassMenuOpen( true );
-		return true;
-	}
-	else if ( FStrEq( pcmd, "menuclosed" ) )
-	{
-		SetClassMenuOpen( false );
-		return true;
-	}*/
 
 	return BaseClass::ClientCommand( args );
 }

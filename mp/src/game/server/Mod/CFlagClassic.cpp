@@ -184,23 +184,6 @@ void CFlagClassic::Think()
 
 bool CFlagClassic::CreateDropPhysics ()
 {
-#if 0
-	VPhysicsDestroyObject();
-	CPhysicsProp::CreateVPhysics();
-	
-	SetSolid( SOLID_VPHYSICS );
-	SetMoveType( MOVETYPE_VPHYSICS );
-
-	SetAbsOrigin( GetAbsOrigin() + Vector( 0.0f, 0.0f, -50.0f));
-
-	SetSolid( SOLID_BBOX );
-	SetMoveType( MOVETYPE_FLYGRAVITY );
-	SetCollisionGroup( COLLISION_GROUP_FLAG );
-	SetFriction(4.0f);
-
-	SetSolid( SOLID_OBB );
-#endif
-
 	if( IsCurrentlyTouching() )
 	{
 		PhysicsRemoveTouchedList( this );
@@ -228,29 +211,7 @@ bool CFlagClassic::CreateDropPhysics ()
 
 	SetCollisionGroup( COLLISION_GROUP_FLAG );
 
-	//VPhysicsSetObject( pPhysFlag );
 	VPhysicsGetObject()->Wake();
-
-#if 0
-	//Tony; if we're dropped, don't reset to none!!
-	SetCollisionGroup( COLLISION_GROUP_FLAG );
-	RemoveSolidFlags( FSOLID_NOT_SOLID );
-	AddSolidFlags( FSOLID_TRIGGER );
-	CollisionProp()->UseTriggerBounds( true, 16 );
-	IPhysicsObject *pPhysicsObject = VPhysicsGetObject();
-	pPhysicsObject = VPhysicsInitNormal( SOLID_VPHYSICS, FSOLID_NOT_STANDABLE, true );
-	pPhysicsObject->EnableGravity( true );
-	pPhysicsObject->EnableCollisions( true );
-	
-	Vector vecDown( 0.f, 0.f, 100.0f );
-	pPhysicsObject->AddVelocity( &vecDown, NULL );
-
-	AddSolidFlags( FSOLID_TRIGGER );
-	SetCollisionGroup( COLLISION_GROUP_FLAG );
-	//CollisionProp()->UseTriggerBounds( true, 16 );
-
-	pPhysicsObject->Wake();
-#endif
 
 	return true;
 }
