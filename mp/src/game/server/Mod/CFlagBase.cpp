@@ -131,10 +131,10 @@ void CFlagBase::Spawn( void )
 	AddSolidFlags( FSOLID_TRIGGER );
 
 	BaseClass::Spawn();
-//	if ( ClassicGameRules()->IsSourcefortsMap() )
-//	{
-//		ChangeTeam( m_iSourcefortsTeamNumber );
-//	}
+	if ( ClassicGameRules()->IsSourcefortsMap() )
+	{
+		ChangeTeam( m_iSourcefortsTeamNumber );
+	}
 
 	m_vecSpawnOrigin = GetAbsOrigin();
 	SetCollisionGroup( COLLISION_GROUP_FLAG );
@@ -160,19 +160,13 @@ void CFlagBase::Spawn( void )
 	m_StatusUserId = -1;
 
 	// Disallow punting, pushing and picking up
-	AddSpawnFlags( SF_PHYSPROP_PREVENT_PICKUP );
+	AddSpawnFlags( SF_PHYSPROP_PREVENT_PICKUP | SF_PHYSPROP_DONT_TAKE_PHYSICS_DAMAGE );
 	AddEFlags( EFL_NO_PHYSCANNON_INTERACTION | EFL_NO_DAMAGE_FORCES );
 
 	if ( m_bFullyDisabled )
 	{
 		DisableFlag();
 	}
-}
-
-// Override CreateVPhysics so physics isn't enabled on spawn
-bool CFlagBase::CreateVPhysics()
-{	
-	return true;
 }
 
 const bool CFlagBase::PlayerHasFlag() const

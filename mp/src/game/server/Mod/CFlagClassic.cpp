@@ -165,11 +165,10 @@ void CFlagClassic::Think()
 {
 	if( m_bPlayerHasFlag )
 	{
-		// TODO: Fix
-//		if ( m_pPlayerWithFlag->m_nButtons & IN_DROPFLAG )
-//		{
-//			m_pPlayerWithFlag->DropFlag();
-//		}
+		if ( m_pPlayerWithFlag->m_nButtons & IN_DROPFLAG )
+		{
+			m_pPlayerWithFlag->DropFlag();
+		}
 	}
 	else if ( m_bDropped )
 	{
@@ -202,8 +201,6 @@ bool CFlagClassic::CreateDropPhysics ()
 	SetSolid( SOLID_OBB );
 #endif
 
-	IPhysicsObject *pPhysFlag = VPhysicsGetObject();
-
 	if( IsCurrentlyTouching() )
 	{
 		PhysicsRemoveTouchedList( this );
@@ -213,16 +210,15 @@ bool CFlagClassic::CreateDropPhysics ()
 
 	SetSolidFlags( FSOLID_NOT_SOLID );
 	SetSolid( SOLID_BBOX );	
-	SetParent( NULL );
 	SetAbsOrigin( dropPos );
 
-	pPhysFlag = VPhysicsInitNormal( SOLID_VPHYSICS, FSOLID_NOT_STANDABLE, true );
-	if( pPhysFlag ) 
-	{
-		Vector av = pPhysFlag->GetInertia();
-		pPhysFlag->SetPosition( dropPos, GetAbsAngles(), true);
-	}
+	SetParent( NULL );
+	RemoveEffects( EF_BONEMERGE );
+	RemoveSolidFlags( FSOLID_NOT_SOLID );
+	SetMoveType( MOVETYPE_NONE );
 
+	IPhysicsObject *pPhysFlag = VPhysicsGetObject();
+	pPhysFlag->SetPosition( dropPos, GetAbsAngles(), true);
 	pPhysFlag->EnableMotion( true );
 	pPhysFlag->EnableCollisions( true );
 	pPhysFlag->EnableGravity( true );
@@ -232,6 +228,7 @@ bool CFlagClassic::CreateDropPhysics ()
 
 	SetCollisionGroup( COLLISION_GROUP_FLAG );
 
+	//VPhysicsSetObject( pPhysFlag );
 	VPhysicsGetObject()->Wake();
 
 #if 0
@@ -261,10 +258,8 @@ bool CFlagClassic::CreateDropPhysics ()
 // Do not call directly, use player GiveFlag(CBaseEntity *pFlag) instead
 void CFlagClassic::Pickup( CModPlayer *pPlayer )
 {
-	FollowEntity( pPlayer );
+	FollowEntity( pPlayer, false );
 	SetLocalOrigin( Vector( 0, 0, 100 ) );
-	//CreateNoPhysics();
-	//SetMoveType( MOVETYPE_NOCLIP );
 
 	BaseClass::Pickup( pPlayer );
 	m_bFirstTake = true;
