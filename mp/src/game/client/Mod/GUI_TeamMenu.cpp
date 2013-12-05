@@ -81,11 +81,6 @@ void CModTeamMenu::OnKeyCodePressed( KeyCode code )
 		}
 		else if ( code == KEY_3 )
 		{
-			// Auto assign
-			OnCommand( "jointeam 0" );
-		}
-		else if ( code == KEY_4 )
-		{
 			// Spectator
 			OnCommand( "jointeam 1" );
 		}

@@ -75,6 +75,8 @@ extern const char *pszPossiblePlayerModels[];
 
 extern const char *pszTeamNames[];
 
+extern void ModDebugMsg( const char *message );
+
 //Tony; these defines handle the default speeds for all of these - all are listed regardless of which option is enabled.
 #define SDK_DEFAULT_PLAYER_RUNSPEED			340
 #define SDK_DEFAULT_PLAYER_SPRINTSPEED		440

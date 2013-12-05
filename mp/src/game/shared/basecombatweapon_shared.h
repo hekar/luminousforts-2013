@@ -250,6 +250,8 @@ public:
 
 	virtual bool			ShouldBlockPrimaryFire() { return !AutoFiresFullClip(); }
 
+	virtual int GetWeaponID() { return WEAPON_NONE; }
+
 #ifdef CLIENT_DLL
 	virtual void			CreateMove( float flInputSampleTime, CUserCmd *pCmd, const QAngle &vecOldViewAngles ) {}
 	virtual int				CalcOverrideModelIndex() OVERRIDE;

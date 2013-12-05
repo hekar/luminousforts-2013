@@ -80,6 +80,8 @@ public:
 	virtual void DetonateTripmines();
 	virtual void RemoveBeacons();
 
+	virtual bool ClientCommand( const CCommand &args );
+
 	virtual CBaseEntity *EntSelectSpawnPoint();
 	virtual bool SelectTeamSpawnSpot( int iTeamNum, CBaseEntity* &pSpot );
 
