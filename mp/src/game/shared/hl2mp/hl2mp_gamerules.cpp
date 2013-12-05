@@ -795,13 +795,6 @@ void CHL2MPRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 		}
 
 		pHL2Player->SetPlayerModel();
-
-		const char *pszCurrentModelName = modelinfo->GetModelName( pHL2Player->GetModel() );
-
-		char szReturnString[128];
-		Q_snprintf( szReturnString, sizeof( szReturnString ), "Your player model is: %s\n", pszCurrentModelName );
-
-		ClientPrint( pHL2Player, HUD_PRINTTALK, szReturnString );
 	}
 	if ( sv_report_client_settings.GetInt() == 1 )
 	{
