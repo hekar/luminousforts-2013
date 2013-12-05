@@ -160,9 +160,12 @@ void CModPlayer::ChangeTeam( int iTeamNum )
 		DropFlag();
 	}
 
-	if ( GetPlayerClass() == PLAYERCLASS_UNDEFINED )
+	if ( iTeamNum != TEAM_UNASSIGNED && iTeamNum != TEAM_SPECTATOR )
 	{
-		State_Transition( STATE_CLASS_REQUIRED );
+		if ( GetPlayerClass() == PLAYERCLASS_UNDEFINED )
+		{
+			State_Transition( STATE_CLASS_REQUIRED );
+		}
 	}
 
 	BaseClass::ChangeTeam( iTeamNum );
@@ -199,8 +202,7 @@ void CModPlayer::Event_Killed( const CTakeDamageInfo &info )
 	// Detonate all the slams!
 	DetonateTripmines();
 
-#if 0
-	const CBaseCombatWeapon *wpn = GetActiveWeapon();
+	CBaseCombatWeapon *wpn = GetActiveWeapon();
 	if ( wpn && wpn->GetWeaponID() == LF_WEAPON_COMBATCANNON )
 	{
 		CWeaponCombatCannon *combatcannon = dynamic_cast< CWeaponCombatCannon* >( wpn );
@@ -220,7 +222,6 @@ void CModPlayer::Event_Killed( const CTakeDamageInfo &info )
 	}
 
 	BaseClass::Event_Killed( info );
-#endif // 0
 }
 
 void CModPlayer::Precache()
@@ -242,8 +243,8 @@ void CModPlayer::Precache()
 
 void CModPlayer::InitialSpawn()
 {
-	State_Enter( STATE_ENTER );
 	BaseClass::InitialSpawn();
+	State_Enter( STATE_ENTER );
 }
 
 void CModPlayer::Spawn()
@@ -257,13 +258,9 @@ void CModPlayer::Spawn()
 			State_Transition( STATE_TEAM_REQUIRED );
 		}
 		else if ( GetPlayerClass() == PLAYERCLASS_UNDEFINED &&
-				( GetTeamNumber() == TEAM_SPECTATOR || GetTeamNumber() == TEAM_UNASSIGNED ) )
+				( GetTeamNumber() != TEAM_SPECTATOR || GetTeamNumber() != TEAM_UNASSIGNED ) )
 		{
 			State_Transition( STATE_CLASS_REQUIRED );
-		}
-		else if ( GetTeamNumber() != TEAM_SPECTATOR && GetMoveType() == MOVETYPE_WALK )
-		{
-			State_Transition( STATE_ACTIVE );
 		}
 	}
 
@@ -339,7 +336,6 @@ CBaseEntity *CModPlayer::EntSelectSpawnPoint()
 
 	switch( GetTeamNumber() )
 	{
-#if defined ( SDK_USE_TEAMS )
 	case SDK_TEAM_BLUE:
 		{
 			pSpot = g_pLastBlueSpawn;
@@ -358,7 +354,6 @@ CBaseEntity *CModPlayer::EntSelectSpawnPoint()
 			}
 		}
 		break;
-#endif // SDK_USE_TEAMS
 	case TEAM_UNASSIGNED:
 		{
 			pSpawnPointName = "info_player_deathmatch";
@@ -519,12 +514,12 @@ bool CModPlayer::HandleCommand_JoinClass( int iClass )
 		return true;
 	}
 
-	/*if( !ClassicGameRules()->IsPlayerClassOnTeam( iClass, GetTeamNumber() ) )
+	if( !ClassicGameRules()->IsPlayerClassOnTeam( iClass, GetTeamNumber() ) )
 	{
 		return false;
-	}*/
+	}
 
-	const char *classname = "";//ClassicGameRules()->GetPlayerClassName( iClass, GetTeamNumber() );
+	const char *classname = ClassicGameRules()->GetPlayerClassName( iClass, GetTeamNumber() );
 
 	m_HL2Local.m_iDesiredPlayerClass = iClass ;
 
@@ -552,6 +547,58 @@ bool CModPlayer::HandleCommand_JoinClass( int iClass )
 	}
 
 	return true;
+}
+
+bool CModPlayer::ClientCommand( const CCommand &args )
+{
+	const char *pcmd = args[0];
+	if ( !Q_strncmp( pcmd, "cls_", 4 ) )
+	{
+		CTeam *pTeam = GetGlobalTeam( GetTeamNumber( ) );
+
+		Assert( pTeam );
+
+		int iClassIndex = PLAYERCLASS_UNDEFINED;
+
+		if ( pTeam->IsClassOnTeam( pcmd, iClassIndex ) )
+		{
+			HandleCommand_JoinClass( iClassIndex );
+		}
+
+		return true;
+	}
+	else if ( FStrEq( pcmd, "mod_motd_closed" ) )
+	{
+		if ( State_Get() == STATE_ENTER )
+		{
+			State_Transition( STATE_TEAM_REQUIRED );
+		}
+
+		return true;
+	}
+	else if ( FStrEq( pcmd, "joinclass" ) )
+	{
+		if ( args.ArgC( ) < 2 )
+		{
+			Warning( "Player sent bad joinclass syntax\n" );
+		}
+
+		int iClass = atoi( args[1] );
+		HandleCommand_JoinClass( iClass );
+		return true;
+	}
+	/*else if ( FStrEq( pcmd, "menuopen" ) )
+	{
+		SetClassMenuOpen( true );
+		return true;
+	}
+	else if ( FStrEq( pcmd, "menuclosed" ) )
+	{
+		SetClassMenuOpen( false );
+		return true;
+	}*/
+
+	return BaseClass::ClientCommand( args );
 }
 
 #ifdef MOD_SF132

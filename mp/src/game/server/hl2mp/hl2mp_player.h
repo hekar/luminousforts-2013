@@ -114,6 +114,7 @@ public:
 	void State_Transition( HL2MPPlayerState newState );
 	void State_Enter( HL2MPPlayerState newState );
 	void State_Leave();
+	HL2MPPlayerState State_Get( );
 	void State_PreThink();
 	CHL2MPPlayerStateInfo *State_LookupInfo( HL2MPPlayerState state );
 

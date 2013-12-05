@@ -147,8 +147,6 @@ void CHL2MP_Player::Precache( void )
 		 PrecacheModel( g_ppszRandomCombineModels[i] );
 	}
 
-
-
 	PrecacheFootStepSounds();
 
 	PrecacheScriptSound( "NPC_MetroPolice.Die" );
@@ -166,6 +164,7 @@ void CHL2MP_Player::Spawn(void)
 
 	BaseClass::Spawn();
 	
+
 	if ( !IsObserver() )
 	{
 		pl.deadflag = false;
@@ -184,6 +183,15 @@ void CHL2MP_Player::Spawn(void)
 	AddFlag(FL_ONGROUND); // set the player on the ground at the start of the round.
 
 	m_impactEnergyScale = HL2MPPLAYER_PHYSDAMAGE_SCALE;
+
+	if ( State_Get( ) == STATE_ACTIVE )
+	{
+		EquipSuit( false );
+	}
+	else
+	{
+		SetMoveType( MOVETYPE_NONE );
+	}
 
 	if ( HL2MPRules()->IsIntermission() )
 	{
@@ -1382,6 +1390,19 @@ void CHL2MP_Player::State_Leave()
 }
 
 
+HL2MPPlayerState CHL2MP_Player::State_Get( )
+{
+	if ( m_pCurStateInfo )
+	{
+		return m_pCurStateInfo->m_iPlayerState;
+	}
+	else
+	{
+		return STATE_ACTIVE;
+	}
+}
+
+
 void CHL2MP_Player::State_PreThink()
 {
 	if ( m_pCurStateInfo && m_pCurStateInfo->pfnPreThink )
@@ -1389,7 +1410,6 @@ void CHL2MP_Player::State_PreThink()
 		(this->*m_pCurStateInfo->pfnPreThink)();
 	}
 }
-
 
 CHL2MPPlayerStateInfo *CHL2MP_Player::State_LookupInfo( HL2MPPlayerState state )
 {
@@ -1431,6 +1451,8 @@ void CHL2MP_Player::StopObserverMode()
 
 void CHL2MP_Player::State_Enter_OBSERVER_MODE()
 {
+	ModDebugMsg( "State_Enter_OBSERVER_MODE" );
+
 	int observerMode = m_iObserverLastMode;
 	if ( IsNetClient() )
 	{
@@ -1450,6 +1472,8 @@ void CHL2MP_Player::State_Enter_OBSERVER_MODE()
 
 void CHL2MP_Player::State_PreThink_OBSERVER_MODE()
 {
+	ModDebugMsg( "State_PreThink_OBSERVER_MODE" );
+
 	// Make sure nobody has changed any of our state.
 	//	Assert( GetMoveType() == MOVETYPE_FLY );
 	Assert( m_takedamage == DAMAGE_NO );
@@ -1463,45 +1487,52 @@ void CHL2MP_Player::State_PreThink_OBSERVER_MODE()
 
 void CHL2MP_Player::State_Enter_ENTER()
 {
+	ModDebugMsg( "State_Enter_ENTER" );
 }
 
 void CHL2MP_Player::State_Leave_ENTER()
 {
+	ModDebugMsg( "State_Leave_ENTER" );
 }
 
 void CHL2MP_Player::State_Enter_TEAM_REQUIRED()
 {
+	ModDebugMsg( "State_Enter_TEAM_REQUIRED" );
 	engine->ClientCommand( edict(), "lf_hud_teammenu" );
 }
 
 void CHL2MP_Player::State_PreThink_TEAM_REQUIRED()
 {
+	ModDebugMsg( "State_PreThink_TEAM_REQUIRED" );
 }
 
 void CHL2MP_Player::State_Enter_CLASS_REQUIRED()
 {
+	ModDebugMsg( "State_Enter_CLASS_REQUIRED" );
+	engine->ClientCommand( edict( ), "lf_hud_classmenu" );
 }
 
 void CHL2MP_Player::State_PreThink_CLASS_REQUIRED()
 {
+	ModDebugMsg( "State_PreThink_CLASS_REQUIRED" );
 }
 
 void CHL2MP_Player::State_Enter_ACTIVE()
 {
+	ModDebugMsg( "State_Enter_ACTIVE" );
+
 	SetMoveType( MOVETYPE_WALK );
 	
-	// md 8/15/07 - They'll get set back to solid when they actually respawn. If we set them solid now and mp_forcerespawn
-	// is false, then they'll be spectating but blocking live players from moving.
-	// RemoveSolidFlags( FSOLID_NOT_SOLID );
-	
+	RemoveSolidFlags( FSOLID_NOT_SOLID );
 	m_Local.m_iHideHUD = 0;
+
+	Spawn( );
 }
 
 
 void CHL2MP_Player::State_PreThink_ACTIVE()
 {
-	//we don't really need to do anything here. 
-	//This state_prethink structure came over from CS:S and was doing an assert check that fails the way hl2dm handles death
+	ModDebugMsg( "State_PreThink_ACTIVE" );
 }
 
 //-----------------------------------------------------------------------------

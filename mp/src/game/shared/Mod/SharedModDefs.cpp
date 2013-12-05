@@ -136,5 +136,12 @@ const char *WeaponIDToAlias( int id )
 	return s_WeaponAliasInfo[id];
 }
 
-
-
+/**
+ * TODO: Figure out how to call DMsg using varargs
+ * Ran into this problem
+ * Reference: http://www.swig.org/Doc1.3/Varargs.html#Varargs_nn3
+ */
+void ModDebugMsg( const char *message )
+{
+	DMsg( "LuminousFarts", 1, message );
+}

@@ -309,55 +309,7 @@ void CTextWindow::OnCommand( const char *command )
 {
 	if (!Q_strcmp(command, "okay"))
 	{
-		//=============================================================================
-		// HPE_BEGIN:
-		// [Forrest] Replaced text window command string with TEXTWINDOW_CMD enumeration
-		// of options.  Passing a command string is dangerous and allowed a server network
-		// message to run arbitrary commands on the client.
-		//=============================================================================
-		const char *pszCommand = NULL;
-		switch ( m_nExitCommand )
-		{
-			case TEXTWINDOW_CMD_NONE:
-				break;
-
-			case TEXTWINDOW_CMD_JOINGAME:
-				pszCommand = "joingame";
-				break;
-
-			case TEXTWINDOW_CMD_CHANGETEAM:
-				pszCommand = "changeteam";
-				break;
-
-			case TEXTWINDOW_CMD_IMPULSE101:
-				pszCommand = "impulse 101";
-				break;
-
-			case TEXTWINDOW_CMD_MAPINFO:
-				pszCommand = "mapinfo";
-				break;
-
-			case TEXTWINDOW_CMD_CLOSED_HTMLPAGE:
-				pszCommand = "closed_htmlpage";
-				break;
-
-			case TEXTWINDOW_CMD_CHOOSETEAM:
-				pszCommand = "chooseteam";
-				break;
-
-			default:
-				DevMsg("CTextWindow::OnCommand: unknown exit command value %i\n", m_nExitCommand );
-				break;
-		}
-
-		if ( pszCommand != NULL )
-		{
-			engine->ClientCmd_Unrestricted( pszCommand );
-		}
-		//=============================================================================
-		// HPE_END
-		//=============================================================================
-		
+		engine->ClientCmd_Unrestricted( "mod_motd_closed" );
 		m_pViewPort->ShowPanel( this, false );
 	}
 

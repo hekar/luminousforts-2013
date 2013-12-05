@@ -25,8 +25,12 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 
 #include "cbase.h"
-#include "ClassicGameRules.h"
-#include "ClassicCommands.h"
+#include "Mod/ClassicGameRules.h"
+#include "Mod/ClassicCommands.h"
+
+#ifndef CLIENT_DLL
+#include "Mod/CModPlayer.h"
+#endif // !CLIENT_DLL
 
 #ifdef CLIENT_DLL
 void CC_PrintCurrentPhase( const CCommand& args )
@@ -230,5 +234,14 @@ void CC_ReturnToSpawn( const CCommand& args )
 
 static ConCommand lf_return_to_spawn( "lf_return_to_spawn", CC_ReturnToSpawn, "Teleport to spawn" );
 
+
+//void CC_MotdClosed( const CCommand& args )
+//{
+//	CModPlayer *pPlayer = ToModPlayer( UTIL_GetCommandClient() );
+//
+//	ModDebugMsg( pPlayer->GetPlayerName() );
+//}
+//
+//static ConCommand mod_motd_closed( "mod_motd_closed", CC_MotdClosed, "The motd dialog has been closed by a player" );
 
 #endif // CLIENT_DLL

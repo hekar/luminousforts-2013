@@ -794,28 +794,14 @@ void CHL2MPRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 			return;
 		}
 
-		if ( HL2MPRules()->IsTeamplay() == false )
-		{
-			pHL2Player->SetPlayerModel();
+		pHL2Player->SetPlayerModel();
 
-			const char *pszCurrentModelName = modelinfo->GetModelName( pHL2Player->GetModel() );
+		const char *pszCurrentModelName = modelinfo->GetModelName( pHL2Player->GetModel() );
 
-			char szReturnString[128];
-			Q_snprintf( szReturnString, sizeof( szReturnString ), "Your player model is: %s\n", pszCurrentModelName );
+		char szReturnString[128];
+		Q_snprintf( szReturnString, sizeof( szReturnString ), "Your player model is: %s\n", pszCurrentModelName );
 
-			ClientPrint( pHL2Player, HUD_PRINTTALK, szReturnString );
-		}
-		else
-		{
-			if ( Q_stristr( szModelName, "models/human") )
-			{
-				pHL2Player->ChangeTeam( TEAM_REBELS );
-			}
-			else
-			{
-				pHL2Player->ChangeTeam( TEAM_COMBINE );
-			}
-		}
+		ClientPrint( pHL2Player, HUD_PRINTTALK, szReturnString );
 	}
 	if ( sv_report_client_settings.GetInt() == 1 )
 	{
