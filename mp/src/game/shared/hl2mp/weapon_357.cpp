@@ -36,6 +36,8 @@ public:
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_357; }
+
 #ifndef CLIENT_DLL
 	DECLARE_ACTTABLE();
 #endif

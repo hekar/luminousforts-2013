@@ -66,6 +66,8 @@ public:
 	
 	const WeaponProficiencyInfo_t *GetProficiencyValues();
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_AR2; }
+
 private:
 	CWeaponAR2( const CWeaponAR2 & );
 

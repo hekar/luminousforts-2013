@@ -234,6 +234,8 @@ public:
 	void			DrawEffects( void );
 //	void			DrawLaserDot( void );
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_RPG; }
+
 	CMaterialReference	m_hSpriteMaterial;	// Used for the laser glint
 	CMaterialReference	m_hBeamMaterial;	// Used for the laser beam
 	Beam_t				*m_pBeam;			// Laser beam temp entity
