@@ -405,6 +405,8 @@ public:
 	virtual void	ItemBusyFrame( void );
 	virtual bool	SendWeaponAnim( int iActivity );
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_CROSSBOW; }
+
 #ifndef CLIENT_DLL
 	virtual void Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCharacter *pOperator );
 #endif

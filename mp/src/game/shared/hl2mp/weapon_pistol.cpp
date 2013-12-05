@@ -52,6 +52,8 @@ public:
 
 	Activity	GetPrimaryAttackActivity( void );
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_PISTOL; }
+
 	virtual bool Reload( void );
 
 	virtual const Vector& GetBulletSpread( void )

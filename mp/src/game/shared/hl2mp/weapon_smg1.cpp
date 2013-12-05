@@ -61,6 +61,8 @@ public:
 
 	const WeaponProficiencyInfo_t *GetProficiencyValues();
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_SMG1; }
+
 #ifndef CLIENT_DLL
 	DECLARE_ACTTABLE();
 #endif

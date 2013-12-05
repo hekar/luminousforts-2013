@@ -33,7 +33,7 @@ bool g_bUsedPlayerClassSlots[MAX_PLAYERCLASSES] = { 0 };
 
 void CC_ReloadPlayerClasses_f (void)
 {
-	//ResetFilePlayerClassInfoDatabase();
+	ResetFilePlayerClassInfoDatabase();
 }
 
 static ConCommand dod_reloadplayerclasses("dod_reloadplayerclasses", CC_ReloadPlayerClasses_f, "Reset player class info cache" );
@@ -264,7 +264,8 @@ void FilePlayerClassInfo_t::Parse( KeyValues *pKeyValuesData, const char *szPlay
 
 	for (int i = 1; i <= WEAPON_MAX; i++)
 	{
-		int Length = strlen ("weapon_") + 2;
+		// This code sucks...
+		int Length = strlen ("weapon_") + 3;
 		char *WeaponKeyName = new char [Length];
 		Q_snprintf (WeaponKeyName, Length, "weapon_%d", i);
 		const char *pszWeapon = pKeyValuesData->GetString( WeaponKeyName, NULL );
@@ -279,7 +280,7 @@ void FilePlayerClassInfo_t::Parse( KeyValues *pKeyValuesData, const char *szPlay
 		m_WeaponVector.AddToTail (iWeapon);
 		delete WeaponKeyName;
 
-		int AmmoLength = strlen ("weapon_ammo") + 3;
+		int AmmoLength = strlen ("weapon_ammo") + 4;
 		char *AmmoKeyName = new char [AmmoLength];
 		Q_snprintf (AmmoKeyName, AmmoLength, "weapon_%d_ammo", i);
 		int iAmmoCount = pKeyValuesData->GetInt( AmmoKeyName, 0 );

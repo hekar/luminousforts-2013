@@ -62,6 +62,8 @@ public:
 	
 	bool	Reload( void );
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_FRAG; }
+
 #ifndef CLIENT_DLL
 	void Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCharacter *pOperator );
 #endif

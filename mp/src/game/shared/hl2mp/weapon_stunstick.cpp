@@ -88,6 +88,8 @@ public:
 	void		SetStunState( bool state );
 	bool		GetStunState( void );
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_STUNSTICK; }
+
 #ifndef CLIENT_DLL
 	void		Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCharacter *pOperator );
 	int			WeaponMeleeAttack1Condition( float flDot, float flDist );

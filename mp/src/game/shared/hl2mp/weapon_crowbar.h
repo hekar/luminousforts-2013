@@ -51,6 +51,8 @@ public:
 
 	void		Drop( const Vector &vecVelocity );
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_CROWBAR; }
+
 
 	// Animation event
 #ifndef CLIENT_DLL

@@ -250,7 +250,7 @@ public:
 
 	virtual bool			ShouldBlockPrimaryFire() { return !AutoFiresFullClip(); }
 
-	virtual int GetWeaponID() { return WEAPON_NONE; }
+	virtual SDKWeaponID GetWeaponID( void ) const { return WEAPON_NONE; }
 
 #ifdef CLIENT_DLL
 	virtual void			CreateMove( float flInputSampleTime, CUserCmd *pCmd, const QAngle &vecOldViewAngles ) {}

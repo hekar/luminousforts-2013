@@ -75,6 +75,8 @@ public:
 	bool				Deploy( void );
 	bool				Holster( CBaseCombatWeapon *pSwitchingTo = NULL );
 
+	SDKWeaponID GetWeaponID( void ) const { return WEAPON_SLAM; }
+
 
 	CWeapon_SLAM();
 

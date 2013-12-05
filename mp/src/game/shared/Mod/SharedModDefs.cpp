@@ -70,6 +70,18 @@ const char *pszPossiblePlayerModels[] =
 static const char * s_WeaponAliasInfo[] =
 {
 	"none",		// WEAPON_NONE
+	"357",
+	"ar2",
+	"crossbow",
+	"crowbar",
+	"frag",
+	"shotgun",
+	"slam",
+	"smg1",
+	"stunstick",
+	"pistol",
+	"physcannon",
+	"rpg",
 	"sdk_mp5",		// SDK_WEAPON_MP5
 	"hl2_rpg",
 	"sdk_shotgun",	// SDK_WEAPON_SHOTGUN
