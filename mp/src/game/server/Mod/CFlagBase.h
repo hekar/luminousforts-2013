@@ -54,9 +54,6 @@ public:
 	virtual void Precache( void );
 	virtual void Spawn( void );
 
-	// Override CreateVPhysics so physics isn't enabled on spawn
-	bool CreateVPhysics();
-
 	const bool PlayerHasFlag() const;
 
 	virtual void SetSpawnPoint( const Vector& Origin );
