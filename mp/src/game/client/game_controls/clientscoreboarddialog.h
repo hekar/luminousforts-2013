@@ -1,4 +1,4 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -13,8 +13,9 @@
 
 #include <vgui_controls/EditablePanel.h>
 #include <game/client/iviewport.h>
-#include "GameEventListener.h"
+#include "gameeventlistener.h"
 
+// This is dumb
 #define TYPE_NOTEAM			0	// NOTEAM must be zero :)
 #define TYPE_TEAM			1	// a section for a single team	
 #define TYPE_PLAYERS		2
@@ -30,87 +31,85 @@ class CClientScoreBoardDialog : public vgui::EditablePanel, public IViewPortPane
 private:
 	DECLARE_CLASS_SIMPLE( CClientScoreBoardDialog, vgui::EditablePanel );
 
-protected:
-// column widths at 640
-	enum { NAME_WIDTH = 160, SCORE_WIDTH = 60, DEATH_WIDTH = 60, PING_WIDTH = 80, VOICE_WIDTH = 0, FRIENDS_WIDTH = 0 };
-	// total = 340
-
 public:
 	CClientScoreBoardDialog( IViewPort *pViewPort );
-	~CClientScoreBoardDialog();
+	~CClientScoreBoardDialog( );
 
 	virtual const char *GetName( void ) { return PANEL_SCOREBOARD; }
-	virtual void SetData(KeyValues *data) {};
-	virtual void Reset();
-	virtual void Update();
+	virtual void SetData( KeyValues *data ) {};
+	virtual void Reset( );
+	virtual void Update( );
 	virtual bool NeedsUpdate( void );
 	virtual bool HasInputElements( void ) { return true; }
 	virtual void ShowPanel( bool bShow );
 
-	virtual bool ShowAvatars() 
-	{ 
-#ifdef CSS_PERF_TEST
-		return false;
-#endif
-		return IsPC(); 
-	}
+	virtual bool ShowAvatars( ) { return IsPC( ); }
 
 	// both vgui::Frame and IViewPortPanel define these, so explicitly define them here as passthroughs to vgui
-	vgui::VPANEL GetVPanel( void ) { return BaseClass::GetVPanel(); }
-  	virtual bool IsVisible() { return BaseClass::IsVisible(); }
-  	virtual void SetParent( vgui::VPANEL parent ) { BaseClass::SetParent( parent ); }
- 	
+	vgui::VPANEL GetVPanel( void ) { return BaseClass::GetVPanel( ); }
+	virtual bool IsVisible( ) { return BaseClass::IsVisible( ); }
+	virtual void SetParent( vgui::VPANEL parent ) { BaseClass::SetParent( parent ); }
+
 	// IGameEventListener interface:
-	virtual void FireGameEvent( IGameEvent *event);
+	virtual void FireGameEvent( IGameEvent *event );
 
 	virtual void UpdatePlayerAvatar( int playerIndex, KeyValues *kv );
-			
+
 protected:
 	MESSAGE_FUNC_INT( OnPollHideCode, "PollHideCode", code );
 
 	// functions to override
-	virtual bool GetPlayerScoreInfo(int playerIndex, KeyValues *outPlayerInfo);
-	virtual void InitScoreboardSections();
-	virtual void UpdateTeamInfo();
-	virtual void UpdatePlayerInfo();
-	virtual void OnThink();
-	virtual void AddHeader(); // add the start header of the scoreboard
-	virtual void AddSection(int teamType, int teamNumber); // add a new section header for a team
-	virtual int GetAdditionalHeight() { return 0; }
+	virtual bool GetPlayerScoreInfo( int playerIndex, KeyValues *outPlayerInfo );
+	virtual void InitScoreboardSections( );
+
+	// Left blank for inheriter to override
+	virtual void UpdateTeamInfo( ) {};
+	virtual void UpdatePlayerInfo( );
+
+	virtual void OnThink( );
+	virtual void AddList( vgui::SectionedListPanel *pList );
+	virtual void AddHeader( vgui::SectionedListPanel *pList ); // add the start header of the scoreboard
+	virtual void AddSection( vgui::SectionedListPanel *pList, int teamType, int teamNumber ); // add a new section header for a team
+	virtual int GetAdditionalHeight( ) { return 0; }
+
+	virtual vgui::SectionedListPanel *GetList( int TeamIndex );
 
 	// sorts players within a section
-	static bool StaticPlayerSortFunc(vgui::SectionedListPanel *list, int itemID1, int itemID2);
+	static bool StaticPlayerSortFunc( vgui::SectionedListPanel *list, int itemID1, int itemID2 );
 
-	virtual void ApplySchemeSettings(vgui::IScheme *pScheme);
+	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
 
 	virtual void PostApplySchemeSettings( vgui::IScheme *pScheme );
 
 	// finds the player in the scoreboard
-	int FindItemIDForPlayerIndex(int playerIndex);
+	int FindItemIDForPlayerIndex( int playerIndex );
 
 	int m_iNumTeams;
 
-	vgui::SectionedListPanel *m_pPlayerList;
-	int				m_iSectionId; // the current section we are entering into
+	int	m_iSectionId; // the current section we are entering into
+
+	vgui::SectionedListPanel *m_pBlueList;
+	vgui::SectionedListPanel *m_pRedList;
 
 	int s_VoiceImage[5];
 	int TrackerImage;
 	int	m_HLTVSpectators;
-	int m_ReplaySpectators;
 	float m_fNextUpdateTime;
 
-	void MoveLabelToFront(const char *textEntryName);
-	void MoveToCenterOfScreen();
+	void MoveLabelToFront( const char *textEntryName );
+	void MoveToCenterOfScreen( );
 
 	vgui::ImageList				*m_pImageList;
-	CUtlMap<CSteamID,int>		m_mapAvatarsToImageList;
+	int							m_iImageAvatars[MAX_PLAYERS + 1];
+	CUtlMap<int, int>			m_mapAvatarsToImageList;
 
-	CPanelAnimationVar( int, m_iAvatarWidth, "avatar_width", "34" );		// Avatar width doesn't scale with resolution
-	CPanelAnimationVarAliasType( int, m_iNameWidth, "name_width", "136", "proportional_int" );
-	CPanelAnimationVarAliasType( int, m_iClassWidth, "class_width", "35", "proportional_int" );
-	CPanelAnimationVarAliasType( int, m_iScoreWidth, "score_width", "35", "proportional_int" );
-	CPanelAnimationVarAliasType( int, m_iDeathWidth, "death_width", "35", "proportional_int" );
-	CPanelAnimationVarAliasType( int, m_iPingWidth, "ping_width", "23", "proportional_int" );
+	// Avatar proportional value
+	CPanelAnimationVarAliasType( int, m_iAvatarWidth, "avatar_width", "42", "proportional_int" );
+	CPanelAnimationVarAliasType( int, m_iNameWidth, "name_width", "96", "proportional_int" );
+	CPanelAnimationVarAliasType( int, m_iClassWidth, "class_width", "50", "proportional_int" );
+	CPanelAnimationVarAliasType( int, m_iScoreWidth, "score_width", "50", "proportional_int" );
+	CPanelAnimationVarAliasType( int, m_iPingWidth, "ping_width", "30", "proportional_int" );
+	CPanelAnimationVarAliasType( int, m_iVoiceWidth, "voice_width", "30", "proportional_int" );
 
 private:
 	int			m_iPlayerIndexSymbol;
@@ -120,7 +119,7 @@ private:
 
 
 	// methods
-	void FillScoreBoard();
+	void FillScoreBoard( );
 };
 
 

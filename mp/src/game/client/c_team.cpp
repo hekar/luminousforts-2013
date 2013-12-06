@@ -102,6 +102,11 @@ void C_Team::PreDataUpdate( DataUpdateType_t updateType )
 	BaseClass::PreDataUpdate( updateType );
 }
 
+void C_Team::PostDataUpdate( DataUpdateType_t updateType )
+{
+	BaseClass::PostDataUpdate( updateType );
+	LoadPlayerClassInfo( );
+}
 
 //-----------------------------------------------------------------------------
 // Gets the ith player on the team (may return NULL) 
@@ -278,6 +283,34 @@ int C_Team::GetBlockCount()
 int C_Team::GetStolenBlockCount()
 {
 	return m_iStolenBlockCount;
+}
+
+void C_Team::LoadPlayerClassInfo( void )
+{
+	if ( m_hPlayerClassInfoHandles.Size() > 0 )
+	{
+		return;
+	}
+
+	if ( m_iTeamNum == TEAM_BLUE )
+	{
+		int i = 0;
+		while ( pszTeamBlueClasses[i] != NULL )
+		{
+			AddPlayerClass( pszTeamBlueClasses[i] );
+			i++;
+		}
+	}
+	else if ( m_iTeamNum == TEAM_RED )
+	{
+		int i = 0;
+		while ( pszTeamRedClasses[i] != NULL )
+		{
+			AddPlayerClass( pszTeamRedClasses[i] );
+			i++;
+		}
+	}
+	
 }
 
 
