@@ -69,7 +69,7 @@ BEGIN_NETWORK_TABLE_NOBASE( CHL2MPRules, DT_HL2MPRules )
 		SendPropBool( SENDINFO( m_bTeamPlayEnabled ) ),
 		SendPropFloat( SENDINFO( m_flGameStartTime ), 32, SPROP_NOSCALE ),
 		SendPropInt( SENDINFO( m_iCurrentPhaseID ), 8, SPROP_UNSIGNED ),
-		SendPropFloat( SENDINFO( m_flPhaseTimeLeft ), 0, SPROP_NOSCALE ),
+		SendPropFloat( SENDINFO( m_flPhaseTimeLeft ), 32, SPROP_NOSCALE ),
 		SendPropBool( SENDINFO( m_bSourcefortsMap ) ),
 	#endif
 
