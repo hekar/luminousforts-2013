@@ -34,7 +34,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 ===============================================================*/
 
 #include "cbase.h"
-#if 0
 #include "player.h"
 #include "gamerules.h"
 #include "items.h"
@@ -42,15 +41,14 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "eventlist.h"
 #include "npcevent.h"
 
-#include "hl2mp_player.h"
-#include "sdk_team.h"
-#include "sdk_gamerules.h"
-#include "sdk_playerclass_info_parse.h"
-#include "weapon_sdkbase.h"
+#include "team.h"
+#include "gamerules.h"
+#include "playerclass_info_parse.h"
 
 #include "CAmmoCrate.h"
 #include "CAmmoCrateClassic.h"
-#include "ClassicGameRules.h"
+#include "CModPlayer.h"
+#include "Mod/ClassicGameRules.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -67,7 +65,7 @@ END_DATADESC()
 
 void CAmmoCrateClassic::Spawn()
 {
-	if ( SDKGameRules()->IsSourcefortsMap() )
+	if ( ClassicGameRules()->IsSourcefortsMap() )
 	{
 		ChangeTeam( m_iSourcefortsTeam );
 	}
@@ -111,4 +109,3 @@ void CAmmoCrateClassic::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 	BaseClass::Use( pActivator, pCaller, useType, value );
 }
 
-#endif // 0

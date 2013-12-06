@@ -27,10 +27,10 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #ifndef CAMMOCRATE_H
 #define CAMMOCRATE_H
 
-class CItem_AmmoCrate : public CBaseAnimating
+class CAmmoCrate : public CBaseAnimating
 {
 public:
-	DECLARE_CLASS( CItem_AmmoCrate, CBaseAnimating );
+	DECLARE_CLASS( CAmmoCrate, CBaseAnimating );
 
 	void	Spawn( void );
 	void	Precache( void );

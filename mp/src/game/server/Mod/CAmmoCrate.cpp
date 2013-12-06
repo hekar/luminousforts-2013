@@ -34,8 +34,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 ===============================================================*/
 
 #include "cbase.h"
-#if 0
-#include "ClassicGameRules.h"
 #include "CAmmoCrate.h"
 #include "player.h"
 #include "gamerules.h"
@@ -43,12 +41,11 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "ammodef.h"
 #include "eventlist.h"
 #include "npcevent.h"
+#include "team.h"
+#include "playerclass_info_parse.h"
 
-#include "hl2mp_player.h"
-#include "sdk_team.h"
-#include "sdk_gamerules.h"
-#include "sdk_playerclass_info_parse.h"
-#include "weapon_sdkbase.h"
+#include "CModPlayer.h"
+#include "Mod/ClassicGameRules.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -58,7 +55,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 //---------------------------------------------------------
 // Applies ammo quantity scale.
 //---------------------------------------------------------
-int ITEM_GiveAmmo( CBasePlayer *pPlayer, float flCount, const char *pszAmmoName, bool bSuppressSound = false )
+int GivePlayerAmmo( CBasePlayer *pPlayer, float flCount, const char *pszAmmoName, bool bSuppressSound = false )
 {
 	if (!strcmp (pszAmmoName, ""))
 		return 0;
@@ -78,7 +75,7 @@ int ITEM_GiveAmmo( CBasePlayer *pPlayer, float flCount, const char *pszAmmoName,
 	return pPlayer->GiveAmmo( flCount, iAmmoType, bSuppressSound );
 }
 
-BEGIN_DATADESC( CItem_AmmoCrate )
+BEGIN_DATADESC( CAmmoCrate )
 
 	DEFINE_FIELD( m_flCloseTime, FIELD_FLOAT ),
 	DEFINE_FIELD( m_hActivator, FIELD_EHANDLE ),
@@ -93,7 +90,7 @@ END_DATADESC()
 
 #define	AMMO_CRATE_CLOSE_DELAY	1.5f
 
-void CItem_AmmoCrate::Spawn( void )
+void CAmmoCrate::Spawn( void )
 {
 	Precache();
 
@@ -133,12 +130,12 @@ void CItem_AmmoCrate::Spawn( void )
 	m_takedamage = DAMAGE_NO;
 }
 
-bool CItem_AmmoCrate::CreateVPhysics( void )
+bool CAmmoCrate::CreateVPhysics( void )
 {
 	return ( VPhysicsInitStatic() != NULL );
 }
 
-void CItem_AmmoCrate::Precache( void )
+void CAmmoCrate::Precache( void )
 {
 	PrecacheModel( AMMO_CRATE_MODELNAME );
 
@@ -147,13 +144,13 @@ void CItem_AmmoCrate::Precache( void )
 	PrecacheScriptSound( "Player.UseDeny" );
 }
 
-void CItem_AmmoCrate::OnRestore( void )
+void CAmmoCrate::OnRestore( void )
 {
 	BaseClass::OnRestore();
 }
 
 // +Use
-void CItem_AmmoCrate::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+void CAmmoCrate::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	CBasePlayer *pPlayer = ToBasePlayer( pActivator );
 
@@ -191,22 +188,22 @@ void CItem_AmmoCrate::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 		CPASAttenuationFilter sndFilter( this, "AmmoCrate.Open" );
 		EmitSound( sndFilter, entindex(), "AmmoCrate.Open" );
 
-		SetThink( &CItem_AmmoCrate::CrateThink );
+		SetThink( &CAmmoCrate::CrateThink );
 		SetNextThink( gpGlobals->curtime + 0.1f );
 	}
 
 	m_flCloseTime = gpGlobals->curtime + AMMO_CRATE_CLOSE_DELAY;
 }
 
-void CItem_AmmoCrate::GiveAmmo( CBasePlayer *pBasePlayer )
+void CAmmoCrate::GiveAmmo( CBasePlayer *pBasePlayer )
 {
-	CHL2MP_Player *pPlayer = ToSDKPlayer (pBasePlayer);
+	CModPlayer *pPlayer = ToModPlayer( pBasePlayer );
 
 	int team = pPlayer->GetTeamNumber();
-	CTeam *pTeam = GetGlobalSDKTeam( team );
+	CTeam *pTeam = GetGlobalTeam( team );
 
-	int playerclass = pPlayer->m_Shared.PlayerClass();
-	const CHL2MP_PlayerClassInfo &pClassInfo = pTeam->GetPlayerClassInfo( playerclass );
+	int playerclass = pPlayer->GetPlayerClass();
+	const FilePlayerClassInfo_t &pClassInfo = pTeam->GetPlayerClassInfo( playerclass );
 
 	for (int i = 0; i < pClassInfo.m_iWeaponCount; i++)
 	{
@@ -214,14 +211,14 @@ void CItem_AmmoCrate::GiveAmmo( CBasePlayer *pBasePlayer )
 		if (pClassInfo.m_WeaponVector [i] == WEAPON_NONE)
 			continue;
 
-		CWeaponSDKBase *pWeapon = (CWeaponSDKBase *) pPlayer->GetWeapon( i );
+		CBaseCombatWeapon *pWeapon = (CBaseCombatWeapon *)pPlayer->GetWeapon( i );
 
 		// No weapon? Give it to them
 		if ( !pWeapon )
 		{
 			char buf[64];
 			Q_snprintf( buf, sizeof( buf ), "weapon_%s", WeaponIDToAlias( pClassInfo.m_WeaponVector [i] ) );
-			pWeapon = dynamic_cast< CWeaponSDKBase * > ( pPlayer->GiveNamedItem( buf ) );
+			pWeapon = dynamic_cast< CBaseCombatWeapon * > (pPlayer->GiveNamedItem( buf ));
 		}
 
 		// Do not restock the slam
@@ -230,7 +227,7 @@ void CItem_AmmoCrate::GiveAmmo( CBasePlayer *pBasePlayer )
 			continue;
 		}
 
-		const char *AmmoName = pWeapon->GetSDKWpnData().szAmmo1;
+		const char *AmmoName = pWeapon->GetWpnData().szAmmo1;
 		int AmmoIndex = GetAmmoDef()->Index( AmmoName );
 
 		int iMaxAmmo = pClassInfo.m_AmmoVector[ i ];
@@ -239,7 +236,7 @@ void CItem_AmmoCrate::GiveAmmo( CBasePlayer *pBasePlayer )
 		if (iAmmoCount < iMaxAmmo)
 		{
 			int AmmoToGive = iMaxAmmo - iAmmoCount;
-			pPlayer->GiveAmmo( AmmoToGive, AmmoName );
+			pPlayer->GiveAmmo( AmmoToGive, AmmoIndex, false );
 		}
 	}
 }
@@ -249,7 +246,7 @@ void CItem_AmmoCrate::GiveAmmo( CBasePlayer *pBasePlayer )
 //			animation frames are played.
 // Input  : *pEvent - 
 //-----------------------------------------------------------------------------
-void CItem_AmmoCrate::HandleAnimEvent( animevent_t *pEvent )
+void CAmmoCrate::HandleAnimEvent( animevent_t *pEvent )
 {
 	if ( pEvent->event == AE_AMMOCRATE_PICKUP_AMMO )
 	{
@@ -266,7 +263,7 @@ void CItem_AmmoCrate::HandleAnimEvent( animevent_t *pEvent )
 	BaseClass::HandleAnimEvent( pEvent );
 }
 
-void CItem_AmmoCrate::CrateThink( void )
+void CAmmoCrate::CrateThink( void )
 {
 	StudioFrameAdvance();
 	DispatchAnimEvents( this );
@@ -303,8 +300,7 @@ void CItem_AmmoCrate::CrateThink( void )
 	}
 }
 
-void CItem_AmmoCrate::InputKill( inputdata_t &data )
+void CAmmoCrate::InputKill( inputdata_t &data )
 {
 	UTIL_Remove( this );
 }
-#endif // 0
