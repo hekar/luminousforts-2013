@@ -75,10 +75,6 @@ public:
 	virtual bool IsAllowedToSpawn( CBaseEntity *pEntity );
 	virtual void Think();
 
-	virtual bool IsPlayerClassOnTeam( int cls, int team );
-	virtual int CountPlayerClass( int team, int cls );
-	virtual const char *GetPlayerClassName( int cls, int team );
-
 	virtual void CheckWinningTeam();
 
 	float GetPhaseTime() { return m_PhaseManager.GetCurrentPhase()->GetPhaseTime(); }
@@ -107,6 +103,8 @@ public:
 
 	virtual const char *GetChatPrefix( bool bTeamOnly, CBasePlayer *pPlayer );
 	virtual const char *GetChatFormat( bool bTeamOnly, CBasePlayer *pPlayer );
+	
+	virtual int CountPlayerClass( int team, int cls );
 
 private:
 	bool m_bLastRoundOver;
@@ -127,6 +125,9 @@ public:
 	virtual int GetClassCount( void );
 	virtual const char *GetClassmenuRed() const;
 	virtual const char *GetClassmenuBlue() const;
+
+	virtual bool IsPlayerClassOnTeam( int cls, int team );
+	virtual const char *GetPlayerClassName( int cls, int team );
 
 #ifdef CLIENT_DLL
 	virtual bool IsBuildPhase() { return m_iCurrentPhaseID == PHASE_BUILD; }

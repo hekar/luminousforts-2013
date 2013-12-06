@@ -30,6 +30,7 @@ public:
 	virtual			~C_Team();
 
 	virtual void	PreDataUpdate( DataUpdateType_t updateType );
+	virtual void	PostDataUpdate( DataUpdateType_t updateType );
 
 	const unsigned char *GetEncryptionKey( void ) { return g_pGameRules->GetEncryptionKey(); }
 
@@ -46,7 +47,7 @@ public:
 
 	virtual void AddPlayerClass( const char *pszClassName );
 
-	virtual void LoadPlayerClassInfo( void ) { };
+	virtual void LoadPlayerClassInfo( void );
 	virtual void ClearPlayerClassInfo( void );
 
 	virtual const CPlayerClassInfo &GetPlayerClassInfo( int iPlayerClass ) const;

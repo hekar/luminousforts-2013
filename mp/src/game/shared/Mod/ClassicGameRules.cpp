@@ -43,6 +43,9 @@ the terms of any one of the MPL, the GPL or the LGPL.
 	#include "c_hl2mp_player.h"
 	#include "c_team.h"
 	#include "Mod/C_ModPlayer.h"
+
+#define CTeam C_Team
+#define CModPlayer C_ModPlayer
 #else
 	#include "hl2mp_player.h"
 	#include "team.h"
@@ -645,59 +648,6 @@ void CClassicGameRules::ClientDisconnected(edict_t* pClient)
 	BaseClass::ClientDisconnected(pClient);
 }
 
-bool CClassicGameRules::IsPlayerClassOnTeam( int cls, int team )
-{
-	CTeam *pTeam = GetGlobalTeam( team );
-	return ( cls >= 0 && cls < CLASSIC_GAME_CLASSCOUNT );
-}
-
-int CClassicGameRules::CountPlayerClass( int team, int cls )
-{
-	int num = 0;
-
-	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
-	{
-		CModPlayer *pModPlayer = ToModPlayer( UTIL_PlayerByIndex( i ) );
-
-		if (pModPlayer == NULL)
-			continue;
-
-		if (FNullEnt( pModPlayer->edict() ))
-			continue;
-
-		if( pModPlayer->GetTeamNumber() != team )
-			continue;
-
-		if( pModPlayer->GetDesiredPlayerClass() == cls )
-			num++;
-	}
-
-	return num;
-}
-
-const char *CClassicGameRules::GetPlayerClassName( int cls, int team )
-{
-	if ( team == TEAM_SPECTATOR )
-	{
-		return "Spectator";
-	}
-
-	CTeam *pTeam = GetGlobalTeam( team );
-
-	if( cls == PLAYERCLASS_RANDOM )
-	{
-		return "#class_random";
-	}
-
-	if( cls < 0 || cls >= CLASSIC_GAME_CLASSCOUNT )
-	{
-		Assert( false );
-		return NULL;
-	}
-
-	return pTeam->GetPlayerClassInfo( cls ).m_szPrintName;
-}
-
 void CClassicGameRules::PlayerKilled(CBasePlayer* pVictim, const CTakeDamageInfo& info)
 {
 	BaseClass::PlayerKilled(pVictim, info);
@@ -755,4 +705,57 @@ void CClassicGameRules::RespawnPlayers()
 	}
 }
 
+int CClassicGameRules::CountPlayerClass( int team, int cls )
+{
+	int num = 0;
+
+	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CModPlayer *pModPlayer = ToModPlayer( UTIL_PlayerByIndex( i ) );
+
+		if ( pModPlayer == NULL )
+			continue;
+
+		if ( FNullEnt( pModPlayer->edict( ) ) )
+			continue;
+
+		if ( pModPlayer->GetTeamNumber( ) != team )
+			continue;
+
+		if ( pModPlayer->GetDesiredPlayerClass( ) == cls )
+			num++;
+	}
+
+	return num;
+}
+
 #endif // !CLIENT_DLL
+
+bool CClassicGameRules::IsPlayerClassOnTeam( int cls, int team )
+{
+	CTeam *pTeam = GetGlobalTeam( team );
+	return (cls >= 0 && cls < CLASSIC_GAME_CLASSCOUNT);
+}
+
+const char *CClassicGameRules::GetPlayerClassName( int cls, int team )
+{
+	if ( team == TEAM_SPECTATOR )
+	{
+		return "Spectator";
+	}
+
+	CTeam *pTeam = GetGlobalTeam( team );
+
+	if ( cls == PLAYERCLASS_RANDOM )
+	{
+		return "#class_random";
+	}
+
+	if ( cls < 0 || cls >= CLASSIC_GAME_CLASSCOUNT )
+	{
+		Assert( false );
+		return NULL;
+	}
+
+	return pTeam->GetPlayerClassInfo( cls ).m_szPrintName;
+}
