@@ -103,8 +103,8 @@ CHudFlagCarrier::CHudFlagCarrier( const char *pElementName ) :
 
 	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
 	{
-		m_FlagState [i] = HFLG_BASE;
-		m_LastFlagState [i] = 0;
+		m_FlagState[ i ] = HFLG_BASE;
+		m_LastFlagState[ i ] = 0;
 	}
 
 	SetHiddenBits( HIDEHUD_PLAYERDEAD | HIDEHUD_BUILDPHASE );
@@ -114,9 +114,9 @@ CHudFlagCarrier::~CHudFlagCarrier ()
 {
 	for (int i = 0; i < TEAM_COUNT; i++)
 	{
-		if ( m_pAvatar [i] )
+		if ( m_pAvatar[ i ])
 		{
-			delete m_pAvatar [i];
+			delete m_pAvatar[ i ];
 		}
 	}
 }
@@ -135,8 +135,8 @@ void CHudFlagCarrier::LevelInit( void )
 
 	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
 	{
-		m_FlagState [i] = HFLG_BASE;
-		m_LastFlagState [i] = 0;
+		m_FlagState[ i ] = HFLG_BASE;
+		m_LastFlagState[ i ] = 0;
 	}
 }
 
@@ -277,23 +277,24 @@ void CHudFlagCarrier::UpdateTakenAvatar( int TeamIndex )
 					}
 					
 					// Indent the image. These are deliberately non-resolution-scaling.
-					pAvImage->SetAvatarSize( 32, 32 );	// Deliberately non scaling
+					pAvImage->SetAvatarSize( 32, 32 );
 					pAvImage->SetSize( pAvImage->GetWide(), 32 );
+
 #if 0
 					if ( TeamIndex == SDK_TEAM_BLUE )
 					{
 						m_pAvatar[ TeamIndex ]->SetPos
 						(
-							m_flBlueAvatarX - AVATAR_INDENT_X, 
-							m_flBlueAvatarY - AVATAR_INDENT_Y 
+							m_flBlueAvatarX - 32, 
+							m_flBlueAvatarY - 32
 						);
 					}
 					else if ( TeamIndex == SDK_TEAM_RED )
 					{
 						m_pAvatar[ TeamIndex ]->SetPos
 						(
-							m_flRedAvatarX - AVATAR_INDENT_X,
-							m_flRedAvatarY - AVATAR_INDENT_Y 
+							m_flRedAvatarX - 32,
+							m_flRedAvatarY - 32
 						);
 					}
 #endif // 0
