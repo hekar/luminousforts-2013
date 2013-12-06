@@ -27,8 +27,8 @@
 		"ypos"	"432"
 		"wide"	"108"
 		"tall"  "36"
-		"visible" "1"
-		"enabled" "1"
+		"visible" "0"
+		"enabled" "0"
 
 		"PaintBackgroundType"	"0"
 
@@ -684,8 +684,8 @@
 	HudSuitPower
 	{
 		"fieldName" "HudSuitPower"
-		"visible" "1"
-		"enabled" "1"
+		"visible" "0"
+		"enabled" "0"
 		"xpos"	"8"
 		"ypos"	"r44"
 		"wide"	"144"
