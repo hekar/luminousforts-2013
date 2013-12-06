@@ -70,6 +70,7 @@ END_DATADESC()
 
 // main table
 IMPLEMENT_SERVERCLASS_ST( CModPlayer, DT_ModPlayer )
+	SendPropInt( SENDINFO( m_iMaxHealth ) ),
 END_SEND_TABLE()
 
 EHANDLE g_pLastDMSpawn;

@@ -31,6 +31,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 // main table
 IMPLEMENT_CLIENTCLASS_DT( C_ModPlayer, DT_ModPlayer, CModPlayer )
+	RecvPropInt( RECVINFO( m_iMaxHealth ) ),
 END_RECV_TABLE()
 
 BEGIN_PREDICTION_DATA( C_ModPlayer )
@@ -40,6 +41,7 @@ LINK_ENTITY_TO_CLASS( modplayer, C_ModPlayer );
 
 C_ModPlayer::C_ModPlayer()
 {
+	m_iMaxHealth = 100;
 }
 
 C_ModPlayer::~C_ModPlayer()

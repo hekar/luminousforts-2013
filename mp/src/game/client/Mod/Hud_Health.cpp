@@ -141,7 +141,7 @@ void CHudPlayerHealth::Paint()
 
 	surface()->DrawSetColor( barcolor );
 	surface()->DrawFilledRect( m_flBarInsetX, m_flBarInsetY, 
-		m_flBarWidth * ( DisplayHealth / 100.0f ), m_flBarInsetY + m_flBarHeight );
+		m_flBarWidth * DisplayHealth, m_flBarInsetY + m_flBarHeight );
 	
 	// Draw Health Text
 	if ( m_iLastHealth != m_iHealth )
