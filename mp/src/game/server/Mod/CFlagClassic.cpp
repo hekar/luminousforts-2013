@@ -95,7 +95,7 @@ void CFlagClassic::Precache( void )
 
 void CFlagClassic::Spawn( void )
 {
-	Precache ();
+	Precache();
 
 	AddSpawnFlags( SF_TRIG_TOUCH_DEBRIS | SF_TRIGGER_ALLOW_ALL );
 
@@ -139,6 +139,11 @@ bool CFlagClassic::CreateNoPhysics ()
 
 bool CFlagClassic::CreateBoxPhysics ()
 {
+	if ( GetParent() != NULL )
+	{
+		FollowEntity( NULL );
+	}
+
 	// Need to undo what CreateDropPhysics does
 	SetMoveType( MOVETYPE_NONE );
 	SetSolid( SOLID_BBOX );
@@ -263,9 +268,13 @@ void CFlagClassic::Drop()
 // Do not call directly if the player has the flag (use SDKPlayer->ReturnFlag())
 void CFlagClassic::ReturnToSpawn( bool scored )
 {
-	CreateBoxPhysics ();
+	CreateBoxPhysics();
 
 	BaseClass::ReturnToSpawn();
+	SetParent( NULL );
+	RemoveEffects( EF_BONEMERGE );
+	RemoveSolidFlags( FSOLID_NOT_SOLID );
+	SetMoveType( MOVETYPE_NONE );
 	m_bFirstTake = false;
 
 	if ( !scored )
