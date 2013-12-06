@@ -141,8 +141,6 @@ void CHudPhaseTime::DisplayBlockCount( int x, int y, Color col )
 		TeamBlockLimit = lf_block_blue_limit.GetInt();
 	}
 
-	// TODO: Fix
-#if 0
 	int BlockCount = pTeam->GetBlockCount() - pTeam->GetStolenBlockCount();
 	int BlockLimit = TeamBlockLimit;
 	int StolenBlockCount = pTeam->GetStolenBlockCount();
@@ -157,7 +155,6 @@ void CHudPhaseTime::DisplayBlockCount( int x, int y, Color col )
 		// Show the negative number with the '-' sign
 		_snwprintf( szText, sizeof( szText ), L"%d/%d - %d", BlockCount, BlockLimit, abs( StolenBlockCount ) );
 	}
-#endif // 0
 
 	szText[62] = '\0';
 
