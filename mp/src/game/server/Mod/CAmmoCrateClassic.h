@@ -27,12 +27,11 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #ifndef CAMMOCRATECLASSIC_H
 #define CAMMOCRATECLASSIC_H
 
-#if 0
 
-class CAmmoCrateClassic : public CItem_AmmoCrate
+class CAmmoCrateClassic : public CAmmoCrate
 {
 public:
-	DECLARE_CLASS( CAmmoCrateClassic, CItem_AmmoCrate );
+	DECLARE_CLASS( CAmmoCrateClassic, CAmmoCrate );
 	DECLARE_DATADESC();
 
 	void Spawn();
@@ -40,7 +39,5 @@ public:
 private:
 	int m_iSourcefortsTeam;
 };
-
-#endif // 0
 
 #endif // CAMMOCRATECLASSIC_H
