@@ -233,7 +233,6 @@ void CFlagBase::ReturnToSpawn( bool scored )
 	OnReturnEvent();
 	OnReturnOutput();
 
-	FollowEntity( NULL );
 	SetAbsOrigin( m_vecSpawnOrigin );
 
 	// The player no longer has the flag
