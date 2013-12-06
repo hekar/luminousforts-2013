@@ -111,7 +111,7 @@ void CHudStamina::OnThink( void )
 	if ( !pPlayer )
 		return;
 
-	//flCurrentStamina = pPlayer->m_Shared.GetStamina();
+	flCurrentStamina = pPlayer->m_HL2Local.m_flSuitPower;
 
 	// Only update if we've changed stamina
 	if ( flCurrentStamina == m_flStamina )

@@ -11,6 +11,7 @@
 // implementation of CHudBattery class
 //
 #include "cbase.h"
+#if 0
 #include "hud.h"
 #include "hudelement.h"
 #include "hud_macros.h"
@@ -145,3 +146,5 @@ void CHudBattery::MsgFunc_Battery( bf_read &msg )
 {
 	m_iNewBat = msg.ReadShort();
 }
+
+#endif // 0
