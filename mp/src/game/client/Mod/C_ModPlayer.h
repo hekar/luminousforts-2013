@@ -44,7 +44,11 @@ public:
 	C_ModPlayer();
 	~C_ModPlayer();
 	
+	int GetMaxHealth( ) const { return m_iMaxHealth; }
+
 	static C_ModPlayer* GetLocalModPlayer();
+
+	int m_iMaxHealth;
 };
 
 extern C_ModPlayer *ToModPlayer( C_BasePlayer *pPlayer );
