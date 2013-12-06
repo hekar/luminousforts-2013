@@ -31,16 +31,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 	#pragma once
 #endif
 
-#if 0
-class CArmorRechargerClassic : public CNewRecharge
-{
-public:
-	DECLARE_CLASS( CArmorRechargerClassic, CNewRecharge );
-	
-	CArmorRechargerClassic();
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-};
-
 class CHealthRechargerClassic : public CNewWallHealth
 {
 public:
@@ -49,6 +39,5 @@ public:
 	CHealthRechargerClassic();
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 };
-#endif // 0
 
 #endif // CCHARGERSCLASSIC_H
