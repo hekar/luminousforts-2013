@@ -294,12 +294,10 @@ void CModClassMenu::SetVisible( bool state )
 
 	if ( state )
 	{
-		engine->ServerCmd( "menuopen" );			// to the server
-		engine->ClientCmd( "_cl_classmenuopen 1" );	// for other panels
+		engine->ClientCmd( "_cl_classmenuopen 1" );
 	}
 	else
 	{
-		engine->ServerCmd( "menuclosed" );	
 		engine->ClientCmd( "_cl_classmenuopen 0" );
 	}
 }
