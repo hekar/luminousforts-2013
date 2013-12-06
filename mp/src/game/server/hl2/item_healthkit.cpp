@@ -6,6 +6,7 @@
 //=============================================================================//
 
 #include "cbase.h"
+#if 0
 #include "gamerules.h"
 #include "player.h"
 #include "items.h"
@@ -741,3 +742,4 @@ void CNewWallHealth::Off(void)
 	}
 }
 
+#endif // 0
