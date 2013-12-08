@@ -5,6 +5,7 @@
 //=============================================================================//
 
 #include "cbase.h"
+#if 0
 #include "player.h"
 #include "gamerules.h"
 #include "items.h"
@@ -982,3 +983,4 @@ void CItem_AmmoCrate::InputKill( inputdata_t &data )
 	UTIL_Remove( this );
 }
 
+#endif // 0
