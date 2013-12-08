@@ -94,8 +94,8 @@ public:
 
 	virtual void RespawnPlayers();
 
-	virtual bool IsSourcefortsMap() { return false; }
-	virtual void SetSourcefortsMap(bool t) { }
+	virtual bool IsSourcefortsMap() { return m_bSourcefortsMap; }
+	virtual void SetSourcefortsMap( bool bSourcefortsMap ) { m_bSourcefortsMap = bSourcefortsMap; }
 
 	virtual bool ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char *reject, int maxrejectlen );
 	virtual void ClientDisconnected( edict_t *pClient );
