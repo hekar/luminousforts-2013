@@ -7,6 +7,7 @@
 #include "cbase.h"
 #include "npcevent.h"
 #include "in_buttons.h"
+#include "SpriteTrail.h"
 #include "weapon_rpg.h"
 
 #ifdef CLIENT_DLL
@@ -147,6 +148,7 @@ class CWeaponRPG;
 CMissile::CMissile()
 {
 	m_hRocketTrail = NULL;
+	m_pGlowTrail = NULL;
 }
 
 CMissile::~CMissile()
@@ -392,6 +394,13 @@ void CMissile::Explode( void )
 		m_hRocketTrail = NULL;
 	}
 
+	if( m_pGlowTrail )
+	{
+		m_pGlowTrail->StopFollowingEntity();
+		m_pGlowTrail->Remove();
+		m_pGlowTrail = NULL;
+	}
+
 	if ( m_hOwner != NULL )
 	{
 		m_hOwner->NotifyRocketDied();
@@ -410,6 +419,15 @@ void CMissile::MissileTouch( CBaseEntity *pOther )
 {
 	Assert( pOther );
 	
+	// Disappear on flag hit
+	if ( pOther->GetCollisionGroup() == COLLISION_GROUP_FLAG )
+	{
+		StopSound( "Missile.Accelerate" );
+		StopSound( "Missile.Ignite" );
+		this->Remove();
+		return;
+	}
+
 	// Don't touch triggers (but DO hit weapons)
 	if ( pOther->IsSolidFlagSet(FSOLID_TRIGGER|FSOLID_VOLUME_CONTENTS) && pOther->GetCollisionGroup() != COLLISION_GROUP_WEAPON )
 		return;
@@ -441,6 +459,25 @@ void CMissile::CreateSmokeTrail( void )
 		
 		m_hRocketTrail->SetLifetime( 999 );
 		m_hRocketTrail->FollowEntity( this, "0" );
+	}
+
+	const Color& col = GetTeamColor( GetOwnerEntity()->GetTeamNumber() );
+	byte Red (col.r());
+	byte Green (col.g());
+	byte Blue (col.b());
+
+	m_pGlowTrail = CSpriteTrail::SpriteTrailCreate( "sprites/bluelaser1.vmt", GetLocalOrigin(), false );
+
+	int	nAttachment = LookupAttachment( "fuse" );
+
+	if ( m_pGlowTrail != NULL )
+	{
+		m_pGlowTrail->FollowEntity( this );
+		m_pGlowTrail->SetAttachment( this, nAttachment );
+		m_pGlowTrail->SetTransparency( kRenderTransAdd, Red, Green, Blue, 255, kRenderFxNone );
+		m_pGlowTrail->SetStartWidth( 25.0f );
+		m_pGlowTrail->SetEndWidth( 20.0f );
+		m_pGlowTrail->SetLifeTime( 0.8f );
 	}
 }
 

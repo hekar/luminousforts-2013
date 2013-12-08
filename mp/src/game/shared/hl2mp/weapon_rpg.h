@@ -82,6 +82,7 @@ protected:
 	void GetShootPosition( CLaserDot *pLaserDot, Vector *pShootPosition );
 
 	CHandle<RocketTrail>	m_hRocketTrail;
+	CHandle<CSpriteTrail>	m_pGlowTrail;
 	float					m_flAugerTime;		// Amount of time to auger before blowing up anyway
 	float					m_flMarkDeadTime;
 	float					m_flDamage;
