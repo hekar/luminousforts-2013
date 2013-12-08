@@ -322,10 +322,15 @@ void CNewWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 
         if ( GetTeamNumber() != TEAM_SPECTATOR && pActivator->GetTeamNumber() != GetTeamNumber() )
         {
-                ClientPrint( pPlayer, HUD_PRINTTALK, "Cannot recharge from enemy charger" );
-                CPASAttenuationFilter sndFilter( this, "Player.UseDeny" );
-                EmitSound( sndFilter, entindex(), "Player.UseDeny" );
-                return;
+            if ( pPlayer )
+            {
+                pPlayer->m_afButtonPressed &= ~IN_USE;
+            }
+
+            ClientPrint( pPlayer, HUD_PRINTTALK, "Cannot recharge from enemy charger" );
+            CPASAttenuationFilter sndFilter( this, "Player.UseDeny" );
+            EmitSound( sndFilter, entindex(), "Player.UseDeny" );
+            return;
         }
 
         // Reset to a state of continuous use.
