@@ -486,6 +486,7 @@ void CWeapon_SLAM::SatchelThrow( void )
 
 	if ( pSatchel )
 	{
+		pSatchel->SetDamage( GetHL2MPWpnData().m_iPlayerDamage );
 		pSatchel->SetThrower( GetOwner() );
 		pSatchel->ApplyAbsVelocityImpulse( vecThrow );
 		pSatchel->SetLocalAngularVelocity( QAngle( 0, 400, 0 ) );
