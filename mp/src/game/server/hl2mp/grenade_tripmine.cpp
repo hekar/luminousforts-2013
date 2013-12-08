@@ -175,7 +175,10 @@ void CTripmineGrenade::MakeBeam( void )
 
 	m_pBeam = CBeam::BeamCreate( g_pModelNameLaser, 0.35 );
 	m_pBeam->PointEntInit( vecTmpEnd, this );
-	m_pBeam->SetColor( 255, 55, 52 );
+
+	const Color& c = GetTeamColor( m_hOwner.Get( )->GetTeamNumber( ) );
+	m_pBeam->SetColor( c.r( ), c.g( ), c.b( ) );
+
 	m_pBeam->SetScrollRate( 25.6 );
 	m_pBeam->SetBrightness( 64 );
 	
