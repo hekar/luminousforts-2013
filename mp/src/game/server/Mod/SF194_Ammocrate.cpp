@@ -34,7 +34,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #include "cbase.h"
 #ifdef MOD_SF194
-#if 0
 #include "CAmmoCrate.h"
 #include "CAmmoCrateClassic.h"
 
@@ -47,5 +46,4 @@ the terms of any one of the MPL, the GPL or the LGPL.
  */
 LINK_ENTITY_TO_CLASS( item_ammo_crate, CAmmoCrateClassic );
 
-#endif // 0
 #endif // MOD_SF194
