@@ -131,7 +131,7 @@ void CFlagBase::Spawn( void )
 	AddSolidFlags( FSOLID_TRIGGER );
 
 	BaseClass::Spawn();
-	if ( ClassicGameRules()->IsSourcefortsMap() )
+	if ( ClassicGameRules( )->IsSourcefortsMap( ) && Q_stricmp( gpGlobals->mapname.ToCStr( ), "sf_skywalk" ) )
 	{
 		ChangeTeam( m_iSourcefortsTeamNumber );
 	}
