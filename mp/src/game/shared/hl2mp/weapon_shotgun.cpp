@@ -7,6 +7,7 @@
 #include "cbase.h"
 #include "npcevent.h"
 #include "in_buttons.h"
+#include "Mod/BalanceMacros.h"
 
 #ifdef CLIENT_DLL
 	#include "c_hl2mp_player.h"
@@ -321,6 +322,7 @@ void CWeaponShotgun::PrimaryAttack( void )
 
 	FireBulletsInfo_t info( 7, vecSrc, vecAiming, GetBulletSpread(), MAX_TRACE_LENGTH, m_iPrimaryAmmoType );
 	info.m_pAttacker = pPlayer;
+	info.m_flDamage = GetHL2MPWpnData().m_iPlayerDamage;
 
 	// Fire the bullets, and force the first shot to be perfectly accuracy
 	pPlayer->FireBullets( info );
