@@ -14,6 +14,7 @@
 */
 
 #include "cbase.h"
+#if 0
 #include "gamerules.h"
 #include "player.h"
 #include "engine/IEngineSound.h"
@@ -775,3 +776,4 @@ void CNewRecharge::Off(void)
 		}
 	}
 }
+#endif // 0
