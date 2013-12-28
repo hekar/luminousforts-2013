@@ -119,12 +119,12 @@ void CModHudElement::SetGameModes( int iGamemodes )
 	m_iGamemodes = iGamemodes;
 }
 
-PrivateMethod void CModHudElement::LevelInit()
+void CModHudElement::LevelInit()
 {
 	LevelStart();
 }
 
-PrivateMethod void CModHudElement::LevelShutdown()
+void CModHudElement::LevelShutdown()
 {
 	LevelEnd();
 }

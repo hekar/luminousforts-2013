@@ -82,34 +82,25 @@ CTextWindow::CTextWindow(IViewPort *pViewPort) : Frame(NULL, PANEL_INFO	)
 	// initialize dialog
 	m_pViewPort = pViewPort;
 
-//	SetTitle("", true);
+	LoadControlSettings( "Resource/UI/TextWindow.res" );
 
 	m_szTitle[0] = '\0';
 	m_szMessage[0] = '\0';
-	m_szMessageFallback[0] = '\0';
-	m_nExitCommand = TEXTWINDOW_CMD_NONE;
-	m_bShownURL = false;
-	m_bUnloadOnDismissal = false;
-	
+
 	// load the new scheme early!!
-	SetScheme("ClientScheme");
-	SetMoveable(false);
-	SetSizeable(false);
-	SetProportional(true);
+	SetScheme( "SourceScheme" );
+	SetMoveable( true );
+	SetSizeable( true );
+	SetProportional( true );
 
 	// hide the system buttons
-	SetTitleBarVisible( false );
+	SetTitleBarVisible( true );
+	SetMinimizeButtonVisible( false );
+	SetMaximizeButtonVisible( false );
+	SetCloseButtonVisible( false );
 
 	m_pTextMessage = new TextEntry( this, "TextMessage" );
-#if defined( ENABLE_CHROMEHTMLWINDOW )
-	m_pHTMLMessage = new CMOTDHTML( this,"HTMLMessage" );
-#else
-	m_pHTMLMessage = NULL;
-#endif
-	m_pTitleLabel  = new Label( this, "MessageTitle", "Message Title" );
-	m_pOK		   = new Button(this, "ok", "#PropertyDialog_OK");
 
-	m_pOK->SetCommand("okay");
 	m_pTextMessage->SetMultiline( true );
 	m_nContentType = TYPE_TEXT;
 }
@@ -120,9 +111,8 @@ CTextWindow::CTextWindow(IViewPort *pViewPort) : Frame(NULL, PANEL_INFO	)
 void CTextWindow::ApplySchemeSettings( IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
-
-	LoadControlSettings("Resource/UI/TextWindow.res");
-
+	m_pHTMLMessage = dynamic_cast< CMOTDHTML* >( FindChildByName( "HTMLMessage", true ) );
+	m_pOK = dynamic_cast< vgui::Button* >( FindChildByName( "ok", true ) );
 	Reset();
 }
 
@@ -137,16 +127,9 @@ CTextWindow::~CTextWindow()
 
 void CTextWindow::Reset( void )
 {
-	//=============================================================================
-	// HPE_BEGIN:
-	// [Forrest] Replace strange hard-coded default message with hard-coded error message.
-	//=============================================================================
 	Q_strcpy( m_szTitle, "Error loading info message." );
 	Q_strcpy( m_szMessage, "" );
 	Q_strcpy( m_szMessageFallback, "" );
-	//=============================================================================
-	// HPE_END
-	//=============================================================================
 
 	m_nExitCommand = TEXTWINDOW_CMD_NONE;
 	m_nContentType = TYPE_TEXT;
@@ -188,7 +171,6 @@ void CTextWindow::ShowURL( const char *URL, bool bAllowUserToDisable )
 	m_pHTMLMessage->SetVisible( true );
 	m_pHTMLMessage->OpenURL( URL, NULL );
 	m_bShownURL = true;
-
 #endif
 }
 
@@ -276,8 +258,6 @@ void CTextWindow::Update( void )
 {
 	SetTitle( m_szTitle, false );
 
-	m_pTitleLabel->SetText( m_szTitle );
-
 #if defined( ENABLE_CHROMEHTMLWINDOW )
 	m_pHTMLMessage->SetVisible( false );
 #endif
@@ -329,10 +309,13 @@ void CTextWindow::OnKeyCodePressed( vgui::KeyCode code )
 
 void CTextWindow::SetData(KeyValues *data)
 {
-	SetData( data->GetInt( "type" ), data->GetString( "title" ), data->GetString( "msg" ), data->GetString( "msg_fallback" ), data->GetInt( "cmd" ), data->GetBool( "unload" ) );
+	SetData( data->GetInt( "type" ), data->GetString( "title" ), 
+		data->GetString( "msg" ), data->GetString( "msg_fallback" ), 
+		data->GetInt( "cmd" ), data->GetBool( "unload" ) );
 }
 
-void CTextWindow::SetData( int type, const char *title, const char *message, const char *message_fallback, int command, bool bUnload )
+void CTextWindow::SetData( int type, const char *title, const char *message, 
+	const char *message_fallback, int command, bool bUnload )
 {
 	Q_strncpy(  m_szTitle, title, sizeof( m_szTitle ) );
 	Q_strncpy(  m_szMessage, message, sizeof( m_szMessage ) );
@@ -351,8 +334,6 @@ void CTextWindow::ShowPanel( bool bShow )
 	if ( BaseClass::IsVisible() == bShow )
 		return;
 
-	m_pViewPort->ShowBackGround( bShow );
-
 	if ( bShow )
 	{
 		Activate();
@@ -370,6 +351,18 @@ void CTextWindow::ShowPanel( bool bShow )
 			m_bShownURL = false;
 		}
 #endif
+	}
+}
+
+vgui::Panel *CTextWindow::CreateControlByName( const char *controlName )
+{
+	if ( !Q_strcmp( controlName, "HTML" ) )
+	{
+		return new CMOTDHTML( this, "HTMLMessage" );
+	}
+	else
+	{
+		return BaseClass::CreateControlByName( controlName );
 	}
 }
 
