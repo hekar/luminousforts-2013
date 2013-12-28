@@ -74,8 +74,8 @@ public:
 	virtual void SetGameModes( int iGamemodes );
 
 private:
-	PrivateMethod void LevelInit();
-	PrivateMethod void LevelShutdown();
+	void LevelInit();
+	void LevelShutdown();
 
 private:
 	int m_iElementMask;

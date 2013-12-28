@@ -38,12 +38,7 @@ using namespace vgui;
 //-----------------------------------------------------------------------------
 CHL2MPTextWindow::CHL2MPTextWindow(IViewPort *pViewPort) : CTextWindow( pViewPort )
 {
-	SetProportional( true );
-
 	m_iScoreBoardKey = BUTTON_CODE_INVALID; // this is looked up in Activate()
-
-	CreateBackground( this );
-	m_backgroundLayoutFinished = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -109,33 +104,32 @@ void CHL2MPTextWindow::OnKeyCodePressed(KeyCode code)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: The CS background is painted by image panels, so we should do nothing
-//-----------------------------------------------------------------------------
 void CHL2MPTextWindow::PaintBackground()
 {
+	int x, y = 0;
+	GetSize( x, y );
+	DrawBox( 1, 1, x, y, GetBgColor(), 170, false );
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Scale / center the window
-//-----------------------------------------------------------------------------
 void CHL2MPTextWindow::PerformLayout()
 {
 	BaseClass::PerformLayout();
-
-	// stretch the window to fullscreen
-	if ( !m_backgroundLayoutFinished )
-		LayoutBackgroundPanel( this );
-	m_backgroundLayoutFinished = true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 void CHL2MPTextWindow::ApplySchemeSettings( vgui::IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
-	ApplyBackgroundSchemeSettings( this, pScheme );
+
+	Color bgColor = GetSchemeColor( "Lum.Game.Background", GetBgColor( ), pScheme );
+	Color borderColor = pScheme->GetColor( "Lum.GameBorder", Color( 0, 0, 0, 0 ) );
+
+	const int kGameBorderAlpha = 170;
+	borderColor.SetColor( borderColor.r( ), borderColor.g( ), borderColor.b( ), kGameBorderAlpha );
+
+	SetBgColor( bgColor );
+	SetBorder( pScheme->GetBorder( "FrameBorder" ) );
+
+	Reset();
 }
 
 CHL2MPSpectatorGUI::CHL2MPSpectatorGUI(IViewPort *pViewPort) : CSpectatorGUI(pViewPort)
@@ -170,5 +164,3 @@ void CHL2MPSpectatorGUI::Update()
 		m_nLastSpecTarget = pLocalPlayer->GetObserverTarget();
 	}
 }
-
-

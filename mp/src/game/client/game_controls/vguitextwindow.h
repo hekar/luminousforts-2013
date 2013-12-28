@@ -49,6 +49,8 @@ public:
   	virtual bool IsVisible() { return BaseClass::IsVisible(); }
   	virtual void SetParent( vgui::VPANEL parent ) { BaseClass::SetParent( parent ); }
 
+	virtual vgui::Panel *CreateControlByName( const char *controlName );
+
 public:
 
 	virtual void SetData( int type, const char *title, const char *message, const char *message_fallback, int command, bool bUnload );
@@ -95,9 +97,7 @@ protected:
 		virtual bool OnStartRequest( const char *url, const char *target, const char *pchPostData, bool bIsRedirect ) OVERRIDE;
 	};
 	CMOTDHTML		*m_pHTMLMessage;
-	
 	vgui::Button	*m_pOK;
-	vgui::Label		*m_pTitleLabel;
 };
 
 
