@@ -147,8 +147,17 @@ bool CCrossbowBolt::CreateSprites( void )
 
 	if ( m_pGlowSprite != NULL )
 	{
+		if ( GetOwnerEntity() )
+		{
+			const Color& c = GetTeamColor( GetOwnerEntity()->GetTeamNumber() );
+			m_pGlowSprite->SetTransparency( kRenderGlow, c.r(), c.g(), c.b(), 128, kRenderFxNoDissipation );
+		}
+		else
+		{
+			m_pGlowSprite->SetTransparency( kRenderGlow, 255, 255, 255, 128, kRenderFxNoDissipation );
+		}
+
 		m_pGlowSprite->FollowEntity( this );
-		m_pGlowSprite->SetTransparency( kRenderGlow, 255, 255, 255, 128, kRenderFxNoDissipation );
 		m_pGlowSprite->SetScale( 0.2f );
 		m_pGlowSprite->TurnOff();
 	}
@@ -168,6 +177,13 @@ void CCrossbowBolt::Spawn( void )
 	UTIL_SetSize( this, -Vector(1,1,1), Vector(1,1,1) );
 	SetSolid( SOLID_BBOX );
 	SetGravity( 0.05f );
+#ifdef CLIENT_DLL
+	if ( GetOwnerEntity() )
+	{
+		const Color& c = GetTeamColor( GetOwnerEntity()->GetTeamNumber() );
+		SetRenderColor( c.r(), c.g(), c.b() );
+	}
+#endif // CLIENT_DLL
 	
 	// Make sure we're updated if we're underwater
 	UpdateWaterState();
