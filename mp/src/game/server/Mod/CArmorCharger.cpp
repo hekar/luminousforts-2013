@@ -34,9 +34,10 @@ the terms of any one of the MPL, the GPL or the LGPL.
 ===============================================================*/
 
 #include "cbase.h"
-#if 0
 #include "HealthChargers.h"
 LINK_ENTITY_TO_CLASS(item_suitcharger, CNewWallHealth);
+
+#if 0
 #include "CArmorCharger.h"
 #include "player.h"
 #include "engine/IEngineSound.h"
