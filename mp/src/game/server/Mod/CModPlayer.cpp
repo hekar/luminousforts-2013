@@ -252,6 +252,11 @@ void CModPlayer::Spawn()
 {
 	BaseClass::Spawn();
 
+	if ( GetPlayerClass() == PLAYERCLASS_UNDEFINED )
+	{
+		SetMoveType( MOVETYPE_NONE );
+	}
+
 	if ( GetPlayerState() != STATE_ENTER )
 	{
 		if ( GetTeamNumber() == TEAM_UNASSIGNED )
