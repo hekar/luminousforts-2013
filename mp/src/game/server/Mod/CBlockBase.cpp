@@ -179,15 +179,21 @@ void CBlockBase::OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup_t rea
 	BaseClass::OnPhysGunPickup( pPhysGunUser, reason );
 	if ( reason != PUNTED_BY_CANNON )
 	{
-		if ( GetTeamNumber() != pPhysGunUser->GetTeamNumber() )
+		if ( IsPlayingTeam( pPhysGunUser->GetTeamNumber() ) && GetTeamNumber() != pPhysGunUser->GetTeamNumber() )
 		{
 			CTeam *pTeam = (CTeam *) GetTeam();
-			pTeam->AddBlockCount( -GetBlockWorth() );
-			pTeam->AddStolenBlockCount( -GetBlockWorth() );
+			if ( pTeam )
+			{
+				pTeam->AddBlockCount( -GetBlockWorth( ) );
+				pTeam->AddStolenBlockCount( -GetBlockWorth( ) );
+			}
 			
 			CTeam *pNewTeam = (CTeam *) pPhysGunUser->GetTeam();
-			pNewTeam->AddBlockCount( GetBlockWorth() );
-			pNewTeam->AddStolenBlockCount( GetBlockWorth() );
+			if ( pNewTeam )
+			{
+				pNewTeam->AddBlockCount( GetBlockWorth( ) );
+				pNewTeam->AddStolenBlockCount( GetBlockWorth( ) );
+			}
 
 			ChangeTeam( pPhysGunUser->GetTeamNumber() );
 		}
@@ -386,8 +392,6 @@ bool CBlockBase::UpdateHealth( int iNewHealth, CBaseEntity *pActivator )
 
 void CBlockBase::Event_Killed( const CTakeDamageInfo &info )
 {
-	GetGlobalTeam( GetTeamNumber() )->AddBlockCount( -GetBlockWorth() );
-
 	BaseClass::Event_Killed( info );
 }
 
