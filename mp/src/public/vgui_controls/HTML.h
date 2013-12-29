@@ -66,6 +66,7 @@ public:
 	virtual void SetContextMenuEnabled(bool state);
 	virtual void SetViewSourceEnabled( bool state );
 	virtual void NewWindowsOnly( bool state );
+	virtual void SetBlockPopups( bool state );
 
 	bool IsScrolledToBottom();
 	bool IsScrollbarVisible();
@@ -248,6 +249,7 @@ private:
 	int m_nViewSourceAllowedIndex;
 	CUtlString m_sDragURL;
 	int m_iDragStartX, m_iDragStartY;
+	bool m_bBlockPopups;
 
 	struct CustomURLHandler_t
 	{
