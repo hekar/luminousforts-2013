@@ -122,7 +122,7 @@ public:
 private:
 	CUtlVector < PLAYERCLASS_FILE_INFO_HANDLE >		m_hPlayerClassInfoHandles;
 	CNetworkVar (int, m_iCapturePoints);
-	CNetworkVar (int, m_iBlockCount);
+	CNetworkVar (int16, m_iBlockCount);
 	CNetworkVar (int, m_iStolenBlockCount);
 };
 

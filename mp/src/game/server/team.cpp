@@ -43,7 +43,7 @@ IMPLEMENT_SERVERCLASS_ST_NOBASE(CTeam, DT_Team)
 	SendPropInt( SENDINFO(m_iRoundsWon), 8 ),
 	SendPropString( SENDINFO( m_szTeamname ) ),
 	SendPropInt( SENDINFO( m_iCapturePoints ), 24, SPROP_UNSIGNED ),
-	SendPropInt( SENDINFO( m_iBlockCount ), 24, SPROP_UNSIGNED ),
+	SendPropInt( SENDINFO( m_iBlockCount ), 16, SPROP_UNSIGNED | SPROP_CHANGES_OFTEN ),
 	SendPropInt( SENDINFO( m_iStolenBlockCount ), 32, SPROP_UNSIGNED ),
 
 	SendPropArray2( 

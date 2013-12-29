@@ -38,7 +38,7 @@ IMPLEMENT_CLIENTCLASS_DT_NOBASE(C_Team, DT_Team, CTeam)
 	RecvPropInt( RECVINFO(m_iRoundsWon) ),
 	RecvPropString( RECVINFO(m_szTeamname)),
 	RecvPropInt( RECVINFO( m_iCapturePoints ) ),
-	RecvPropInt( RECVINFO( m_iBlockCount ) ),
+	RecvPropInt( RECVINFO_NOSIZE( m_iBlockCount ), 16 ),
 	RecvPropInt( RECVINFO( m_iStolenBlockCount ) ),
 	
 	RecvPropArray2( 
