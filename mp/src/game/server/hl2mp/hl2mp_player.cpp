@@ -1066,8 +1066,6 @@ void CHL2MP_Player::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecT
 			}
 		}
 	}
-
-	BaseClass::Weapon_Drop( pWeapon, pvecTarget, pVelocity );
 }
 
 
