@@ -1,7 +1,7 @@
 /* ***** BEGIN LICENSE BLOCK *****
 Version: MPL 1.1/LGPL 2.1/GPL 2.0
 
-The contents of this file are subject to the Mozilla Public License Version 
+The contents of this file are subject to the Mozilla Public License Version
 1.1 (the "License"); you may not use this file except in compliance with
 ...
 for the specific language governing rights and limitations under the
@@ -14,7 +14,7 @@ Portions created by the Hekar Khani are Copyright (C) 2010
 Hekar Khani. All Rights Reserved.
 
 Contributor(s):
-  Hekar Khani <hekark@gmail.com>
+Hekar Khani <hekark@gmail.com>
 
 Alternatively, the contents of this file may be used under the terms of
 either of the GNU General Public License Version 2 or later (the "GPL"),
@@ -31,7 +31,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 	Disposes of players, disposes of blocks and returns flag.
 
 	Last Updated Feb 27, 2010
-===============================================================*/
+	===============================================================*/
 
 #include "cbase.h"
 #include "team.h"
@@ -43,13 +43,13 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "Mod/CDisposerBase.h"
 
 BEGIN_DATADESC( CBlockDisposer )
-	
-	DEFINE_ENTITYFUNC( Touch ),
 
-	DEFINE_KEYFIELD( m_bDissolve, FIELD_BOOLEAN, "dissolve" ),
-	DEFINE_KEYFIELD( m_iTeamNum, FIELD_INTEGER, "team" ),
-	DEFINE_OUTPUT( m_OnDisposeBlock, "OnDisposeBlock" ),
-	DEFINE_OUTPUT( m_OnDisposePlayer, "OnDisposePlayer" ),
+DEFINE_ENTITYFUNC( Touch ),
+
+DEFINE_KEYFIELD( m_bDissolve, FIELD_BOOLEAN, "dissolve" ),
+DEFINE_KEYFIELD( m_iTeamNum, FIELD_INTEGER, "team" ),
+DEFINE_OUTPUT( m_OnDisposeBlock, "OnDisposeBlock" ),
+DEFINE_OUTPUT( m_OnDisposePlayer, "OnDisposePlayer" ),
 
 END_DATADESC()
 
@@ -58,7 +58,7 @@ CBlockDisposer::CBlockDisposer()
 	m_bDissolve = false;
 }
 
-void CBlockDisposer::Spawn ()
+void CBlockDisposer::Spawn()
 {
 	// Set the touch functions, etc.
 	SetTouch( &CBlockDisposer::Touch );
@@ -69,7 +69,7 @@ void CBlockDisposer::Spawn ()
 
 	SetSolid( SOLID_BSP );
 	SetMoveType( MOVETYPE_NONE );
-	SetModel( STRING( GetModelName( ) ) );
+	SetModel( STRING( GetModelName() ) );
 	AddEffects( EF_NODRAW );
 	CreateVPhysics();
 #if 0
@@ -92,7 +92,7 @@ bool CBlockDisposer::OnFlagTouch( CBaseEntity *pOther )
 	if ( pOther->IsFlag() )
 	{
 		Msg( "Returning Flag\n" );
-		CFlagBase *pFlag = dynamic_cast < CFlagBase * > ( pOther );
+		CFlagBase *pFlag = dynamic_cast <CFlagBase *> (pOther);
 		if ( pFlag )
 		{
 			pFlag->ReturnToSpawn();
@@ -108,22 +108,27 @@ bool CBlockDisposer::OnBlockTouch( CBaseEntity *pOther )
 {
 	if ( pOther->IsBlock() ) // If the entity is a block
 	{
-		CBlockBase *pBlock = dynamic_cast< CBlockBase * > ( pOther );
-
-		CTeam *pTeam = dynamic_cast< CTeam * > ( pBlock->GetTeam() );
-		Assert( pTeam );
-		pTeam->AddBlockCount( -pBlock->GetBlockWorth() );
-
-		if ( m_bDissolve )
+		CBlockBase *pBlock = dynamic_cast<CBlockBase *> (pOther);
+		if ( !( pBlock->GetFlags() & FL_DISSOLVING ) )
 		{
-			pBlock->Dissolve( NULL, gpGlobals->curtime, false, ENTITY_DISSOLVE_ELECTRICAL );
-		}
-		else
-		{
-			pBlock->Remove();
+			CTeam *pTeam = dynamic_cast<CTeam *>( pBlock->GetTeam() );
+			if ( pTeam )
+			{
+				pTeam->AddBlockCount( -pBlock->GetBlockWorth() );
+			}
+
+			if ( m_bDissolve )
+			{
+				pBlock->Dissolve( NULL, gpGlobals->curtime, false, ENTITY_DISSOLVE_ELECTRICAL );
+			}
+			else
+			{
+				pBlock->Remove();
+			}
+
+			OnDisposeBlock( pBlock );
 		}
 
-		OnDisposeBlock( pBlock );
 		return true;
 	}
 
@@ -135,7 +140,7 @@ bool CBlockDisposer::OnPlayerTouch( CBaseEntity *pOther )
 	if ( pOther->IsPlayer() )
 	{
 		CModPlayer *pPlayer = ToModPlayer( pOther );
-		
+
 		// Return the flag if the player has it
 		if ( pPlayer->HasFlag() )
 		{

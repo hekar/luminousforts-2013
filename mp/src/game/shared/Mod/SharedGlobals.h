@@ -47,6 +47,8 @@ enum TeamColor_enum
 
 extern Color GetTeamColor( int nTeamIndex, int TeamColorType = TEAM_CLR_NORMAL );
 
+extern bool IsPlayingTeam( int teamNumber );
+
 extern int Q_StrReplace( const char *str, char *output, int size, const char *original, const char *replace );
 
 #endif // SHAREDGLOBALS_H

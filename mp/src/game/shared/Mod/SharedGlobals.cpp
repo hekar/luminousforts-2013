@@ -202,6 +202,11 @@ int TeamMaskToNumber( int TeamMask )
 	}
 }
 
+ bool IsPlayingTeam( int teamNumber )
+ {
+	 return teamNumber == TEAM_RED || TEAM_BLUE;
+ }
+
 int Q_StrReplace( const char *str, char *output, int size, const char *original, const char *replace )
 {
 	char *pos = NULL;
