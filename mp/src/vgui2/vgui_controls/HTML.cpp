@@ -199,6 +199,7 @@ HTML::HTML(Panel *parent, const char *name, bool allowJavaScript, bool bPopupWin
 	m_flZoom = 100.0f;
 	m_iBrowser = -1;
 	m_bNeedsFullTextureUpload = false;
+	m_bBlockPopups = false;
 
 	m_pInteriorPanel = new HTMLInterior( this );
 	SetPostChildPaintEnabled( true );
@@ -1224,6 +1225,10 @@ void HTML::NewWindowsOnly( bool state )
 	m_bNewWindowsOnly = state;
 }
 
+void HTML::SetBlockPopups( bool state )
+{
+	m_bBlockPopups = state;
+}
 
 //-----------------------------------------------------------------------------
 // Purpose: called when our children have finished painting
@@ -1884,6 +1889,9 @@ void HTML::BrowserOpenNewTab( const CMsgOpenNewTab *pCmd )
 //-----------------------------------------------------------------------------
 void HTML::BrowserPopupHTMLWindow( const CMsgPopupHTMLWindow *pCmd )
 {
+	if ( m_bBlockPopups )
+		return;
+
 	HTMLPopup *p = new HTMLPopup( this, pCmd->url().c_str(), "" );
 	int wide = pCmd->wide();
 	int tall = pCmd->tall();
