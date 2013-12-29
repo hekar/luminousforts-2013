@@ -152,7 +152,7 @@ void CHudFlagCarrier::VidInit( void )
 {
 	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
 	{
-		m_pAvatar[i]->ClearAvatarSteamID();
+		m_pAvatar[ i ]->ClearAvatarSteamID();
 	}
 
 	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
@@ -160,6 +160,9 @@ void CHudFlagCarrier::VidInit( void )
 		m_iTakenByPlayer[ i ] = TAKEN_INVALID_PLAYER;
 		Update();
 	}
+
+	m_pAvatar[ SDK_TEAM_BLUE ]->SetPos( m_flBlueAvatarX, m_flBlueAvatarY );
+	m_pAvatar[ SDK_TEAM_RED ]->SetPos( m_flRedAvatarX, m_flRedAvatarY );
 
 	Reset();
 }
@@ -279,25 +282,6 @@ void CHudFlagCarrier::UpdateTakenAvatar( int TeamIndex )
 					// Indent the image. These are deliberately non-resolution-scaling.
 					pAvImage->SetAvatarSize( 32, 32 );
 					pAvImage->SetSize( pAvImage->GetWide(), 32 );
-
-#if 0
-					if ( TeamIndex == SDK_TEAM_BLUE )
-					{
-						m_pAvatar[ TeamIndex ]->SetPos
-						(
-							m_flBlueAvatarX - 32, 
-							m_flBlueAvatarY - 32
-						);
-					}
-					else if ( TeamIndex == SDK_TEAM_RED )
-					{
-						m_pAvatar[ TeamIndex ]->SetPos
-						(
-							m_flRedAvatarX - 32,
-							m_flRedAvatarY - 32
-						);
-					}
-#endif // 0
 				}
 			}
 		}
@@ -335,12 +319,12 @@ void CHudFlagCarrier::Paint ( void )
 	// Display avatars if required
 	for (int i = 0; i < TEAM_COUNT; i++)
 	{
-		if ( !m_pAvatar [i] || m_iTakenByPlayer [i] == TAKEN_INVALID_PLAYER )
+		if ( !m_pAvatar[ i ] || m_iTakenByPlayer[ i ] == TAKEN_INVALID_PLAYER )
 		{
 			continue;
 		}
 
-		m_pAvatar [i]->Paint();
+		m_pAvatar[ i ]->Paint();
 	}
 }
 
