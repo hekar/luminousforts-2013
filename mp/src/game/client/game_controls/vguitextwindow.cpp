@@ -366,6 +366,11 @@ vgui::Panel *CTextWindow::CreateControlByName( const char *controlName )
 	}
 }
 
+CTextWindow::CMOTDHTML::CMOTDHTML( Panel *parent, const char *pchName ) : vgui::HTML( parent, pchName ) {
+	NewWindowsOnly( false );
+	SetBlockPopups( true );
+}
+
 bool CTextWindow::CMOTDHTML::OnStartRequest( const char *url, const char *target, const char *pchPostData, bool bIsRedirect )
 {
 	if ( Q_strstr( url, "steam://" ) )
