@@ -43,17 +43,21 @@ public:
 	~C_BlockBase();
 
 	int	GetHealth() const { return m_iHealth; }
-	int	GetMaxHealth() const { return m_iMaxHealth; }
+	int	GetMaxHealth( ) const { return m_iMaxHealth; }
+	int	GetBlockType( ) const { return m_BlockType; }
+	int	GetBlockWorth( ) const { return m_BlockWorth; }
 	int GetLastFrozenByUserID() const { return m_iUserIDFreezer; }
 	int GetLastUnFrozenByUserID() const { return m_iUserIDUnFreezer; }
 
 	bool IsBlock() { return true; }
 
 private:
-	CNetworkVar( int, m_iHealth );
-	CNetworkVar( int, m_iMaxHealth );
-	CNetworkVar( int, m_iUserIDFreezer );
-	CNetworkVar( int, m_iUserIDUnFreezer );
+	int m_iHealth;
+	int m_iMaxHealth;
+	int m_BlockType;
+	int m_BlockWorth;
+	int m_iUserIDFreezer;
+	int m_iUserIDUnFreezer;
 };
 
 
