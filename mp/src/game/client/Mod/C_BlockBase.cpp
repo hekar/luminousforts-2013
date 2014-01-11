@@ -38,6 +38,8 @@ the terms of any one of the MPL, the GPL or the LGPL.
 IMPLEMENT_CLIENTCLASS_DT( C_BlockBase, DT_BlockBase, CBlockBase )
 	RecvPropInt( RECVINFO( m_iHealth ) ),
 	RecvPropInt( RECVINFO( m_iMaxHealth ) ),
+	RecvPropInt( RECVINFO( m_BlockType ) ),
+	RecvPropInt( RECVINFO( m_BlockWorth ) ),
 	RecvPropInt( RECVINFO( m_iUserIDFreezer ) ),
 	RecvPropInt( RECVINFO( m_iUserIDUnFreezer ) ),
 END_RECV_TABLE()

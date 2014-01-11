@@ -184,15 +184,13 @@ void CHUDBlockHealth::Paint()
 			float MaxBlockHealth = pBlock->GetMaxHealth();
 			float HealthRatio = ( BlockHealth / MaxBlockHealth ) * 100;
 
-			wchar_t wszHealthText[ 10 ];
+			wchar_t wszHealthText[ 32 ];
 			unsigned int HealthTextLen = ARRAYSIZE( wszHealthText );
-			_snwprintf( wszHealthText, HealthTextLen - 1, L"%.0f%%", HealthRatio );
+			_snwprintf( wszHealthText, HealthTextLen - 1, L"%.0f%% | %d", HealthRatio, pBlock->GetBlockWorth( ) );
 			wszHealthText[ HealthTextLen - 1 ] = '\0';
 
-			wchar_t *printFormatString = NULL;
-			printFormatString = L"Health | %s1 |";
 			g_pVGuiLocalize->ConstructString( sIDString, sizeof( sIDString ), 
-				printFormatString, 1, wszHealthText );
+				L"Health | %s1", 1, wszHealthText );
 
 			// Check if we have anything to output
 			if ( sIDString[0] )
@@ -214,7 +212,6 @@ void CHUDBlockHealth::Paint()
 
 void CHUDBlockHealth::PaintBackground()
 {
-
 }
 
 void CHUDBlockHealth::ApplySchemeSettings( vgui::IScheme *scheme )

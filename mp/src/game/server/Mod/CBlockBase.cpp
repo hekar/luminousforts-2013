@@ -72,6 +72,8 @@ END_DATADESC()
 IMPLEMENT_SERVERCLASS_ST( CBlockBase, DT_BlockBase )
 	SendPropInt( SENDINFO( m_iHealth ) ),
 	SendPropInt( SENDINFO( m_iMaxHealth ) ),
+	SendPropInt( SENDINFO( m_BlockType ) ),
+	SendPropInt( SENDINFO( m_BlockWorth ) ),
 	SendPropInt( SENDINFO( m_iUserIDFreezer ) ),
 	SendPropInt( SENDINFO( m_iUserIDUnFreezer ) ),
 END_SEND_TABLE()

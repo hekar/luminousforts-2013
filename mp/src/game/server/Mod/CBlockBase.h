@@ -112,8 +112,8 @@ public:
 	void SetSpawnFrozen( bool val ) { m_bSpawnFrozen = val; }
 
 private:
-	PrivateMethod void SetLastFrozenUserID( int UserID );
-	PrivateMethod void SetLastUnFrozenUserID( int UserID );
+	void SetLastFrozenUserID( int UserID );
+	void SetLastUnFrozenUserID( int UserID );
 
 protected:
 	int m_iDesiredHealth;
@@ -123,8 +123,7 @@ private:
 	bool m_bSpawnBlockCount;
 	bool m_bSpawnFrozen;
 
-	int m_BlockType;
-	int m_BlockWorth;
+	
 	char *m_czModelName;
 	bool m_bFrozen;
 
@@ -132,6 +131,9 @@ private:
 
 	COutputEvent m_OnFrozen;
 	COutputEvent m_OnUnFrozen;
+
+	CNetworkVar( int, m_BlockType );
+	CNetworkVar( int, m_BlockWorth );
 
 	CNetworkVar( int, m_iUserIDFreezer );
 	CNetworkVar( int, m_iUserIDUnFreezer );
