@@ -1,0 +1,23 @@
+install: make
+language: cpp
+compiler:
+    - gcc
+notifications:
+  recipients:
+    - hekark@gmail.com
+  email:
+    on_success: change
+    on_failure: always
+branches:
+  only:
+    - dev
+before_script:
+    wget http://media.steampowered.com/client/runtime/steam-runtime-sdk_latest.tar.xz
+    tar xvf steam-runtime-sdk_latest.tar.xz
+    rm steam-runtime-sdk_latest.tar.xz
+    cd steam-runtime-sdk_*
+
+    ./setup.sh
+script:
+    cd steam-runtime-sdk_*
+    ./shell.sh --arch=i386 "cd ../mp/src/creategameprojects; make -f games.mak"
