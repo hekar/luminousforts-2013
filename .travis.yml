@@ -1,4 +1,3 @@
-install: make
 language: cpp
 compiler:
     - gcc
