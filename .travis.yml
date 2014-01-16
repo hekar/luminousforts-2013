@@ -10,14 +10,11 @@ notifications:
 branches:
   only:
     - dev
-before_script: |
+script: |
     wget http://media.steampowered.com/client/runtime/steam-runtime-sdk_latest.tar.xz
     tar xvf steam-runtime-sdk_latest.tar.xz
     rm steam-runtime-sdk_latest.tar.xz
     cd steam-runtime-sdk_*
     export AUTO_UPGRADE=true
     ./setup.sh --host=i368 --target=i386 --release
-    
-script: |
-    cd steam-runtime-sdk_*
     ./shell.sh --arch=i386 "cd ../mp/src/creategameprojects; make -f games.mak"
