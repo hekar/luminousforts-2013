@@ -19,4 +19,4 @@ script: |
     ls
     export AUTO_UPGRADE=true
     ./setup.sh --host=i368 --target=i386 --release
-    ./shell.sh --arch=i386 "cd ../mp/src/creategameprojects; make -f games.mak"
+    ./shell.sh --arch=i386 "cd mp/src/ && creategameprojects && make -f games.mak"
