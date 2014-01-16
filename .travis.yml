@@ -15,6 +15,7 @@ before_script: |
     tar xvf steam-runtime-sdk_latest.tar.xz
     rm steam-runtime-sdk_latest.tar.xz
     cd steam-runtime-sdk_*
+    export AUTO_UPGRADE=true
     ./setup.sh --host=i368 --target=i386 --release
     
 script: |
