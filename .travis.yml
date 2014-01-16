@@ -15,8 +15,8 @@ before_script: |
     tar xvf steam-runtime-sdk_latest.tar.xz
     rm steam-runtime-sdk_latest.tar.xz
     cd steam-runtime-sdk_*
-
-    ./setup.sh
+    ./setup.sh --host=i368 --target=i386 --release
+    
 script: |
     cd steam-runtime-sdk_*
     ./shell.sh --arch=i386 "cd ../mp/src/creategameprojects; make -f games.mak"
