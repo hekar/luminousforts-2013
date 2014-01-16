@@ -14,7 +14,9 @@ script: |
     wget http://media.steampowered.com/client/runtime/steam-runtime-sdk_latest.tar.xz
     tar xvf steam-runtime-sdk_latest.tar.xz
     rm steam-runtime-sdk_latest.tar.xz
+    ls
     cd steam-runtime-sdk_*
+    ls
     export AUTO_UPGRADE=true
     ./setup.sh --host=i368 --target=i386 --release
     ./shell.sh --arch=i386 "cd ../mp/src/creategameprojects; make -f games.mak"
