@@ -13,7 +13,7 @@
 
 #include <vgui_controls/EditablePanel.h>
 #include <game/client/iviewport.h>
-#include "gameeventlistener.h"
+#include "GameEventListener.h"
 
 // This is dumb
 #define TYPE_NOTEAM			0	// NOTEAM must be zero :)

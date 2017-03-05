@@ -31,8 +31,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #pragma once
 #endif
 
-#include "SharedModCvars.h"
-
 // Classic class limits, blue
 extern ConVar mp_limit_blue_classscout;
 extern ConVar mp_limit_blue_classengineer;

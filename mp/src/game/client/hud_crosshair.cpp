@@ -183,7 +183,8 @@ void CHudCrosshair::SetCrosshair( CHudTexture *texture, Color& clr )
 //-----------------------------------------------------------------------------
 void CHudCrosshair::ResetCrosshair()
 {
-	SetCrosshair( m_pDefaultCrosshair, Color( 255, 255, 255, 255 ) );
+	Color color = Color( 255, 255, 255, 255 );
+	SetCrosshair( m_pDefaultCrosshair, color );
 }
 
 void CHudCrosshair::GetDrawPosition( float *pX, float *pY, bool *pbBehindCamera, QAngle angleCrosshairOffset )

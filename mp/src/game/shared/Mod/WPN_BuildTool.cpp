@@ -35,10 +35,10 @@ the terms of any one of the MPL, the GPL or the LGPL.
 	#include "Mod/BlockUtils.h"
 #endif
 
-BALANCE_DEFINE( lfm_build_tool_snap_x, 1.0f );
-BALANCE_DEFINE( lfm_build_tool_snap_y, 1.0f );
-BALANCE_DEFINE( lfm_build_tool_firerate, 0.70f );
-BALANCE_DEFINE( lfm_build_tool_distance, 5000.0f );
+BALANCE_DEFINE( lfm_build_tool_snap_x, 1 );
+BALANCE_DEFINE( lfm_build_tool_snap_y, 1 );
+BALANCE_DEFINE( lfm_build_tool_firerate, 1 );
+BALANCE_DEFINE( lfm_build_tool_distance, 5000 );
 
 class CWeaponBuildTool : public CBaseHL2MPCombatWeapon
 {
