@@ -37,7 +37,7 @@ END_RECV_TABLE()
 BEGIN_PREDICTION_DATA( C_ModPlayer )
 END_PREDICTION_DATA()
 
-LINK_ENTITY_TO_CLASS( modplayer, C_ModPlayer );
+LINK_ENTITY_TO_CLASS( player, C_ModPlayer );
 
 C_ModPlayer::C_ModPlayer()
 {

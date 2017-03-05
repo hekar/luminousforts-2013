@@ -389,8 +389,6 @@ BEGIN_PREDICTION_DATA( C_BasePlayer )
 
 END_PREDICTION_DATA()
 
-LINK_ENTITY_TO_CLASS( player, C_BasePlayer );
-
 // -------------------------------------------------------------------------------- //
 // Functions.
 // -------------------------------------------------------------------------------- //

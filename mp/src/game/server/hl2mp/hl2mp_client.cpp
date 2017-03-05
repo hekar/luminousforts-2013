@@ -40,7 +40,7 @@ ConVar sv_motd_unload_on_dismissal( "sv_motd_unload_on_dismissal", "0", 0, "If e
 extern CBaseEntity*	FindPickerEntityClass( CBasePlayer *pPlayer, char *classname );
 extern bool			g_fGameOver;
 
-void FinishClientPutInServer( CHL2MP_Player *pPlayer )
+void FinishClientPutInServer( CModPlayer *pPlayer )
 {
 	pPlayer->InitialSpawn();
 
@@ -99,7 +99,7 @@ void ClientActive( edict_t *pEdict, bool bLoadGame )
 	// Can't load games in CS!
 	Assert( !bLoadGame );
 
-	CHL2MP_Player *pPlayer = ToHL2MPPlayer( CBaseEntity::Instance( pEdict ) );
+	CModPlayer *pPlayer = ToModPlayer( CBaseEntity::Instance( pEdict ) );
 	FinishClientPutInServer( pPlayer );
 }
 
