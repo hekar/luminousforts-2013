@@ -7,12 +7,14 @@
 $IgnoreRedundancyWarning	"ON"
 $MacroRequired				"SRCDIR"
 $MacroRequired				"OUTBINDIR"
+$MacroRequired				"PLATSUBDIR"
+
 
 $Include "$SRCDIR\vpc_scripts\source_exe_win_win32_base.vpc"
 
 $Configuration
 {
-	$General [$VS2010]
+	$General
 	{
 		$TargetName		"$OUTBINNAME"
 	}

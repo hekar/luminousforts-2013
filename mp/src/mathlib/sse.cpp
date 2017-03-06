@@ -204,7 +204,9 @@ float FASTCALL _SSE_VectorNormalize (Vector& vec)
 #endif
 
 	float *v = &vec[0];
+#ifdef _WIN32
 	float *r = &result[0];
+#endif
 
 	float	radius = 0.f;
 	// Blah, get rid of these comparisons ... in reality, if you have all 3 as zero, it shouldn't 
@@ -259,6 +261,7 @@ float FASTCALL _SSE_VectorNormalize (Vector& vec)
             "movaps          %%xmm4, %1 \n\t"
             : "=m" (radius), "=m" (result)
             : "m" (*v)
+            : "xmm1", "xmm2", "xmm3", "xmm4"
  		);
 #else
 	#error "Not Implemented"
@@ -322,8 +325,9 @@ float _SSE_InvRSquared(const float* v)
 		"maxss           %%xmm5, %%xmm1 \n\t"
         "rcpss           %%xmm1, %%xmm0 \n\t"
 		"movss           %%xmm0, %0 \n\t" 
-        : "=m" (inv_r2)
-        : "m" (*v), "0" (inv_r2)
+        : "+m" (inv_r2)
+        : "m" (*v)
+        : "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5"
  		);
 #else
 	#error "Not Implemented"
@@ -738,6 +742,7 @@ float _SSE_cos( float x )
 //-----------------------------------------------------------------------------
 // SSE2 implementations of optimized routines:
 //-----------------------------------------------------------------------------
+#ifdef PLATFORM_WINDOWS_PC32
 void _SSE2_SinCos(float x, float* s, float* c)  // any x
 {
 #ifdef _WIN32
@@ -823,7 +828,9 @@ void _SSE2_SinCos(float x, float* s, float* c)  // any x
 	#error "Not Implemented"
 #endif
 }
+#endif // PLATFORM_WINDOWS_PC32
 
+#ifdef PLATFORM_WINDOWS_PC32
 float _SSE2_cos(float x)  
 {
 #ifdef _WIN32
@@ -881,7 +888,9 @@ float _SSE2_cos(float x)
 
 	return x;
 }
+#endif // PLATFORM_WINDOWS_PC32
 
+#if 0
 // SSE Version of VectorTransform
 void VectorTransformSSE(const float *in1, const matrix3x4_t& in2, float *out1)
 {
@@ -939,7 +948,9 @@ void VectorTransformSSE(const float *in1, const matrix3x4_t& in2, float *out1)
 	#error "Not Implemented"
 #endif
 }
+#endif
 
+#if 0
 void VectorRotateSSE( const float *in1, const matrix3x4_t& in2, float *out1 )
 {
 	Assert( s_bMathlibInitialized );
@@ -993,6 +1004,7 @@ void VectorRotateSSE( const float *in1, const matrix3x4_t& in2, float *out1 )
 	#error "Not Implemented"
 #endif
 }
+#endif
 
 #ifdef _WIN32
 void _declspec(naked) _SSE_VectorMA( const float *start, float scale, const float *direction, float *dest )

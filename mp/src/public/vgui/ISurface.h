@@ -19,7 +19,6 @@
 
 #include "appframework/IAppSystem.h"
 #include "mathlib/vector2d.h"  // must be before the namespace line
-#include <html/ichromehtmlwrapper.h>
 
 #include "IVguiMatInfo.h"
 
@@ -32,6 +31,7 @@
 #endif
 
 class Color;
+class ITexture;
 
 namespace vgui
 {
@@ -383,10 +383,10 @@ public:
 
 	virtual const char *GetWebkitHTMLUserAgentString() = 0;
 
-	virtual IHTMLChromeController *AccessChromeHTMLController() = 0;
+	virtual void *Deprecated_AccessChromeHTMLController() = 0;
 
 	// the origin of the viewport on the framebuffer (Which might not be 0,0 for stereo)
-	virtual void SetFullscreenViewport( int x, int y, int w, int h ) = 0;
+	virtual void SetFullscreenViewport( int x, int y, int w, int h ) = 0; // this uses NULL for the render target.
 	virtual void GetFullscreenViewport( int & x, int & y, int & w, int & h ) = 0;
 	virtual void PushFullscreenViewport() = 0;
 	virtual void PopFullscreenViewport() = 0;
@@ -394,6 +394,12 @@ public:
 	// handles support for software cursors
 	virtual void SetSoftwareCursor( bool bUseSoftwareCursor ) = 0;
 	virtual void PaintSoftwareCursor() = 0;
+
+
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// !! WARNING! YOU MUST NOT ADD YOUR NEW METHOD HERE OR YOU WILL BREAK MODS !!
+	// !! Add your new stuff to the bottom of IMatSystemSurface instead.        !!
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 };
 
 }

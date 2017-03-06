@@ -140,7 +140,7 @@ typedef enum
 	VOTE_FAILED_ISSUE_DISABLED,
 	VOTE_FAILED_MAP_NOT_FOUND,
 	VOTE_FAILED_MAP_NAME_REQUIRED,
-	VOTE_FAILED_FAILED_RECENTLY,
+	VOTE_FAILED_ON_COOLDOWN,
 	VOTE_FAILED_TEAM_CANT_CALL,
 	VOTE_FAILED_WAITINGFORPLAYERS,
 	VOTE_FAILED_PLAYERNOTFOUND,
@@ -151,7 +151,21 @@ typedef enum
 	VOTE_FAILED_MAP_NOT_VALID,
 	VOTE_FAILED_CANNOT_KICK_FOR_TIME,
 	VOTE_FAILED_CANNOT_KICK_DURING_ROUND,
+	VOTE_FAILED_VOTE_IN_PROGRESS,
+	VOTE_FAILED_KICK_LIMIT_REACHED,
+
+	// TF-specific?
+	VOTE_FAILED_MODIFICATION_ALREADY_ACTIVE,
 } vote_create_failed_t;
+
+enum
+{
+#ifdef STAGING_ONLY
+	SERVER_MODIFICATION_ITEM_DURATION_IN_MINUTES = 2
+#else
+	SERVER_MODIFICATION_ITEM_DURATION_IN_MINUTES = 120
+#endif
+};
 
 #define MAX_VOTE_DETAILS_LENGTH 64
 #define INVALID_ISSUE			-1
@@ -189,9 +203,8 @@ enum CastVote
 #define	HIDEHUD_VEHICLE_CROSSHAIR	( 1<<9 )	// Hide vehicle crosshair
 #define HIDEHUD_INVEHICLE			( 1<<10 )
 #define HIDEHUD_BONUS_PROGRESS		( 1<<11 )	// Hide bonus progress display (for bonus map challenges)
-#define HIDEHUD_BUILDPHASE			( 1<<12 )
 
-#define HIDEHUD_BITCOUNT			13
+#define HIDEHUD_BITCOUNT			12
 
 //===================================================================================================================
 // suit usage bits
@@ -444,6 +457,7 @@ enum {
 	OBS_MODE_FIXED,		// view from a fixed camera position
 	OBS_MODE_IN_EYE,	// follow a player in first person view
 	OBS_MODE_CHASE,		// follow a player in third person view
+	OBS_MODE_POI,		// PASSTIME point of interest - game objective, big fight, anything interesting; added in the middle of the enum due to tons of hard-coded "<ROAMING" enum compares
 	OBS_MODE_ROAMING,	// free roaming
 
 	NUM_OBSERVER_MODES,
@@ -677,6 +691,7 @@ struct FireBulletsInfo_t
 		m_vecDirShooting.Init( VEC_T_NAN, VEC_T_NAN, VEC_T_NAN );
 #endif
 		m_bPrimaryAttack = true;
+		m_bUseServerRandomSeed = false;
 	}
 
 	FireBulletsInfo_t( int nShots, const Vector &vecSrc, const Vector &vecDir, const Vector &vecSpread, float flDistance, int nAmmoType, bool bPrimaryAttack = true )
@@ -695,6 +710,7 @@ struct FireBulletsInfo_t
 		m_pAdditionalIgnoreEnt = NULL;
 		m_flDamageForceScale = 1.0f;
 		m_bPrimaryAttack = bPrimaryAttack;
+		m_bUseServerRandomSeed = false;
 	}
 
 	int m_iShots;
@@ -711,6 +727,7 @@ struct FireBulletsInfo_t
 	CBaseEntity *m_pAttacker;
 	CBaseEntity *m_pAdditionalIgnoreEnt;
 	bool m_bPrimaryAttack;
+	bool m_bUseServerRandomSeed;
 };
 
 //-----------------------------------------------------------------------------
@@ -920,14 +937,17 @@ enum
 #define TF_VISION_FILTER_NONE			0
 #define TF_VISION_FILTER_PYRO			(1<<0)		// 1
 #define TF_VISION_FILTER_HALLOWEEN		(1<<1)		// 2
+#define TF_VISION_FILTER_ROME			(1<<2)		// 4
 
+// THIS ENUM SHOULD MATCH THE ORDER OF THE FLAGS ABOVE
 enum
 {
-	MODEL_INDEX_OVERRIDE_DEFAULT = 0,
-	MODEL_INDEX_OVERRIDE_PYRO,
-	MODEL_INDEX_OVERRIDE_HALLOWEEN,
+	VISION_MODE_NONE = 0,
+	VISION_MODE_PYRO,
+	VISION_MODE_HALLOWEEN,
+	VISION_MODE_ROME,
 
-	MAX_MODEL_INDEX_OVERRIDES
+	MAX_VISION_MODES
 };
 #endif // TF_DLL || TF_CLIENT_DLL
 

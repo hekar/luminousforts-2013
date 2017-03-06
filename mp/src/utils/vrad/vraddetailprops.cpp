@@ -524,7 +524,8 @@ private:
 	bool TestPointAgainstSkySurface( Vector const &pt, dface_t *pFace )
 	{
 		// Create sky face winding.
-		winding_t *pWinding = WindingFromFace( pFace, Vector( 0.0f, 0.0f, 0.0f ) );
+		Vector v( 0.0f, 0.0f, 0.0f );
+		winding_t *pWinding = WindingFromFace( pFace, v );
 
 		// Test point in winding. (Since it is at the node, it is in the plane.)
 		bool bRet = PointInWinding( pt, pWinding );
@@ -737,7 +738,9 @@ void ComputeIndirectLightingAtPoint( Vector &position, Vector &normal, Vector &o
 			ColorRGBExp32ToVector( *pLightmap, lightmapColor );
 		}
 
-		VectorMultiply( lightmapColor, dtexdata[pTex->texdata].reflectivity, lightmapColor );
+		float invLengthSqr = 1.0f / (1.0f + ((vEnd - position) * surfEnum.m_HitFrac / 128.0).LengthSqr());
+		// Include falloff using invsqrlaw.
+		VectorMultiply( lightmapColor, invLengthSqr * dtexdata[pTex->texdata].reflectivity, lightmapColor );
 		VectorAdd( outColor, lightmapColor, outColor );
 	}
 

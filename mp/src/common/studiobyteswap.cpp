@@ -1679,6 +1679,11 @@ int ByteswapMDLFile( void *pDestBase, void *pSrcBase, const int fileSize )
 
 		SET_INDEX_POINTERS( pData, pSequence, keyvalueindex )
 		WriteBuffer<char>( pDataDest, pDataSrc, SrcNative( &pSequence->keyvaluesize ) );
+
+		/** ACTIVITY MODIFIERS **/
+
+		SET_INDEX_POINTERS( pData, pSequence, activitymodifierindex )
+		WriteObjects<mstudioactivitymodifier_t>( pDataDest, pDataSrc, SrcNative( &pSequence->numactivitymodifiers ) );
 	}
 	
 	/** TRANSITION GRAPH **/
@@ -1914,6 +1919,22 @@ int ByteswapMDLFile( void *pDestBase, void *pSrcBase, const int fileSize )
 
 				SET_INDEX_POINTERS_FIXUP( pData, pLinearBone, qalignmentindex )
 				WriteBuffer<float>( &pDataDest, &pDataSrc, 4*numBones );
+			}
+
+			/** BONE FLEX DRIVERS **/
+			if ( pStudioHdr2->m_nBoneFlexDriverIndex )
+			{
+				SET_INDEX_POINTERS_FIXUP( pData, pStudioHdr2, m_nBoneFlexDriverIndex )
+					DECLARE_OBJECT_POINTERS( pBoneFlexDriver, pData, mstudioboneflexdriver_t )
+				ITERATE_BLOCK( pBoneFlexDriver, pStudioHdr2->m_nBoneFlexDriverCount )
+				{
+					WriteObjects( pBoneFlexDriverDest, pBoneFlexDriverSrc );
+
+					/** BONE FLEX DRIVER CONTROLS **/
+
+					SET_INDEX_POINTERS_FIXUP( pData, pBoneFlexDriver, m_nControlIndex );
+					WriteObjects< mstudioboneflexdrivercontrol_t >( &pDataDest, &pDataSrc, SrcNative( &pBoneFlexDriver->m_nControlCount ) );
+				}
 			}
 		}
 	}
@@ -2516,7 +2537,8 @@ BEGIN_BYTESWAP_DATADESC( studiohdr_t )
 	DEFINE_INDEX( unused4, FIELD_INTEGER ),
 	DEFINE_FIELD( numflexcontrollerui, FIELD_INTEGER ),
 	DEFINE_INDEX( flexcontrolleruiindex, FIELD_INTEGER ),
-	DEFINE_ARRAY( unused3, FIELD_INTEGER, 2 ),
+	DEFINE_FIELD( flVertAnimFixedPointScale, FIELD_FLOAT  ),
+	DEFINE_ARRAY( unused3, FIELD_INTEGER, 1 ),
 	DEFINE_INDEX( studiohdr2index, FIELD_INTEGER ),
 	DEFINE_ARRAY( unused2, FIELD_INTEGER, 1 ),
 END_BYTESWAP_DATADESC()
@@ -2530,7 +2552,9 @@ BEGIN_BYTESWAP_DATADESC( studiohdr2_t )
 	DEFINE_FIELD( flMaxEyeDeflection, FIELD_FLOAT ),
 	DEFINE_INDEX( linearboneindex, FIELD_INTEGER ),
 	DEFINE_INDEX( sznameindex, FIELD_INTEGER ),
-	DEFINE_ARRAY( reserved, FIELD_INTEGER, 58 ),
+	DEFINE_INDEX( m_nBoneFlexDriverCount, FIELD_INTEGER ),
+	DEFINE_INDEX( m_nBoneFlexDriverIndex, FIELD_INTEGER ),
+	DEFINE_ARRAY( reserved, FIELD_INTEGER, 56 ),
 END_BYTESWAP_DATADESC()
 
 BEGIN_BYTESWAP_DATADESC( mstudiobone_t )
@@ -2565,6 +2589,20 @@ BEGIN_BYTESWAP_DATADESC( mstudiolinearbone_t )
 	DEFINE_INDEX( rotscaleindex, FIELD_INTEGER ),
 	DEFINE_INDEX( qalignmentindex, FIELD_INTEGER ),
 	DEFINE_ARRAY( unused, FIELD_INTEGER, 6 ),
+END_BYTESWAP_DATADESC()
+
+BEGIN_BYTESWAP_DATADESC( mstudioboneflexdrivercontrol_t )
+	DEFINE_INDEX( m_nBoneComponent, FIELD_INTEGER ),
+	DEFINE_FIELD( m_nFlexControllerIndex, FIELD_INTEGER ),
+	DEFINE_INDEX( m_flMin, FIELD_FLOAT ),
+	DEFINE_INDEX( m_flMax, FIELD_FLOAT ),
+END_BYTESWAP_DATADESC()
+
+BEGIN_BYTESWAP_DATADESC( mstudioboneflexdriver_t )
+	DEFINE_INDEX( m_nBoneIndex, FIELD_INTEGER ),
+	DEFINE_FIELD( m_nControlCount, FIELD_INTEGER ),
+	DEFINE_INDEX( m_nControlIndex, FIELD_FLOAT ),
+	DEFINE_ARRAY( unused, FIELD_INTEGER, 3 ),
 END_BYTESWAP_DATADESC()
 
 BEGIN_BYTESWAP_DATADESC( mstudioaxisinterpbone_t )
@@ -2768,6 +2806,10 @@ BEGIN_BYTESWAP_DATADESC( mstudiomovement_t )
 	DEFINE_FIELD( position, FIELD_VECTOR ),
 END_BYTESWAP_DATADESC()
 
+BEGIN_BYTESWAP_DATADESC( mstudioactivitymodifier_t )
+	DEFINE_INDEX( sznameindex, FIELD_INTEGER ),
+END_BYTESWAP_DATADESC()
+
 BEGIN_BYTESWAP_DATADESC( mstudioseqdesc_t )
 	DEFINE_INDEX( baseptr, FIELD_INTEGER ),
 	DEFINE_INDEX( szlabelindex, FIELD_INTEGER ),
@@ -2807,7 +2849,9 @@ BEGIN_BYTESWAP_DATADESC( mstudioseqdesc_t )
 	DEFINE_INDEX( keyvalueindex, FIELD_INTEGER ),
 	DEFINE_FIELD( keyvaluesize, FIELD_INTEGER ),
 	DEFINE_INDEX( cycleposeindex, FIELD_INTEGER ),
-	DEFINE_ARRAY( unused, FIELD_INTEGER, 7 ),		// remove/add as appropriate (grow back to 8 ints on version change!)
+	DEFINE_INDEX( activitymodifierindex, FIELD_INTEGER ),
+	DEFINE_FIELD( numactivitymodifiers, FIELD_INTEGER ),
+	DEFINE_ARRAY( unused, FIELD_INTEGER, 5 ),		// remove/add as appropriate (grow back to 8 ints on version change!)
 END_BYTESWAP_DATADESC()
 
 BEGIN_BYTESWAP_DATADESC( mstudioevent_t )

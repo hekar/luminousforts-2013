@@ -562,11 +562,11 @@ Vector C_BaseFlex::SetViewTarget( CStudioHdr *pStudioHdr )
 		m_iEyeUpdown = FindFlexController( "eyes_updown" );
 		m_iEyeRightleft = FindFlexController( "eyes_rightleft" );
 
-		if ( m_iEyeUpdown != -1 )
+		if ( m_iEyeUpdown != LocalFlexController_t(-1) )
 		{
 			pStudioHdr->pFlexcontroller( m_iEyeUpdown )->localToGlobal = AddGlobalFlexController( "eyes_updown" );
 		}
-		if ( m_iEyeRightleft != -1 )
+		if ( m_iEyeRightleft != LocalFlexController_t(-1) )
 		{
 			pStudioHdr->pFlexcontroller( m_iEyeRightleft )->localToGlobal = AddGlobalFlexController( "eyes_rightleft" );
 		}
@@ -594,13 +594,13 @@ Vector C_BaseFlex::SetViewTarget( CStudioHdr *pStudioHdr )
 		// calculate animated eye deflection
 		Vector eyeDeflect;
 		QAngle eyeAng( 0, 0, 0 );
-		if ( m_iEyeUpdown != -1 )
+		if ( m_iEyeUpdown != LocalFlexController_t(-1) )
 		{
 			mstudioflexcontroller_t *pflex = pStudioHdr->pFlexcontroller( m_iEyeUpdown );
 			eyeAng.x = g_flexweight[ pflex->localToGlobal ];
 		}
 		
-		if ( m_iEyeRightleft != -1 )
+		if ( m_iEyeRightleft != LocalFlexController_t(-1) )
 		{
 			mstudioflexcontroller_t *pflex = pStudioHdr->pFlexcontroller( m_iEyeRightleft );
 			eyeAng.y = g_flexweight[ pflex->localToGlobal ];
@@ -1057,7 +1057,7 @@ void C_BaseFlex::GetToolRecordingState( KeyValues *msg )
 	Vector viewtarget = m_viewtarget; // Use the unfiltered value
 
 	// HACK HACK: Unmap eyes right/left amounts
-	if (m_iEyeUpdown != -1 && m_iEyeRightleft != -1)
+	if (m_iEyeUpdown != LocalFlexController_t(-1) && m_iEyeRightleft != LocalFlexController_t(-1))
 	{
 		mstudioflexcontroller_t *flexupdown = hdr->pFlexcontroller( m_iEyeUpdown );
 		mstudioflexcontroller_t *flexrightleft = hdr->pFlexcontroller( m_iEyeRightleft );
@@ -1155,6 +1155,33 @@ void C_BaseFlex::SetupWeights( const matrix3x4_t *pBoneToWorld, int nFlexWeightC
 	{
 		SetupLocalWeights( pBoneToWorld, nFlexWeightCount, pFlexWeights, pFlexDelayedWeights );
 	}
+}
+
+
+//-----------------------------------------------------------------------------
+// Purpose: Use the local bone positions to set flex control weights
+//          via boneflexdrivers specified in the model
+//-----------------------------------------------------------------------------
+void C_BaseFlex::BuildTransformations( CStudioHdr *pStudioHdr, Vector *pos, Quaternion q[], const matrix3x4_t& cameraTransform, int boneMask, CBoneBitList &boneComputed )
+{
+	const int nBoneFlexDriverCount = pStudioHdr->BoneFlexDriverCount();
+
+	for ( int i = 0; i < nBoneFlexDriverCount; ++i )
+	{
+		const mstudioboneflexdriver_t *pBoneFlexDriver = pStudioHdr->BoneFlexDriver( i );
+		const Vector &position = pos[ pBoneFlexDriver->m_nBoneIndex ];
+
+		const int nControllerCount = pBoneFlexDriver->m_nControlCount;
+		for ( int j = 0; j < nControllerCount; ++j )
+		{
+			const mstudioboneflexdrivercontrol_t *pController = pBoneFlexDriver->pBoneFlexDriverControl( j );
+			Assert( pController->m_nFlexControllerIndex >= 0 && pController->m_nFlexControllerIndex < pStudioHdr->numflexcontrollers() );
+			Assert( pController->m_nBoneComponent >= 0 && pController->m_nBoneComponent <= 2 );
+			SetFlexWeight( static_cast< LocalFlexController_t >( pController->m_nFlexControllerIndex ), RemapValClamped( position[pController->m_nBoneComponent], pController->m_flMin, pController->m_flMax, 0.0f, 1.0f ) );
+		}
+	}
+
+	BaseClass::BuildTransformations( pStudioHdr, pos, q, cameraTransform, boneMask, boneComputed );
 }
 
 

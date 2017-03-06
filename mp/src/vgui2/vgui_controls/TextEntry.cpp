@@ -1637,7 +1637,7 @@ void TextEntry::OnKeyCodePressed(KeyCode code)
 	
 	// Pass on the joystick and mouse codes
 	if ( IsMouseCode(code) || IsNovintButtonCode(code) || IsJoystickCode(code) || IsJoystickButtonCode(code) ||
-	     IsJoystickPOVCode(code) || IsJoystickPOVCode(code) || IsJoystickAxisCode(code) )
+	     IsJoystickPOVCode(code) || IsJoystickAxisCode(code) )
 	{
 		Panel::OnKeyCodePressed( code );
 		return;
@@ -3355,7 +3355,7 @@ void TextEntry::CopySelected()
 			buf.AddToTail(m_TextStream[i]);
 		}
 		buf.AddToTail('\0');
-		system()->SetClipboardText(buf.Base(), x1 - x0);
+		system()->SetClipboardText(buf.Base(), buf.Count());
 	}
 	
 	// have to request focus if we used the menu

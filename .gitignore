@@ -28,6 +28,7 @@ mp/game/
 *.exp
 *.ilk
 *.lastbuildstate
+vc100.pdb
 ipch
 *.sdf
 *.opensdf

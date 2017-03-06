@@ -86,6 +86,7 @@ bool CBaseEntity::sm_bDisableTouchFuncs = false;	// Disables PhysicsTouch and Ph
 bool CBaseEntity::sm_bAccurateTriggerBboxChecks = true;	// set to false for legacy behavior in ep1
 
 int CBaseEntity::m_nPredictionRandomSeed = -1;
+int CBaseEntity::m_nPredictionRandomSeedServer = -1;
 CBasePlayer *CBaseEntity::m_pPredictionPlayer = NULL;
 
 // Used to make sure nobody calls UpdateTransmitState directly.
@@ -303,7 +304,7 @@ IMPLEMENT_SERVERCLASS_ST_NOBASE( CBaseEntity, DT_BaseEntity )
 	SendPropBool( SENDINFO( m_bAlternateSorting )),
 
 #ifdef TF_DLL
-	SendPropArray3( SENDINFO_ARRAY3(m_nModelIndexOverrides), SendPropInt( SENDINFO_ARRAY(m_nModelIndexOverrides), SP_MODEL_INDEX_BITS, SPROP_UNSIGNED ) ),
+	SendPropArray3( SENDINFO_ARRAY3(m_nModelIndexOverrides), SendPropInt( SENDINFO_ARRAY(m_nModelIndexOverrides), SP_MODEL_INDEX_BITS, 0 ) ),
 #endif
 
 END_SEND_TABLE()
@@ -344,6 +345,8 @@ void CBaseEntityModelLoadProxy::Handler::OnModelLoadComplete( const model_t *pMo
 
 CBaseEntity::CBaseEntity( bool bServerOnly )
 {
+	m_pAttributes = NULL;
+
 	COMPILE_TIME_ASSERT( MOVETYPE_LAST < (1 << MOVETYPE_MAX_BITS) );
 	COMPILE_TIME_ASSERT( MOVECOLLIDE_COUNT < (1 << MOVECOLLIDE_MAX_BITS) );
 
@@ -653,7 +656,7 @@ void CBaseEntity::SetModelIndex( int index )
 void CBaseEntity::ClearModelIndexOverrides( void )
 {
 #ifdef TF_DLL
-	for ( int index = 0 ; index < MAX_MODEL_INDEX_OVERRIDES ; index++ )
+	for ( int index = 0 ; index < MAX_VISION_MODES ; index++ )
 	{
 		m_nModelIndexOverrides.Set( index, 0 );
 	}
@@ -663,7 +666,7 @@ void CBaseEntity::ClearModelIndexOverrides( void )
 void CBaseEntity::SetModelIndexOverride( int index, int nValue )
 {
 #ifdef TF_DLL
-	if ( ( index >= MODEL_INDEX_OVERRIDE_DEFAULT ) && ( index < MAX_MODEL_INDEX_OVERRIDES ) )
+	if ( ( index >= VISION_MODE_NONE ) && ( index < MAX_VISION_MODES ) )
 	{
 		if ( nValue != m_nModelIndexOverrides[index] )
 		{
@@ -1438,10 +1441,10 @@ int CBaseEntity::OnTakeDamage( const CTakeDamageInfo &info )
 //-----------------------------------------------------------------------------
 // Purpose: Scale damage done and call OnTakeDamage
 //-----------------------------------------------------------------------------
-void CBaseEntity::TakeDamage( const CTakeDamageInfo &inputInfo )
+int CBaseEntity::TakeDamage( const CTakeDamageInfo &inputInfo )
 {
 	if ( !g_pGameRules )
-		return;
+		return 0;
 
 	bool bHasPhysicsForceDamage = !g_pGameRules->Damage_NoPhysicsForce( inputInfo.GetDamageType() );
 	if ( bHasPhysicsForceDamage && inputInfo.GetDamageType() != DMG_GENERIC )
@@ -1473,12 +1476,12 @@ void CBaseEntity::TakeDamage( const CTakeDamageInfo &inputInfo )
 	// Make sure our damage filter allows the damage.
 	if ( !PassesDamageFilter( inputInfo ))
 	{
-		return;
+		return 0;
 	}
 
 	if( !g_pGameRules->AllowDamage(this, inputInfo) )
 	{
-		return;
+		return 0;
 	}
 
 	if ( PhysIsInCallback() )
@@ -1500,8 +1503,9 @@ void CBaseEntity::TakeDamage( const CTakeDamageInfo &inputInfo )
 
 		//Msg("%s took %.2f Damage, at %.2f\n", GetClassname(), info.GetDamage(), gpGlobals->curtime );
 
-		OnTakeDamage( info );
+		return OnTakeDamage( info );
 	}
+	return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -1950,7 +1954,7 @@ BEGIN_DATADESC_NO_BASE( CBaseEntity )
 	// DEFINE_FIELD( m_fDataObjectTypes, FIELD_INTEGER ),
 
 #ifdef TF_DLL
-	DEFINE_ARRAY( m_nModelIndexOverrides, FIELD_INTEGER, MAX_MODEL_INDEX_OVERRIDES ),
+	DEFINE_ARRAY( m_nModelIndexOverrides, FIELD_INTEGER, MAX_VISION_MODES ),
 #endif
 
 END_DATADESC()
@@ -4524,6 +4528,17 @@ void CBaseEntity::Teleport( const Vector *newPosition, const QAngle *newAngles, 
 		teleportList[i].pEntity->CollisionRulesChanged();
 	}
 
+	if ( IsPlayer() )
+	{
+		// Tell the client being teleported
+		IGameEvent *event = gameeventmanager->CreateEvent( "base_player_teleported" );
+		if ( event )
+		{
+			event->SetInt( "entindex", entindex() );
+			gameeventmanager->FireEventClientSide( event );
+		}
+	}
+
 	Assert( g_TeleportStack[index] == this );
 	g_TeleportStack.FastRemove( index );
 
@@ -4811,7 +4826,7 @@ void CBaseEntity::PrecacheModelComponents( int nModelIndex )
 							char token[256];
 							const char *pOptions = pEvent->pszOptions();
 							nexttoken( token, pOptions, ' ' );
-							if ( token ) 
+							if ( token[0] ) 
 							{
 								PrecacheParticleSystem( token );
 							}
@@ -4897,7 +4912,9 @@ int CBaseEntity::PrecacheModel( const char *name, bool bPreload )
 {
 	if ( !name || !*name )
 	{
+#ifdef STAGING_ONLY
 		Msg( "Attempting to precache model, but model name is NULL\n");
+#endif
 		return -1;
 	}
 
@@ -4906,8 +4923,7 @@ int CBaseEntity::PrecacheModel( const char *name, bool bPreload )
 	{
 		if ( !engine->IsModelPrecached( name ) )
 		{
-			Assert( !"CBaseEntity::PrecacheModel:  too late" );
-			Warning( "Late precache of %s\n", name );
+			DevMsg( "Late precache of %s -- not necessarily a bug now that we allow ~everything to be dynamically loaded.\n", name );
 		}
 	}
 #if defined( WATCHACCESS )
@@ -5304,11 +5320,6 @@ void CC_Ent_FireTarget( const CCommand& args )
 	ConsoleFireTargets(UTIL_GetCommandClient(),args[1]);
 }
 static ConCommand firetarget("firetarget", CC_Ent_FireTarget, 0, FCVAR_CHEAT);
-
-static bool UtlStringLessFunc( const CUtlString &lhs, const CUtlString &rhs )
-{
-	return Q_stricmp( lhs.String(), rhs.String() ) < 0;
-}
 
 class CEntFireAutoCompletionFunctor : public ICommandCallback, public ICommandCompletionCallback
 {
@@ -6080,7 +6091,7 @@ void CBaseEntity::SetLocalAngles( const QAngle& angles )
 		{
 			Warning( "Bad SetLocalAngles(%f,%f,%f) on %s\n", angles.x, angles.y, angles.z, GetDebugName() );
 		}
-		Assert( false );
+		AssertMsg( false, "Bad SetLocalAngles(%f,%f,%f) on %s\n", angles.x, angles.y, angles.z, GetDebugName() );
 		return;
 	}
 
@@ -6645,23 +6656,19 @@ void CBaseEntity::DispatchResponse( const char *conceptName )
 	AI_Response result;
 	bool found = rs->FindBestResponse( set, result );
 	if ( !found )
-	{
 		return;
-	}
 
 	// Handle the response here...
-	char response[ 256 ];
-	result.GetResponse( response, sizeof( response ) );
+	const char *szResponse = result.GetResponsePtr();
 	switch ( result.GetType() )
 	{
 	case RESPONSE_SPEAK:
-		{
-			EmitSound( response );
-		}
+		EmitSound( szResponse );
 		break;
+
 	case RESPONSE_SENTENCE:
 		{
-			int sentenceIndex = SENTENCEG_Lookup( response );
+			int sentenceIndex = SENTENCEG_Lookup( szResponse );
 			if( sentenceIndex == -1 )
 			{
 				// sentence not found
@@ -6673,16 +6680,13 @@ void CBaseEntity::DispatchResponse( const char *conceptName )
 			CBaseEntity::EmitSentenceByIndex( filter, entindex(), CHAN_VOICE, sentenceIndex, 1, result.GetSoundLevel(), 0, PITCH_NORM );
 		}
 		break;
-	case RESPONSE_SCENE:
-		{
-			// Try to fire scene w/o an actor
-			InstancedScriptedScene( NULL, response );
-		}
-		break;
-	case RESPONSE_PRINT:
-		{
 
-		}
+	case RESPONSE_SCENE:
+		// Try to fire scene w/o an actor
+		InstancedScriptedScene( NULL, szResponse );
+		break;
+
+	case RESPONSE_PRINT:
 		break;
 	default:
 		// Don't know how to handle .vcds!!!
@@ -7040,7 +7044,7 @@ void CBaseEntity::SetRefEHandle( const CBaseHandle &handle )
 	if ( edict() )
 	{
 		COMPILE_TIME_ASSERT( NUM_NETWORKED_EHANDLE_SERIAL_NUMBER_BITS <= 8*sizeof( edict()->m_NetworkSerialNumber ) );
-		edict()->m_NetworkSerialNumber = (m_RefEHandle.GetSerialNumber() & (1 << NUM_NETWORKED_EHANDLE_SERIAL_NUMBER_BITS) - 1);
+		edict()->m_NetworkSerialNumber = m_RefEHandle.GetSerialNumber() & ( (1 << NUM_NETWORKED_EHANDLE_SERIAL_NUMBER_BITS) - 1 );
 	}
 }
 
@@ -7302,6 +7306,30 @@ void CC_Ent_Create( const CCommand& args )
 {
 	MDLCACHE_CRITICAL_SECTION();
 
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+	if (!pPlayer)
+	{
+		return;
+	}
+
+	// Don't allow regular users to create point_servercommand entities for the same reason as blocking ent_fire
+	if ( !Q_stricmp( args[1], "point_servercommand" ) )
+	{
+		if ( engine->IsDedicatedServer() )
+		{
+			// We allow people with disabled autokick to do it, because they already have rcon.
+			if ( pPlayer->IsAutoKickDisabled() == false )
+				return;
+		}
+		else if ( gpGlobals->maxClients > 1 )
+		{
+			// On listen servers with more than 1 player, only allow the host to create point_servercommand.
+			CBasePlayer *pHostPlayer = UTIL_GetListenServerHost();
+			if ( pPlayer != pHostPlayer )
+				return;
+		}
+	}
+
 	bool allowPrecache = CBaseEntity::IsPrecacheAllowed();
 	CBaseEntity::SetAllowPrecache( true );
 
@@ -7322,7 +7350,6 @@ void CC_Ent_Create( const CCommand& args )
 		DispatchSpawn(entity);
 
 		// Now attempt to drop into the world
-		CBasePlayer* pPlayer = UTIL_GetCommandClient();
 		trace_t tr;
 		Vector forward;
 		pPlayer->EyeVectors( &forward );

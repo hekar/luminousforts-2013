@@ -72,6 +72,8 @@ BEGIN_DATADESC( CTeamTrainWatcher )
 	DEFINE_INPUTFUNC( FIELD_VOID, "Disable", InputDisable ),
 	DEFINE_INPUTFUNC( FIELD_FLOAT, "SetSpeedForwardModifier", InputSetSpeedForwardModifier ),
 	DEFINE_INPUTFUNC( FIELD_INTEGER, "SetTrainRecedeTime", InputSetTrainRecedeTime ),
+	DEFINE_INPUTFUNC( FIELD_BOOLEAN, "SetTrainCanRecede", InputSetTrainCanRecede ),
+	DEFINE_INPUTFUNC( FIELD_INTEGER, "SetTrainRecedeTimeAndUpdate", InputSetTrainRecedeTimeAndUpdate ),
 
 	// Outputs
 	DEFINE_OUTPUT( m_OnTrainStartRecede, "OnTrainStartRecede" ),
@@ -141,6 +143,9 @@ END_SEND_TABLE()
 
 
 LINK_ENTITY_TO_CLASS( team_train_watcher, CTeamTrainWatcher );
+
+IMPLEMENT_AUTO_LIST( ITFTeamTrainWatcher );
+
 /*
 LINK_ENTITY_TO_CLASS( team_train_watcher_master, CTeamTrainWatcherMaster );
 PRECACHE_REGISTER( team_train_watcher_master );
@@ -708,6 +713,29 @@ void CTeamTrainWatcher::InputSetTrainRecedeTime( inputdata_t &inputdata )
 	{
 		m_nTrainRecedeTime = 0;
 	}
+}
+
+void CTeamTrainWatcher::InputSetTrainRecedeTimeAndUpdate(inputdata_t &inputdata)
+{
+	InputSetTrainRecedeTime( inputdata );
+
+	// update our time if we're already counting down
+	if ( m_flRecedeTime > 0 )
+	{
+		m_flRecedeTotalTime = tf_escort_recede_time.GetFloat();
+		if ( m_nTrainRecedeTime > 0 )
+		{
+			m_flRecedeTotalTime = m_nTrainRecedeTime;
+		}
+
+		m_flRecedeStartTime = gpGlobals->curtime;
+		m_flRecedeTime = m_flRecedeStartTime + m_flRecedeTotalTime;
+	}
+}
+
+void CTeamTrainWatcher::InputSetTrainCanRecede( inputdata_t &inputdata )
+{
+	m_bTrainCanRecede = inputdata.value.Bool();
 }
 
 void CTeamTrainWatcher::InputOnStartOvertime( inputdata_t &inputdata )

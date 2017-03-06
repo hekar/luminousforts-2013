@@ -87,7 +87,10 @@ public:
 
 	Vector GetAttackSpread( CBaseCombatWeapon *pWeapon, CBaseEntity *pTarget = NULL );
 
+	void CheatImpulseCommands( int iImpulse );
 	void CreateRagdollEntity( void );
+	void GiveAllItems( void );
+	void GiveDefaultItems( void );
 
 	void NoteWeaponFired( void );
 
@@ -98,6 +101,7 @@ public:
 	
 	float GetNextModelChangeTime( void ) { return m_flNextModelChangeTime; }
 	float GetNextTeamChangeTime( void ) { return m_flNextTeamChangeTime; }
+	void  PickDefaultSpawnTeam( void );
 	void  SetupPlayerSoundsByModel( const char *pModelName );
 	const char *GetPlayerModelSoundPrefix( void );
 	int	  GetPlayerModelType( void ) { return m_iPlayerSoundType;	}
@@ -143,6 +147,7 @@ public:
 
 	virtual bool	CanHearAndReadChatFrom( CBasePlayer *pPlayer );
 
+		
 private:
 
 	CNetworkQAngle( m_angEyeAngles );

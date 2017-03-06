@@ -7,7 +7,6 @@
 $macro SRCDIR		"..\.."
 $Macro GENERATED_PROTO_DIR	"generated_proto"
 $macro PROTOBUF_LITE 0
-$Macro OUTLIBDIR	"$SRCDIR\lib\public"	[!$LINUX]
 
 $include "$SRCDIR\vpc_scripts\source_lib_base.vpc"
 $include "$SRCDIR\vpc_scripts\protobuf_builder.vpc"
@@ -100,7 +99,6 @@ $Project "vgui_controls"
 		$File	"URLLabel.cpp"
 		$File	"WizardPanel.cpp"
 		$File	"WizardSubPanel.cpp"
-		$File   "$SRCDIR\public\html\htmlprotobuf.cpp"
 		$File   "$SRCDIR/vgui2/src/vgui_key_translation.cpp"
 	}
 
@@ -197,21 +195,4 @@ $Project "vgui_controls"
 		$File	"$SRCDIR\public\vgui_controls\WizardPanel.h"
 		$File	"$SRCDIR\public\vgui_controls\WizardSubPanel.h"
 	}
-
-	$Folder "Protobuf Files"
-	{
-		$File "$SRCDIR\vgui2\chromehtml\htmlmessages.proto"
-		$DynamicFile "$GENERATED_PROTO_DIR\htmlmessages.pb.h"
-		$DynamicFile "$GENERATED_PROTO_DIR\htmlmessages.pb.cc"
-		{
-			$Configuration
-			{
-				$Compiler 
-				{
-					$Create/UsePrecompiledHeader	"Not Using Precompiled Headers" [$WINDOWS]
-				}
-			}
-		}
-	}
-
 }

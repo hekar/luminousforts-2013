@@ -1810,16 +1810,16 @@ uInt *v)               // working area: values in order of bit length
   uInt f;                       // i repeats in table every f entries 
   int g;                        // maximum code length 
   int h;                        // table level 
-  register uInt i;              // counter, current code 
-  register uInt j;              // counter
-  register int k;               // number of bits in current code 
+  uInt i;              // counter, current code 
+  uInt j;              // counter
+  int k;               // number of bits in current code 
   int l;                        // bits per table (returned in m) 
   uInt mask;                    // (1 << w) - 1, to avoid cc -O bug on HP 
-  register uInt *p;            // pointer into c[], b[], or v[]
+  uInt *p;            // pointer into c[], b[], or v[]
   inflate_huft *q;              // points to current table 
   struct inflate_huft_s r;      // table entry for structure assignment 
   inflate_huft *u[BMAX];        // table stack 
-  register int w;               // bits before this table == (l * h) 
+  int w;               // bits before this table == (l * h) 
   uInt x[BMAX+1];               // bit offsets, then code stack 
   uInt *xp;                    // pointer into x 
   int y;                        // number of dummy codes added 
@@ -3232,10 +3232,12 @@ int unzlocal_GetCurrentFileInfoInternal (unzFile file, unz_file_info *pfile_info
 
 	// we check the magic
 	if (err==UNZ_OK)
+	{
 		if (unzlocal_getLong(s->file,&uMagic) != UNZ_OK)
 			err=UNZ_ERRNO;
 		else if (uMagic!=0x02014b50)
 			err=UNZ_BADZIPFILE;
+	}
 
 	if (unzlocal_getShort(s->file,&file_info.version) != UNZ_OK)
 		err=UNZ_ERRNO;
@@ -3312,10 +3314,12 @@ int unzlocal_GetCurrentFileInfoInternal (unzFile file, unz_file_info *pfile_info
 			uSizeRead = extraFieldBufferSize;
 
 		if (lSeek!=0)
+		{
 			if (lufseek(s->file,lSeek,SEEK_CUR)==0)
 				lSeek=0;
 			else
 				err=UNZ_ERRNO;
+		}
 		if ((file_info.size_file_extra>0) && (extraFieldBufferSize>0))
 			if (lufread(extraField,(uInt)uSizeRead,1,s->file)!=1)
 				err=UNZ_ERRNO;
@@ -3337,10 +3341,12 @@ int unzlocal_GetCurrentFileInfoInternal (unzFile file, unz_file_info *pfile_info
 			uSizeRead = commentBufferSize;
 
 		if (lSeek!=0)
+		{
 			if (lufseek(s->file,lSeek,SEEK_CUR)==0)
 				{} // unused lSeek=0;
 			else
 				err=UNZ_ERRNO;
+		}
 		if ((file_info.size_file_comment>0) && (commentBufferSize>0))
 			if (lufread(szComment,(uInt)uSizeRead,1,s->file)!=1)
 				err=UNZ_ERRNO;
@@ -3490,10 +3496,12 @@ int unzlocal_CheckCurrentFileCoherencyHeader (unz_s *s,uInt *piSizeVar,
 
 
 	if (err==UNZ_OK)
+	{
 		if (unzlocal_getLong(s->file,&uMagic) != UNZ_OK)
 			err=UNZ_ERRNO;
 		else if (uMagic!=0x04034b50)
 			err=UNZ_BADZIPFILE;
+	}
 
 	if (unzlocal_getShort(s->file,&uData) != UNZ_OK)
 		err=UNZ_ERRNO;
@@ -4067,7 +4075,8 @@ ZRESULT TUnzip::Find(const TCHAR *name, bool ic, int *index, ZIPENTRY *ze)
 		return ZR_NOTFOUND;
 	}
 	if (currentfile!=-1) 
-		unzCloseCurrentFile(uf); currentfile=-1;
+		unzCloseCurrentFile(uf);
+	currentfile=-1;
 	int i = (int)uf->num_file;
 	if (index!=NULL) 
 		*index=i;
@@ -4466,15 +4475,7 @@ bool SafeUnzipMemory( const void *pvZipped, int cubZipped, void *pvDest, int cub
 	int iRes = ZR_CORRUPT;
 	if ( hZip )
 	{
-		try
-		{
-			iRes = UnzipItem( hZip, 0, pvDest, cubDest, ZIP_MEMORY );
-		}
-		catch ( ... )
-		{
-			// failed to unzip, try to continue
-			iRes = ZR_CORRUPT;
-		}
+		iRes = UnzipItem( hZip, 0, pvDest, cubDest, ZIP_MEMORY );
 		CloseZip( hZip );
 	}
 

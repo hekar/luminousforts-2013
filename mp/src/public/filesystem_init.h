@@ -156,6 +156,9 @@ public:
 	// This is the filesystem FileSystem_LoadSearchPaths is talking to.
 	IFileSystem		*m_pFileSystem;
 
+	bool m_bMountHDContent;
+	bool m_bLowViolence;
+
 // Outputs.
 public:
 	// This is the location of the first search path called "game", which also becomes your "mod" search path.
@@ -205,11 +208,6 @@ void FileSystem_ClearSteamEnvVars();
 
 // Find the steam.cfg above you for optional stuff
 FSReturnCode_t GetSteamCfgPath( char *steamCfgPath, int steamCfgPathLen );
-
-// Setup the Steam.dll path without needing all the extra gameinfo stuff first
-// used by the CSteamApplication::Create() code to LoadModule() on the filesystem
-// before the underlying apps know specific details about the environment to load
-FSReturnCode_t FileSystem_SetupSteamInstallPath();
 
 // Returns the last error.
 const char *FileSystem_GetLastErrorString();

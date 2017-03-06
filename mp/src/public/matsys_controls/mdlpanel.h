@@ -51,6 +51,8 @@ public:
 
 	virtual void OnTick();
 
+	virtual void Paint();
+
 	// Sets the current mdl
 	virtual void SetMDL( MDLHandle_t handle, void *pProxyData = NULL );
 	virtual void SetMDL( const char *pMDLName, void *pProxyData = NULL );
@@ -62,7 +64,7 @@ public:
 	void SetLOD( int nLOD );
 
 	// Sets the current sequence
-	void SetSequence( int nSequence );
+	void SetSequence( int nSequence, bool bResetSequence = false );
 
 	// Set the pose parameters
 	void SetPoseParameters( const float *pPoseParameters, int nCount );
@@ -78,6 +80,7 @@ public:
 	void SetSkin( int nSkin );
 	void SetLookAtCamera( bool bLookAtCamera );
 	void SetIgnoreDoubleClick( bool bState );
+	void SetThumbnailSafeZone( bool bVisible );
 
 	// Bounds.
 	bool GetBoundingBox( Vector &vecBoundsMin, Vector &vecBoundsMax );
@@ -103,11 +106,14 @@ public:
 
 protected:
 
+	virtual void SetupRenderState( int nDisplayWidth, int nDisplayHeight ) OVERRIDE;
+
 	struct MDLData_t
 	{
 		CMDL		m_MDL;
 		matrix3x4_t	m_MDLToWorld;
 		bool		m_bDisabled;
+		float		m_flCycleStartTime;
 	};
 
 	MDLData_t				m_RootMDL;
@@ -122,9 +128,10 @@ protected:
 
 private:
 	// paint it!
-	void OnPaint3D();
+	virtual void OnPaint3D();
 	virtual void PrePaint3D( IMatRenderContext *pRenderContext ) { };
 	virtual void PostPaint3D( IMatRenderContext *pRenderContext ) { };
+	virtual void RenderingRootModel( IMatRenderContext *pRenderContext, CStudioHdr *pStudioHdr, MDLHandle_t mdlHandle, matrix3x4_t *pWorldMatrix ) { };
 	virtual void RenderingMergedModel( IMatRenderContext *pRenderContext, CStudioHdr *pStudioHdr, MDLHandle_t mdlHandle, matrix3x4_t *pWorldMatrix ) { };
 
 	void OnMouseDoublePressed( vgui::MouseCode code );
@@ -141,6 +148,7 @@ private:
 	bool	m_bWireFrame : 1;
 	bool	m_bLookAtCamera : 1;
 	bool	m_bIgnoreDoubleClick : 1;
+	bool	m_bThumbnailSafeZone : 1;
 
 	float	m_PoseParameters[ MAXSTUDIOPOSEPARAM ];
 };

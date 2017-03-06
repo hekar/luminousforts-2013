@@ -71,6 +71,10 @@ public:
 
 	void	RemoveAllPlayers();
 
+
+// IClientThinkable overrides.
+public:
+
 	virtual	void				ClientThink();
 
 

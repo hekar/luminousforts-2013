@@ -27,30 +27,30 @@ class CHudCrosshair : public CHudElement, public vgui::Panel
 	DECLARE_CLASS_SIMPLE( CHudCrosshair, vgui::Panel );
 public:
 	CHudCrosshair( const char *pElementName );
+	virtual ~CHudCrosshair();
 
-	void SetCrosshairAngle( const QAngle& angle );
-	void SetCrosshair( CHudTexture *texture, Color& clr );
-	void ResetCrosshair();
-	void DrawCrosshair( void );
-	bool HasCrosshair( void ) { return (m_pCrosshair != NULL); }
-	bool ShouldDraw();
+	virtual void	SetCrosshairAngle( const QAngle& angle );
+	virtual void	SetCrosshair( CHudTexture *texture, const Color& clr );
+	virtual void	ResetCrosshair();
+	virtual void	DrawCrosshair( void ) {}
+  	virtual bool	HasCrosshair( void ) { return ( m_pCrosshair != NULL ); }
+	virtual bool	ShouldDraw();
 
 	// any UI element that wants to be at the aim point can use this to figure out where to draw
-	static void	GetDrawPosition( float *pX, float *pY, bool *pbBehindCamera, QAngle angleCrosshairOffset = vec3_angle );
+	static void	GetDrawPosition ( float *pX, float *pY, bool *pbBehindCamera, QAngle angleCrosshairOffset = vec3_angle );
 protected:
-	void ApplySchemeSettings( vgui::IScheme *scheme );
-	void Paint();
-
-private:
+	virtual void	ApplySchemeSettings( vgui::IScheme *scheme );
+	virtual void	Paint();
+	
 	// Crosshair sprite and colors
-	char m_cPreviousCrosshair;
-	CHudTexture *m_pCrosshair;
-	CHudTexture *m_pDefaultCrosshair;
-	Color m_clrCrosshair;
-	QAngle m_vecCrossHairOffsetAngle;
+	CHudTexture		*m_pCrosshair;
+	CHudTexture		*m_pDefaultCrosshair;
+	Color			m_clrCrosshair;
+	QAngle			m_vecCrossHairOffsetAngle;
 
 	QAngle m_curViewAngles;
 	Vector m_curViewOrigin;
+
 
 	CPanelAnimationVar( bool, m_bHideCrosshair, "never_draw", "false" );
 };

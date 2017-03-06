@@ -93,12 +93,13 @@ protected:
 		DECLARE_CLASS_SIMPLE( CMOTDHTML, vgui::HTML );
 	
 	public:
-		CMOTDHTML( Panel *parent, const char *pchName );
-		virtual bool OnStartRequest( const char *url, const char *target, 
-			const char *pchPostData, bool bIsRedirect ) OVERRIDE;
+		CMOTDHTML( Panel *parent, const char *pchName ) : vgui::HTML( parent, pchName ) {}
+		virtual bool OnStartRequest( const char *url, const char *target, const char *pchPostData, bool bIsRedirect ) OVERRIDE;
 	};
 	CMOTDHTML		*m_pHTMLMessage;
+	
 	vgui::Button	*m_pOK;
+	vgui::Label		*m_pTitleLabel;
 };
 
 

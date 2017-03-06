@@ -59,7 +59,7 @@ void DBG_AssertFunction( bool fExpr, const char *szExpr, const char *szFile, int
 		Q_snprintf(szOut,sizeof(szOut), "ASSERT FAILED:\n %s \n(%s@%d)\n%s", szExpr, szFile, szLine, szMessage);
 	else
 		Q_snprintf(szOut,sizeof(szOut), "ASSERT FAILED:\n %s \n(%s@%d)\n", szExpr, szFile, szLine);
-	Warning( szOut);
+	Warning( "%s", szOut);
 }
 #endif	// DEBUG
 
@@ -161,6 +161,11 @@ IServerNetworkable *CEntityFactoryDictionary::Create( const char *pClassName )
 	IEntityFactory *pFactory = FindFactory( pClassName );
 	if ( !pFactory )
 	{
+#ifdef STAGING_ONLY
+		static ConVarRef tf_bot_use_items( "tf_bot_use_items" );
+		if ( tf_bot_use_items.IsValid() && tf_bot_use_items.GetInt() )
+			return NULL;
+#endif
 		Warning("Attempted to create unknown entity type %s!\n", pClassName );
 		return NULL;
 	}
@@ -200,7 +205,7 @@ void CEntityFactoryDictionary::ReportEntitySizes()
 {
 	for ( int i = m_Factories.First(); i != m_Factories.InvalidIndex(); i = m_Factories.Next( i ) )
 	{
-		Msg( " %s: %d", m_Factories.GetElementName( i ), m_Factories[i]->GetEntitySize() );
+		Msg( " %s: %llu", m_Factories.GetElementName( i ), (uint64)(m_Factories[i]->GetEntitySize()) );
 	}
 }
 
@@ -568,6 +573,24 @@ CBasePlayer	*UTIL_PlayerByIndex( int playerIndex )
 	return pPlayer;
 }
 
+CBasePlayer *UTIL_PlayerBySteamID( const CSteamID &steamID )
+{
+	CSteamID steamIDPlayer;
+	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CBasePlayer *pPlayer = UTIL_PlayerByIndex( i );
+		if ( !pPlayer )
+			continue;
+
+		if ( !pPlayer->GetSteamID( &steamIDPlayer ) )
+			continue;
+
+		if ( steamIDPlayer == steamID )
+			return pPlayer;
+	}
+	return NULL;
+}
+
 CBasePlayer* UTIL_PlayerByName( const char *name )
 {
 	if ( !name || !name[0] )
@@ -902,7 +925,15 @@ void UTIL_ScreenShakeObject( CBaseEntity *pEnt, const Vector &center, float ampl
 				continue;
 			}
 
-			localAmplitude = ComputeShakeAmplitude( center, pPlayer->WorldSpaceCenter(), amplitude, radius );
+			if ( radius > 0 )
+			{
+				localAmplitude = ComputeShakeAmplitude( center, pPlayer->WorldSpaceCenter(), amplitude, radius );
+			}
+			else
+			{
+				// If using a 0 radius, apply to everyone with no falloff
+				localAmplitude = amplitude;
+			}
 
 			// This happens if the player is outside the radius, 
 			// in which case we should ignore all commands
@@ -1340,7 +1371,7 @@ void UTIL_SnapDirectionToAxis( Vector &direction, float epsilon )
 	}
 }
 
-char *UTIL_VarArgs( const char *format, ... )
+const char *UTIL_VarArgs( const char *format, ... )
 {
 	va_list		argptr;
 	static char		string[1024];
@@ -1892,7 +1923,8 @@ int DispatchSpawn( CBaseEntity *pEntity )
 			// Don't allow the PVS check to skip animation setup during spawning
 			pAnimating->SetBoneCacheFlags( BCF_IS_IN_SPAWN );
 			pEntity->Spawn();
-			pAnimating->ClearBoneCacheFlags( BCF_IS_IN_SPAWN );
+			if ( pEntSafe != NULL )
+				pAnimating->ClearBoneCacheFlags( BCF_IS_IN_SPAWN );
 		}
 		mdlcache->SetAsyncLoad( MDLCACHE_ANIMBLOCK, bAsyncAnims );
 

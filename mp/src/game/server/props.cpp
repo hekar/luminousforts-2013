@@ -1517,7 +1517,7 @@ void CBreakableProp::OnPhysGunDrop( CBasePlayer *pPhysGunUser, PhysGunDrop_t Rea
 
 	SetPhysicsAttacker( pPhysGunUser, gpGlobals->curtime );
 
-	if( Reason == PUNTED_BY_CANNON )
+	if( (int)Reason == (int)PUNTED_BY_CANNON )
 	{
 		PlayPuntSound(); 
 	}
@@ -1811,6 +1811,8 @@ LINK_ENTITY_TO_CLASS( dynamic_prop, CDynamicProp );
 LINK_ENTITY_TO_CLASS( prop_dynamic, CDynamicProp );	
 LINK_ENTITY_TO_CLASS( prop_dynamic_override, CDynamicProp );	
 
+IMPLEMENT_AUTO_LIST( IPhysicsPropAutoList );
+
 BEGIN_DATADESC( CDynamicProp )
 
 	// Fields
@@ -1937,6 +1939,18 @@ void CDynamicProp::Spawn( )
 	}
 
 	//m_debugOverlays |= OVERLAY_ABSBOX_BIT;
+
+#ifdef TF_DLL
+	const char *pszModelName = modelinfo->GetModelName( GetModel() );
+	if ( pszModelName && pszModelName[0] )
+	{
+		if ( FStrEq( pszModelName, "models/bots/boss_bot/carrier_parts.mdl" ) )
+		{
+			SetModelIndexOverride( VISION_MODE_NONE, modelinfo->GetModelIndex( pszModelName ) );
+			SetModelIndexOverride( VISION_MODE_ROME, modelinfo->GetModelIndex( "models/bots/tw2/boss_bot/twcarrier_addon.mdl" ) );
+		}
+	}
+#endif
 }
 
 //-----------------------------------------------------------------------------

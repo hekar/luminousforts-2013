@@ -576,7 +576,7 @@ public:
 		BaseClass::PerformLayout();
 
 		int nWidth = XRES( 140 );
-		int nMargins[2] = { XRES( 5 ), YRES( 5 ) };
+		int nMargins[2] = { (int)XRES( 5 ), (int)YRES( 5 ) };
 		int nVBuf = YRES( 0 );
 		int nLastY = -1;
 		int nY = nMargins[1];
@@ -1185,6 +1185,7 @@ CReplayPerformanceEditorPanel::CReplayPerformanceEditorPanel( Panel *parent, Rep
 	m_nRedBlueSigns[0] = -1;
 	m_nRedBlueSigns[1] = 1;
 	m_iCurPlayerTarget = -1;
+	m_bCurrentTargetNeedsVisibilityUpdate = false;
 
 	m_pImageList = new ImageList( false );
 
@@ -1737,6 +1738,19 @@ void CReplayPerformanceEditorPanel::OnTick()
 		pCamera->SetPrimaryTarget( m_iCurPlayerTarget );
 	}
 
+	// fixes a case where the replay would be paused and the player would cycle cameras but the 
+	// target's visibility wouldn't be updated until the replay was unpaused (they would be invisible)
+	if ( m_bCurrentTargetNeedsVisibilityUpdate )
+	{
+		C_BaseEntity *pTarget = ClientEntityList().GetEnt( pCamera->GetPrimaryTargetIndex() );
+		if ( pTarget )
+		{
+			pTarget->UpdateVisibility();
+		}
+
+		m_bCurrentTargetNeedsVisibilityUpdate = false;
+	}
+
 	// If in free-cam mode, add set view event if we're not paused
 	if ( bInAControllableCameraMode && m_bShownAtLeastOnce && bRecording )
 	{
@@ -1955,7 +1969,7 @@ void CReplayPerformanceEditorPanel::PerformLayout()
 		dynamic_cast< CExLabel * >( m_pPlayerCellsPanel->FindChildByName( "RedLabel" ) ),
 		dynamic_cast< CExLabel * >( m_pPlayerCellsPanel->FindChildByName( "BlueLabel" ) )
 	};
-	int nMargins[2] = { XRES( 5 ), YRES( 2 ) };
+	int nMargins[2] = { (int)XRES( 5 ), (int)YRES( 2 ) };
 	for ( int i = 0; i < 2; ++i )
 	{
 		pRedBlueLabels[i]->SizeToContents();
@@ -2444,12 +2458,14 @@ void CReplayPerformanceEditorPanel::OnCommand( const char *command )
 		{
 			ReplayCamera()->SetMode( OBS_MODE_IN_EYE );
 			UpdateCameraSelectionPosition( CAM_FIRST );
+			m_bCurrentTargetNeedsVisibilityUpdate = true;
 			g_pReplayPerformanceController->AddEvent_Camera_Change_FirstPerson( flCurTime, nEntIndex );
 		}
 		else if ( !V_stricmp( pCamType, "third" ) )
 		{
 			ReplayCamera()->SetMode( OBS_MODE_CHASE );
 			UpdateCameraSelectionPosition( CAM_THIRD );
+			m_bCurrentTargetNeedsVisibilityUpdate = true;
 			g_pReplayPerformanceController->AddEvent_Camera_Change_ThirdPerson( flCurTime, nEntIndex );
 			AddSetViewEvent();
 		}
@@ -2457,6 +2473,7 @@ void CReplayPerformanceEditorPanel::OnCommand( const char *command )
 		{
 			ReplayCamera()->SetMode( OBS_MODE_ROAMING );
 			UpdateCameraSelectionPosition( CAM_FREE );
+			m_bCurrentTargetNeedsVisibilityUpdate = true;
 			g_pReplayPerformanceController->AddEvent_Camera_Change_Free( flCurTime );
 			AddSetViewEvent();
 			DisplayPerformanceTip( "#Replay_PerfTip_EnterFreeCam", &replay_perftip_count_freecam_enter, MAX_TIP_DISPLAYS );

@@ -68,31 +68,50 @@ CTeam *GetGlobalTeam( int iIndex )
 	return g_Teams[ iIndex ];
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Get the number of team managers
+//-----------------------------------------------------------------------------
 int GetNumberOfTeams( void )
 {
 	return g_Teams.Size();
 }
 
+
+//-----------------------------------------------------------------------------
+// Purpose: Needed because this is an entity, but should never be used
+//-----------------------------------------------------------------------------
 CTeam::CTeam( void )
 {
 	memset( m_szTeamname.GetForModify(), 0, sizeof(m_szTeamname) );
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 CTeam::~CTeam( void )
 {
 	m_aSpawnPoints.Purge();
 	m_aPlayers.Purge();
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Called every frame
+//-----------------------------------------------------------------------------
 void CTeam::Think( void )
 {
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Teams are always transmitted to clients
+//-----------------------------------------------------------------------------
 int CTeam::UpdateTransmitState()
 {
 	return SetTransmitState( FL_EDICT_ALWAYS );
 }
 
+//-----------------------------------------------------------------------------
+// Visibility/scanners
+//-----------------------------------------------------------------------------
 bool CTeam::ShouldTransmitToPlayer( CBasePlayer* pRecipient, CBaseEntity* pEntity )
 {
 	// Always transmit the observer target to players
@@ -102,6 +121,9 @@ bool CTeam::ShouldTransmitToPlayer( CBasePlayer* pRecipient, CBaseEntity* pEntit
 	return false;
 }
 
+//-----------------------------------------------------------------------------
+// Initialization
+//-----------------------------------------------------------------------------
 void CTeam::Init( const char *pName, int iNumber )
 {
 	InitializeSpawnpoints();
@@ -113,30 +135,51 @@ void CTeam::Init( const char *pName, int iNumber )
 	m_iTeamNum = iNumber;
 }
 
+//-----------------------------------------------------------------------------
+// DATA HANDLING
+//-----------------------------------------------------------------------------
 int CTeam::GetTeamNumber( void ) const
 {
 	return m_iTeamNum;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Get the team's name
+//-----------------------------------------------------------------------------
 const char *CTeam::GetName( void )
 {
 	return m_szTeamname;
 }
 
+
+//-----------------------------------------------------------------------------
+// Purpose: Update the player's client data
+//-----------------------------------------------------------------------------
 void CTeam::UpdateClientData( CBasePlayer *pPlayer )
 {
 }
 
+//------------------------------------------------------------------------------------------------------------------
+// SPAWNPOINTS
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 void CTeam::InitializeSpawnpoints( void )
 {
 	m_iLastSpawn = 0;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 void CTeam::AddSpawnpoint( CTeamSpawnPoint *pSpawnpoint )
 {
 	m_aSpawnPoints.AddToTail( pSpawnpoint );
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 void CTeam::RemoveSpawnpoint( CTeamSpawnPoint *pSpawnpoint )
 {
 	for (int i = 0; i < m_aSpawnPoints.Size(); i++ )
@@ -149,6 +192,9 @@ void CTeam::RemoveSpawnpoint( CTeamSpawnPoint *pSpawnpoint )
 	}
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Spawn the player at one of this team's spawnpoints. Return true if successful.
+//-----------------------------------------------------------------------------
 CBaseEntity *CTeam::SpawnPlayer( CBasePlayer *pPlayer )
 {
 	if ( m_aSpawnPoints.Size() == 0 )
@@ -186,33 +232,55 @@ CBaseEntity *CTeam::SpawnPlayer( CBasePlayer *pPlayer )
 	return NULL;
 }
 
+//------------------------------------------------------------------------------------------------------------------
+// PLAYERS
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 void CTeam::InitializePlayers( void )
 {
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Add the specified player to this team. Remove them from their current team, if any.
+//-----------------------------------------------------------------------------
 void CTeam::AddPlayer( CBasePlayer *pPlayer )
 {
 	m_aPlayers.AddToTail( pPlayer );
 	NetworkStateChanged();
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Remove this player from the team
+//-----------------------------------------------------------------------------
 void CTeam::RemovePlayer( CBasePlayer *pPlayer )
 {
 	m_aPlayers.FindAndRemove( pPlayer );
 	NetworkStateChanged();
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Return the number of players in this team.
+//-----------------------------------------------------------------------------
 int CTeam::GetNumPlayers( void )
 {
 	return m_aPlayers.Size();
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Get a specific player
+//-----------------------------------------------------------------------------
 CBasePlayer *CTeam::GetPlayer( int iIndex )
 {
 	Assert( iIndex >= 0 && iIndex < m_aPlayers.Size() );
 	return m_aPlayers[ iIndex ];
 }
 
+//------------------------------------------------------------------------------------------------------------------
+// SCORING
+//-----------------------------------------------------------------------------
+// Purpose: Add / Remove score for this team
+//-----------------------------------------------------------------------------
 void CTeam::AddScore( int iScore )
 {
 	m_iScore += iScore;
@@ -223,11 +291,17 @@ void CTeam::SetScore( int iScore )
 	m_iScore = iScore;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Get this team's score
+//-----------------------------------------------------------------------------
 int CTeam::GetScore( void )
 {
 	return m_iScore;
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
 void CTeam::ResetScores( void )
 {
 	SetScore(0);

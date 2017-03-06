@@ -83,7 +83,7 @@ class CUserCmd;
 class CSkyCamera;
 class CEntityMapData;
 class INextBot;
-
+class IHasAttributes;
 
 typedef CUtlVector< CBaseEntity* > EntityList_t;
 
@@ -380,9 +380,6 @@ public:
 	// data description
 	DECLARE_DATADESC();
 	
-	virtual bool IsBlock() { return false; }
-	virtual bool IsFlag() { return false; }
-
 	// memory handling
     void *operator new( size_t stAllocateBlock );
     void *operator new( size_t stAllocateBlock, int nBlockUse, const char *pFileName, int nLine );
@@ -795,7 +792,7 @@ public:
 	CNetworkVar( short, m_nModelIndex );
 	
 #ifdef TF_DLL
-	CNetworkArray( int, m_nModelIndexOverrides, MAX_MODEL_INDEX_OVERRIDES ); // used to override the base model index on the client if necessary
+	CNetworkArray( int, m_nModelIndexOverrides, MAX_VISION_MODES ); // used to override the base model index on the client if necessary
 #endif
 
 	// was pev->rendercolor
@@ -907,7 +904,7 @@ public:
 	virtual int		OnTakeDamage( const CTakeDamageInfo &info );
 
 	// This is what you should call to apply damage to an entity.
-	void TakeDamage( const CTakeDamageInfo &info );
+	int TakeDamage( const CTakeDamageInfo &info );
 	virtual void AdjustDamageDirection( const CTakeDamageInfo &info, Vector &dir, CBaseEntity *pEnt ) {}
 
 	virtual int		TakeHealth( float flHealth, int bitsDamageType );
@@ -1090,6 +1087,8 @@ public:
 	int		GetHealth() const		{ return m_iHealth; }
 	void	SetHealth( int amt )	{ m_iHealth = amt; }
 
+	float HealthFraction() const;
+
 	// Ugly code to lookup all functions to make sure they are in the table when set.
 #ifdef _DEBUG
 	void FunctionCheck( void *pFunction, const char *name );
@@ -1097,9 +1096,9 @@ public:
 	ENTITYFUNCPTR TouchSet( ENTITYFUNCPTR func, char *name ) 
 	{ 
 #ifdef GNUC
-		COMPILE_TIME_ASSERT( sizeof(func) == 8 );
+#define ENTITYFUNCPTR_SIZE	8
 #else
-		COMPILE_TIME_ASSERT( sizeof(func) == 4 );
+#define ENTITYFUNCPTR_SIZE	4
 #endif
 		m_pfnTouch = func; 
 		FunctionCheck( *(reinterpret_cast<void **>(&m_pfnTouch)), name ); 
@@ -1128,11 +1127,23 @@ public:
 		return func;
 	}
 
-#endif
+#endif // _DEBUG
+
 	virtual void	ModifyOrAppendCriteria( AI_CriteriaSet& set );
 	void			AppendContextToCriteria( AI_CriteriaSet& set, const char *prefix = "" );
 	void			DumpResponseCriteria( void );
-	
+
+	// Return the IHasAttributes interface for this base entity. Removes the need for:
+	//	dynamic_cast< IHasAttributes * >( pEntity );
+	// Which is remarkably slow.
+	// GetAttribInterface( CBaseEntity *pEntity ) in attribute_manager.h uses
+	//  this function, tests for NULL, and Asserts m_pAttributes == dynamic_cast.
+	inline IHasAttributes *GetHasAttributesInterfacePtr() const { return m_pAttributes; }
+
+protected:
+	// NOTE: m_pAttributes needs to be set in the leaf class constructor.
+	IHasAttributes *m_pAttributes;
+
 private:
 	friend class CAI_Senses;
 	CBaseEntity	*m_pLink;// used for temporary link-list operations. 
@@ -1794,6 +1805,8 @@ public:
 	{
 		return s_bAbsQueriesValid;
 	}
+
+	virtual bool ShouldBlockNav() const { return true; }
 };
 
 // Send tables exposed in this module.

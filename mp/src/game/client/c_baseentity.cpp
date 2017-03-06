@@ -571,7 +571,8 @@ void SpewInterpolatedVar( CInterpolatedVar< Vector > *pVar )
 {
 	Msg( "--------------------------------------------------\n" );
 	int i = pVar->GetHead();
-	CApparentVelocity<Vector> apparent;
+	Vector v0(0, 0, 0);
+	CApparentVelocity<Vector> apparent(v0);
 	float prevtime = 0.0f;
 	while ( 1 )
 	{
@@ -594,7 +595,8 @@ void SpewInterpolatedVar( CInterpolatedVar< Vector > *pVar, float flNow, float f
 
 	Msg( "--------------------------------------------------\n" );
 	int i = pVar->GetHead();
-	CApparentVelocity<Vector> apparent;
+	Vector v0(0, 0, 0);
+	CApparentVelocity<Vector> apparent(v0);
 	float newtime = 999999.0f;
 	Vector newVec( 0, 0, 0 );
 	bool bSpew = true;
@@ -662,7 +664,7 @@ void SpewInterpolatedVar( CInterpolatedVar< float > *pVar )
 {
 	Msg( "--------------------------------------------------\n" );
 	int i = pVar->GetHead();
-	CApparentVelocity<float> apparent;
+	CApparentVelocity<float> apparent(0.0f);
 	while ( 1 )
 	{
 		float changetime;
@@ -684,7 +686,8 @@ void GetInterpolatedVarTimeRange( CInterpolatedVar<T> *pVar, float &flMin, float
 	flMax = -1e23;
 
 	int i = pVar->GetHead();
-	CApparentVelocity<Vector> apparent;
+	Vector v0(0, 0, 0);
+	CApparentVelocity<Vector> apparent(v0);
 	while ( 1 )
 	{
 		float changetime;
@@ -892,9 +895,16 @@ C_BaseEntity::C_BaseEntity() :
 	m_iv_angRotation( "C_BaseEntity::m_iv_angRotation" ),
 	m_iv_vecVelocity( "C_BaseEntity::m_iv_vecVelocity" )
 {
+	m_pAttributes = NULL;
+
 	AddVar( &m_vecOrigin, &m_iv_vecOrigin, LATCH_SIMULATION_VAR );
 	AddVar( &m_angRotation, &m_iv_angRotation, LATCH_SIMULATION_VAR );
-	AddVar( &m_vecVelocity, &m_iv_vecVelocity, LATCH_SIMULATION_VAR );
+	// Removing this until we figure out why velocity introduces view hitching.
+	// One possible fix is removing the player->ResetLatched() call in CGameMovement::FinishDuck(), 
+	// but that re-introduces a third-person hitching bug.  One possible cause is the abrupt change
+	// in player size/position that occurs when ducking, and how prediction tries to work through that.
+	//
+	// AddVar( &m_vecVelocity, &m_iv_vecVelocity, LATCH_SIMULATION_VAR );
 
 	m_DataChangeEventRef = -1;
 	m_EntClientFlags = 0;
@@ -1140,6 +1150,13 @@ bool C_BaseEntity::InitializeAsClientEntityByIndex( int iIndex, RenderGroup_t re
 	return true;
 }
 
+void C_BaseEntity::TrackAngRotation( bool bTrack )
+{
+	if ( bTrack )
+		AddVar( &m_angRotation, &m_iv_angRotation, LATCH_SIMULATION_VAR );
+	else
+		RemoveVar( &m_angRotation, false );
+}
 
 void C_BaseEntity::Term()
 {
@@ -1292,19 +1309,6 @@ bool C_BaseEntity::VPhysicsIsFlesh( void )
 			return true;
 	}
 	return false;
-}
-
-//-----------------------------------------------------------------------------
-// Returns the health fraction
-//-----------------------------------------------------------------------------
-float C_BaseEntity::HealthFraction() const
-{
-	if (GetMaxHealth() == 0)
-		return 1.0f;
-
-	float flFraction = (float)GetHealth() / (float)GetMaxHealth();
-	flFraction = clamp( flFraction, 0.0f, 1.0f );
-	return flFraction;
 }
 
 
@@ -2462,28 +2466,36 @@ void C_BaseEntity::UnlinkFromHierarchy()
 void C_BaseEntity::ValidateModelIndex( void )
 {
 #ifdef TF_CLIENT_DLL
-	if ( m_nModelIndexOverrides[MODEL_INDEX_OVERRIDE_DEFAULT] > 0 ) 
+	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_HALLOWEEN ) )
 	{
-		if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_HALLOWEEN ) )
+		if ( m_nModelIndexOverrides[VISION_MODE_HALLOWEEN] > 0 )
 		{
-			if ( m_nModelIndexOverrides[MODEL_INDEX_OVERRIDE_HALLOWEEN] > 0 )
-			{
-				SetModelByIndex( m_nModelIndexOverrides[MODEL_INDEX_OVERRIDE_HALLOWEEN] );
-				return;
-			}
+			SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_HALLOWEEN] );
+			return;
 		}
+	}
 		
-		if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
+	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
+	{
+		if ( m_nModelIndexOverrides[VISION_MODE_PYRO] > 0 )
 		{
-			if ( m_nModelIndexOverrides[MODEL_INDEX_OVERRIDE_PYRO] > 0 )
-			{
-				SetModelByIndex( m_nModelIndexOverrides[MODEL_INDEX_OVERRIDE_PYRO] );
-				return;
-			}
+			SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_PYRO] );
+			return;
 		}
+	}
 
-		SetModelByIndex( m_nModelIndexOverrides[MODEL_INDEX_OVERRIDE_DEFAULT] );		
+	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_ROME ) )
+	{
+		if ( m_nModelIndexOverrides[VISION_MODE_ROME] > 0 )
+		{
+			SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_ROME] );
+			return;
+		}
+	}
 
+	if ( m_nModelIndexOverrides[VISION_MODE_NONE] > 0 ) 
+	{
+		SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_NONE] );		
 		return;
 	}
 #endif
@@ -2608,6 +2620,17 @@ void C_BaseEntity::PostDataUpdate( DataUpdateType_t updateType )
 	{
 		UpdateVisibility();
 	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Latch simulation values when the entity has not changed
+//-----------------------------------------------------------------------------
+void C_BaseEntity::OnDataUnchangedInPVS()
+{
+	Assert( m_hNetworkMoveParent.Get() || !m_hNetworkMoveParent.IsValid() );
+	HierarchySetParent(m_hNetworkMoveParent);
+	
+	MarkMessageReceived();
 }
 
 //-----------------------------------------------------------------------------
@@ -3597,6 +3620,48 @@ void C_BaseEntity::AddStudioDecal( const Ray_t& ray, int hitbox, int decalIndex,
 	}
 }
 
+//-----------------------------------------------------------------------------
+void C_BaseEntity::AddColoredStudioDecal( const Ray_t& ray, int hitbox, int decalIndex, 
+	bool doTrace, trace_t& tr, Color cColor, int maxLODToDecal )
+{
+	if (doTrace)
+	{
+		enginetrace->ClipRayToEntity( ray, MASK_SHOT, this, &tr );
+
+		// Trace the ray against the entity
+		if (tr.fraction == 1.0f)
+			return;
+
+		// Set the trace index appropriately...
+		tr.m_pEnt = this;
+	}
+
+	// Exit out after doing the trace so any other effects that want to happen can happen.
+	if ( !r_drawmodeldecals.GetBool() )
+		return;
+
+	// Found the point, now lets apply the decals
+	CreateModelInstance();
+
+	// FIXME: Pass in decal up?
+	Vector up(0, 0, 1);
+
+	if (doTrace && (GetSolid() == SOLID_VPHYSICS) && !tr.startsolid && !tr.allsolid)
+	{
+		// Choose a more accurate normal direction
+		// Also, since we have more accurate info, we can avoid pokethru
+		Vector temp;
+		VectorSubtract( tr.endpos, tr.plane.normal, temp );
+		Ray_t betterRay;
+		betterRay.Init( tr.endpos, temp );
+		modelrender->AddColoredDecal( m_ModelInstance, betterRay, up, decalIndex, GetStudioBody(), cColor, true, maxLODToDecal );
+	}
+	else
+	{
+		modelrender->AddColoredDecal( m_ModelInstance, ray, up, decalIndex, GetStudioBody(), cColor, false, maxLODToDecal );
+	}
+}
+
 
 //-----------------------------------------------------------------------------
 // This method works when we've got a brush model
@@ -3638,6 +3703,56 @@ void C_BaseEntity::AddDecal( const Vector& rayStart, const Vector& rayEnd,
 
 	case mod_brush:
 		AddBrushModelDecal( ray, decalCenter, decalIndex, doTrace, tr );
+		break;
+
+	default:
+		// By default, no collision
+		tr.fraction = 1.0f;
+		break;
+	}
+}
+
+//-----------------------------------------------------------------------------
+void C_BaseEntity::AddColoredDecal( const Vector& rayStart, const Vector& rayEnd,
+	const Vector& decalCenter, int hitbox, int decalIndex, bool doTrace, trace_t& tr, Color cColor, int maxLODToDecal )
+{
+	Ray_t ray;
+	ray.Init( rayStart, rayEnd );
+	
+	// FIXME: Better bloat?
+	// Bloat a little bit so we get the intersection
+	ray.m_Delta *= 1.1f;
+
+	int modelType = modelinfo->GetModelType( model );
+	if ( doTrace )
+	{
+		enginetrace->ClipRayToEntity( ray, MASK_SHOT, this, &tr );
+		switch ( modelType )
+		{
+		case mod_studio:
+			tr.m_pEnt = this;
+			break;
+		case mod_brush:
+			if ( tr.fraction == 1.0f )
+				return;		// Explicitly end
+		default:
+			// By default, no collision
+			tr.fraction = 1.0f;
+			break;
+		}
+	}
+
+	switch ( modelType )
+	{
+	case mod_studio:
+		AddColoredStudioDecal( ray, hitbox, decalIndex, doTrace, tr, cColor, maxLODToDecal );
+		break;
+
+	case mod_brush:
+		{
+			color32 cColor32 = { (byte)cColor.r(), (byte)cColor.g(), (byte)cColor.b(), (byte)cColor.a() };
+			effects->DecalColorShoot( decalIndex, index, model, GetAbsOrigin(), GetAbsAngles(), decalCenter, 0, 0, cColor32 );
+		}
 		break;
 
 	default:
@@ -6191,6 +6306,9 @@ bool C_BaseEntity::ValidateEntityAttachedToPlayer( bool &bShouldRetry )
 		if ( FStrEq( pszModel, "models/flag/briefcase.mdl" ) )
 			return true;
 
+		if ( FStrEq( pszModel, "models/passtime/ball/passtime_ball.mdl" ) )
+			return true;
+
 		if ( FStrEq( pszModel, "models/props_doomsday/australium_container.mdl" ) )
 			return true;
 
@@ -6202,6 +6320,16 @@ bool C_BaseEntity::ValidateEntityAttachedToPlayer( bool &bShouldRetry )
 			return true;
 
 		if ( FStrEq( pszModel, "models/props_lakeside_event/bomb_temp_hat.mdl" ) )
+			return true;
+
+		if ( FStrEq( pszModel, "models/props_moonbase/powersupply_flag.mdl" ) )
+			return true;
+
+		// The Halloween 2014 doomsday flag replacement
+		if ( FStrEq( pszModel, "models/flag/ticket_case.mdl" ) )
+			return true;
+
+		if ( FStrEq( pszModel, "models/weapons/c_models/c_grapple_proj/c_grapple_proj.mdl" ) )
 			return true;
 	}
 

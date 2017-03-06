@@ -43,7 +43,6 @@ BEGIN_DATADESC(CTriggerAreaCapture)
 //	DEFINE_FIELD( m_TeamData, CUtlVector < perteamdata_t > ),
 //	DEFINE_FIELD( m_Blockers, CUtlVector < blockers_t > ),
 //	DEFINE_FIELD( m_bActive, FIELD_BOOLEAN ),
-//	DEFINE_FIELD( m_iAreaIndex, FIELD_INTEGER ),
 //	DEFINE_FIELD( m_hPoint, CHandle < CTeamControlPoint > ),
 //	DEFINE_FIELD( m_bRequiresObject, FIELD_BOOLEAN ),
 //	DEFINE_FIELD( m_iCapAttemptNumber, FIELD_INTEGER ),
@@ -95,8 +94,6 @@ void CTriggerAreaCapture::Spawn( void )
 	InitTrigger();
 	
 	Precache();
-
-	m_iAreaIndex = -1;
 
 	SetTouch ( &CTriggerAreaCaptureShim::Touch );		
 	SetThink( &CTriggerAreaCapture::CaptureThink );
@@ -167,14 +164,6 @@ void CTriggerAreaCapture::Precache( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CTriggerAreaCapture::SetAreaIndex( int index )
-{
-	m_iAreaIndex = index;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 bool CTriggerAreaCapture::IsActive( void )
 {
 	return !m_bDisabled;
@@ -231,7 +220,7 @@ void CTriggerAreaCapture::StartTouch(CBaseEntity *pOther)
 //-----------------------------------------------------------------------------
 void CTriggerAreaCapture::EndTouch(CBaseEntity *pOther)
 {
-	if ( PassesTriggerFilters(pOther) && m_hPoint )
+	if ( IsTouching( pOther ) && m_hPoint )
 	{
 		IGameEvent *event = gameeventmanager->CreateEvent( "controlpoint_endtouch" );
 		if ( event )
@@ -273,8 +262,6 @@ void CTriggerAreaCapture::AreaTouch( CBaseEntity *pOther )
 	// Don't cap areas unless the round is running
 	if ( !TeamplayGameRules()->PointsMayBeCaptured() )
 		return;
-
-	Assert( m_iAreaIndex != -1 );
 
 	// dont touch for non-alive or non-players
 	if( !pOther->IsPlayer() || !pOther->IsAlive() )
@@ -379,6 +366,7 @@ void CTriggerAreaCapture::CaptureThink( void )
 							}
 
 							iNumBlockablePlayers[iTeam] += TeamplayGameRules()->GetCaptureValueForPlayer( pPlayer );
+							pPlayer->SetLastObjectiveTime( gpGlobals->curtime );
 						}
 						continue;
 					}
@@ -391,6 +379,7 @@ void CTriggerAreaCapture::CaptureThink( void )
 						}
 
 						iNumPlayers[iTeam] += TeamplayGameRules()->GetCaptureValueForPlayer( pPlayer );
+						pPlayer->SetLastObjectiveTime( gpGlobals->curtime );
 					}
 				}
 			}
@@ -546,7 +535,7 @@ void CTriggerAreaCapture::CaptureThink( void )
 
 					if ( !bRepeatBlocker )
 					{
-                        m_hPoint->CaptureBlocked( pBlockingPlayer );
+                        m_hPoint->CaptureBlocked( pBlockingPlayer, NULL );
 
 						// Add this guy to our blocker list
 						int iNew = m_Blockers.AddToTail();
@@ -771,6 +760,8 @@ void CTriggerAreaCapture::StartCapture( int team, int capmode )
 	
 	m_nCapturingTeam = team;
 
+	OnStartCapture( m_nCapturingTeam );
+
 	UpdateNumPlayers();
 
 	if ( CaptureModeScalesWithPlayers() )
@@ -891,6 +882,12 @@ void CTriggerAreaCapture::EndCapture( int team )
 	m_nCapturingTeam = TEAM_UNASSIGNED;
 	SetCapTimeRemaining( 0 );
 
+	// play any special cap sounds. need to do this before we update the owner of the point.
+	if ( TeamplayRoundBasedRules() )
+	{
+		TeamplayRoundBasedRules()->PlaySpecialCapSounds( m_nOwningTeam, m_hPoint.Get() );
+	}
+
 	//there may have been more than one capper, but only report this one.
 	//he hasn't gotten points yet, and his name will go in the cap string if its needed
 	//first capper gets name sent and points given by flag.
@@ -920,12 +917,6 @@ void CTriggerAreaCapture::EndCapture( int team )
 				pPlayer->StopScoringEscortPoints();					
 			}
 		}
-	}
-
-	// play any special cap sounds
-	if ( TeamplayRoundBasedRules() )
-	{
-		TeamplayRoundBasedRules()->PlaySpecialCapSounds( m_nOwningTeam );
 	}
 }
 
@@ -1149,7 +1140,7 @@ bool CTriggerAreaCapture::CheckIfDeathCausesBlock( CBaseMultiplayerPlayer *pVict
 
 	if ( bBreakCap )
 	{
-		m_hPoint->CaptureBlocked( pKiller );
+		m_hPoint->CaptureBlocked( pKiller, pVictim );
 		//BreakCapture( true );
 	}
 
