@@ -31,7 +31,6 @@
   </Settings>
     <VirtualDirectory Name="Source Files">
       <File Name="../../public/filesystem_helpers.cpp"/>
-      <File Name="../../public/html/htmlprotobuf.cpp"/>
       <File Name="../../vgui2/src/vgui_key_translation.cpp"/>
       <File Name="AnalogBar.cpp"/>
       <File Name="AnimatingImagePanel.cpp"/>
@@ -57,7 +56,6 @@
       <File Name="FileOpenStateMachine.cpp"/>
       <File Name="FocusNavGroup.cpp"/>
       <File Name="Frame.cpp"/>
-      <File Name="generated_proto/htmlmessages.pb.cc"/>
       <File Name="GraphPanel.cpp"/>
       <File Name="HTML.cpp"/>
       <File Name="Image.cpp"/>
@@ -201,17 +199,18 @@
       <File Name="../../public/vgui_controls/URLLabel.h"/>
       <File Name="../../public/vgui_controls/WizardPanel.h"/>
       <File Name="../../public/vgui_controls/WizardSubPanel.h"/>
-      <File Name="generated_proto/htmlmessages.pb.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="Resources">
     </VirtualDirectory>
     <VirtualDirectory Name="VPC Files">
+      <File Name="../../vpc_scripts/platform_dirs.vpc"/>
       <File Name="../../vpc_scripts/protobuf_builder.vpc"/>
       <File Name="../../vpc_scripts/source_base.vpc"/>
       <File Name="../../vpc_scripts/source_lib_base.vpc"/>
-      <File Name="../../vpc_scripts/source_lib_linux_base.vpc"/>
-      <File Name="../../vpc_scripts/source_linux_base_project.vpc"/>
+      <File Name="../../vpc_scripts/source_lib_posix_base.vpc"/>
+      <File Name="../../vpc_scripts/source_posix_base.vpc"/>
       <File Name="../../vpc_scripts/source_video_base.vpc"/>
+      <File Name="../../vpc_scripts/version.vpc"/>
       <File Name="vgui_controls.vpc"/>
     </VirtualDirectory>
 </CodeLite_Project>

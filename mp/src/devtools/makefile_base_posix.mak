@@ -101,7 +101,7 @@ else ifeq ($(USE_VALVE_BINDIR),1)
 	CRYPTOPPDIR=linux32
 else
 	# Not using chroot, use old steam-runtime. (gcc 4.6.3)
-	export STEAM_RUNTIME_PATH ?= /valve/steam-runtime
+	export STEAM_RUNTIME_PATH ?= /usr
 	GCC_VER =
 	P4BIN = p4
 	CRYPTOPPDIR=ubuntu12_32
@@ -159,6 +159,7 @@ else
 	WARN_FLAGS += -Wno-unused-variable
 	WARN_FLAGS += -Wno-unused-but-set-variable
 	WARN_FLAGS += -Wno-unused-function
+	WARN_FLAGS += -Wno-unused-local-typedefs
 endif
 
 ifeq ($(CLANG_BUILD),1)

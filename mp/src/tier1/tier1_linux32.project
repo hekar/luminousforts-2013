@@ -30,6 +30,7 @@
     </Configuration>
   </Settings>
     <VirtualDirectory Name="Source Files">
+      <File Name="../utils/lzma/C/LzmaDec.c"/>
       <File Name="bitbuf.cpp"/>
       <File Name="byteswap.cpp"/>
       <File Name="characterset.cpp"/>
@@ -62,9 +63,11 @@
       <File Name="splitstring.cpp"/>
       <File Name="stringpool.cpp"/>
       <File Name="strtools.cpp"/>
+      <File Name="strtools_unicode.cpp"/>
       <File Name="tier1.cpp"/>
       <File Name="tokenreader.cpp"/>
       <File Name="uniqueid.cpp"/>
+      <File Name="utlbinaryblock.cpp"/>
       <File Name="utlbuffer.cpp"/>
       <File Name="utlbufferutil.cpp"/>
       <File Name="utlstring.cpp"/>
@@ -108,6 +111,7 @@
       <File Name="../public/tier1/tier1.h"/>
       <File Name="../public/tier1/tokenreader.h"/>
       <File Name="../public/tier1/utlbidirectionalset.h"/>
+      <File Name="../public/tier1/utlbinaryblock.h"/>
       <File Name="../public/tier1/utlblockmemory.h"/>
       <File Name="../public/tier1/utlbuffer.h"/>
       <File Name="../public/tier1/utlbufferutil.h"/>
@@ -132,17 +136,21 @@
       <File Name="../public/tier1/utlsymbol.h"/>
       <File Name="../public/tier1/utlsymbollarge.h"/>
       <File Name="../public/tier1/utlvector.h"/>
+      <File Name="../utils/lzma/C/7zTypes.h"/>
+      <File Name="../utils/lzma/C/LzmaDec.h"/>
       <File Name="snappy-internal.h"/>
       <File Name="snappy-stubs-internal.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="Resources">
     </VirtualDirectory>
     <VirtualDirectory Name="VPC Files">
+      <File Name="../vpc_scripts/platform_dirs.vpc"/>
       <File Name="../vpc_scripts/source_base.vpc"/>
       <File Name="../vpc_scripts/source_lib_base.vpc"/>
-      <File Name="../vpc_scripts/source_lib_linux_base.vpc"/>
-      <File Name="../vpc_scripts/source_linux_base_project.vpc"/>
+      <File Name="../vpc_scripts/source_lib_posix_base.vpc"/>
+      <File Name="../vpc_scripts/source_posix_base.vpc"/>
       <File Name="../vpc_scripts/source_video_base.vpc"/>
+      <File Name="../vpc_scripts/version.vpc"/>
       <File Name="tier1.vpc"/>
     </VirtualDirectory>
 </CodeLite_Project>

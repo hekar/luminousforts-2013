@@ -47,6 +47,7 @@
       <File Name="../../game/shared/basegrenade_shared.cpp"/>
       <File Name="../../game/shared/baseparticleentity.cpp"/>
       <File Name="../../game/shared/baseplayer_shared.cpp"/>
+      <File Name="../../game/shared/baseprojectile.cpp"/>
       <File Name="../../game/shared/baseviewmodel_shared.cpp"/>
       <File Name="../../game/shared/base_playeranimstate.cpp"/>
       <File Name="../../game/shared/beam_shared.cpp"/>
@@ -193,6 +194,7 @@
       <File Name="../../public/SoundParametersInternal.cpp"/>
       <File Name="../../public/stringregistry.cpp"/>
       <File Name="../../public/studio.cpp"/>
+      <File Name="../../public/tier0/memoverride.cpp"/>
       <File Name="ai_activity.cpp"/>
       <File Name="ai_baseactor.cpp"/>
       <File Name="ai_basehumanoid.cpp"/>
@@ -519,6 +521,7 @@
       <File Name="Mod/Dom_CaptureZone.cpp"/>
       <File Name="Mod/Dom_LinearZone.cpp"/>
       <File Name="Mod/GameRuleMaker.cpp"/>
+      <File Name="Mod/HealthChargers.cpp"/>
       <File Name="Mod/PhaseControl.cpp"/>
       <File Name="Mod/Proj_Beacon.cpp"/>
       <File Name="Mod/Proj_EngineerGrenade.cpp"/>
@@ -718,6 +721,7 @@
       <File Name="../../game/shared/basegrenade_shared.h"/>
       <File Name="../../game/shared/baseparticleentity.h"/>
       <File Name="../../game/shared/baseplayer_shared.h"/>
+      <File Name="../../game/shared/baseprojectile.h"/>
       <File Name="../../game/shared/baseviewmodel_shared.h"/>
       <File Name="../../game/shared/base_playeranimstate.h"/>
       <File Name="../../game/shared/beam_flags.h"/>
@@ -1287,13 +1291,16 @@
       <File Name="../../game/protobuf_include.vpc"/>
       <File Name="../../game/server/nav_mesh.vpc"/>
       <File Name="../../game/server/server_base.vpc"/>
+      <File Name="../../vpc_scripts/platform_dirs.vpc"/>
       <File Name="../../vpc_scripts/protobuf_builder.vpc"/>
       <File Name="../../vpc_scripts/source_base.vpc"/>
       <File Name="../../vpc_scripts/source_dll_base.vpc"/>
-      <File Name="../../vpc_scripts/source_dll_linux_base.vpc"/>
-      <File Name="../../vpc_scripts/source_linux_base_project.vpc"/>
+      <File Name="../../vpc_scripts/source_dll_posix_base.vpc"/>
+      <File Name="../../vpc_scripts/source_posix_base.vpc"/>
       <File Name="../../vpc_scripts/source_video_base.vpc"/>
       <File Name="../../vpc_scripts/version.vpc"/>
+      <File Name="../../vpc_scripts/version.vpc"/>
+      <File Name="server_hl2mp.vpc"/>
       <File Name="server_hl2mp.vpc"/>
     </VirtualDirectory>
 </CodeLite_Project>

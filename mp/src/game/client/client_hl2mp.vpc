@@ -277,16 +277,4 @@ $Project "Client (HL2MP)"
 			}
 		}
 	}
-	$Folder "Libraries"
-	{
-		$File "$SRCDIR\lib\$PLATFORM\release\$VSLIBDIR\libprotobuf.lib" [$WINDOWS]
-		{
-			$Configuration "Debug" { $ExcludedFromBuild	"Yes" }
-		}
-		$File "$SRCDIR\lib\$PLATFORM\debug\$VSLIBDIR\libprotobuf.lib" [$WINDOWS]
-		{
-			$Configuration "Release" { $ExcludedFromBuild "Yes" }
-		}
-		$File "$SRCDIR\lib\$PLATFORM\release\libprotobuf.a"         [$POSIX]
-	}
 }

@@ -651,7 +651,6 @@ $Project
 			$File	"game_controls\MapOverview.cpp"
 			$File	"game_controls\NavProgress.cpp"
 			$File	"game_controls\SpectatorGUI.cpp"
-			$File	"game_controls\teammenu.cpp"
 			$File	"game_controls\vguitextwindow.cpp"
 			$File	"game_controls\IconPanel.cpp"
 		}
@@ -1232,7 +1231,6 @@ $Project
 		$File	"game_controls\mouseoverhtmlbutton.h"
 		$File	"game_controls\mouseoverpanelbutton.h"
 		$File	"game_controls\spectatorgui.h"
-		$File	"game_controls\teammenu.h"
 		$File	"game_controls\vguitextwindow.h"
 		$File	"game_controls\IconPanel.h"
 	}

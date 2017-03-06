@@ -47,6 +47,7 @@
       <File Name="../../game/shared/basegrenade_shared.cpp"/>
       <File Name="../../game/shared/baseparticleentity.cpp"/>
       <File Name="../../game/shared/baseplayer_shared.cpp"/>
+      <File Name="../../game/shared/baseprojectile.cpp"/>
       <File Name="../../game/shared/baseviewmodel_shared.cpp"/>
       <File Name="../../game/shared/base_playeranimstate.cpp"/>
       <File Name="../../game/shared/beam_shared.cpp"/>
@@ -195,6 +196,7 @@
       <File Name="../../public/SoundParametersInternal.cpp"/>
       <File Name="../../public/stringregistry.cpp"/>
       <File Name="../../public/studio.cpp"/>
+      <File Name="../../public/tier0/memoverride.cpp"/>
       <File Name="../../public/tools/bonelist.cpp"/>
       <File Name="../../public/vallocator.cpp"/>
       <File Name="../../public/vgui_controls/vgui_controls.cpp"/>
@@ -384,7 +386,6 @@
       <File Name="game_controls/basemodelpanel.cpp"/>
       <File Name="game_controls/basemodel_panel.cpp"/>
       <File Name="game_controls/baseviewport.cpp"/>
-      <File Name="game_controls/classmenu.cpp"/>
       <File Name="game_controls/ClientScoreBoardDialog.cpp"/>
       <File Name="game_controls/commandmenu.cpp"/>
       <File Name="game_controls/IconPanel.cpp"/>
@@ -392,7 +393,6 @@
       <File Name="game_controls/MapOverview.cpp"/>
       <File Name="game_controls/NavProgress.cpp"/>
       <File Name="game_controls/SpectatorGUI.cpp"/>
-      <File Name="game_controls/teammenu.cpp"/>
       <File Name="game_controls/vguitextwindow.cpp"/>
       <File Name="geiger.cpp"/>
       <File Name="glow_outline_effect.cpp"/>
@@ -449,7 +449,6 @@
       <File Name="hl2/hud_filmdemo.cpp"/>
       <File Name="hl2/hud_flashlight.cpp"/>
       <File Name="hl2/hud_hdrdemo.cpp"/>
-      <File Name="hl2/hud_health.cpp"/>
       <File Name="hl2/hud_poisondamageindicator.cpp"/>
       <File Name="hl2/hud_quickinfo.cpp"/>
       <File Name="hl2/hud_suitpower.cpp"/>
@@ -670,6 +669,7 @@
       <File Name="../../game/shared/basegrenade_shared.h"/>
       <File Name="../../game/shared/baseparticleentity.h"/>
       <File Name="../../game/shared/baseplayer_shared.h"/>
+      <File Name="../../game/shared/baseprojectile.h"/>
       <File Name="../../game/shared/baseviewmodel_shared.h"/>
       <File Name="../../game/shared/base_playeranimstate.h"/>
       <File Name="../../game/shared/beam_flags.h"/>
@@ -1129,7 +1129,6 @@
       <File Name="game_controls/mouseoverhtmlbutton.h"/>
       <File Name="game_controls/mouseoverpanelbutton.h"/>
       <File Name="game_controls/spectatorgui.h"/>
-      <File Name="game_controls/teammenu.h"/>
       <File Name="game_controls/vguitextwindow.h"/>
       <File Name="glow_outline_effect.h"/>
       <File Name="glow_overlay.h"/>
@@ -1268,13 +1267,16 @@
     <VirtualDirectory Name="VPC Files">
       <File Name="../../game/client/client_base.vpc"/>
       <File Name="../../game/protobuf_include.vpc"/>
+      <File Name="../../vpc_scripts/platform_dirs.vpc"/>
       <File Name="../../vpc_scripts/protobuf_builder.vpc"/>
       <File Name="../../vpc_scripts/source_base.vpc"/>
       <File Name="../../vpc_scripts/source_dll_base.vpc"/>
-      <File Name="../../vpc_scripts/source_dll_linux_base.vpc"/>
-      <File Name="../../vpc_scripts/source_linux_base_project.vpc"/>
+      <File Name="../../vpc_scripts/source_dll_posix_base.vpc"/>
+      <File Name="../../vpc_scripts/source_posix_base.vpc"/>
       <File Name="../../vpc_scripts/source_video_base.vpc"/>
       <File Name="../../vpc_scripts/version.vpc"/>
+      <File Name="../../vpc_scripts/version.vpc"/>
+      <File Name="client_hl2mp.vpc"/>
       <File Name="client_hl2mp.vpc"/>
     </VirtualDirectory>
 </CodeLite_Project>
