@@ -9,8 +9,8 @@
 Compilation is easiest in a Docker container running Ubuntu 14.04
 
 ```
-sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib build-essential
 sudo docker run -t -i -v $(pwd):$(pwd) ubuntu:14.04 /bin/bash
+sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib build-essential
 
 # In docker instance
 cd <folder>/mp/src
