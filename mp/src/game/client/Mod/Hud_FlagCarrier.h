@@ -101,7 +101,7 @@ private:
 
 	int m_iTakenByPlayer [TEAM_COUNT];
 
-	wchar_t m_Text [TEAM_COUNT] [256];
+	wchar_t m_Text [TEAM_COUNT][ 256 ];
 	int m_FlagState [TEAM_COUNT];
 	int m_LastFlagState [TEAM_COUNT];
 };

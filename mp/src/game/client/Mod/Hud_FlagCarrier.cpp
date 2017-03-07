@@ -230,7 +230,7 @@ void CHudFlagCarrier::UpdateFlagState( int TeamIndex )
 	switch ( m_FlagState [TeamIndex] )
 	{
 	case HFLG_BASE:
-		wcscpy( m_Text [TeamIndex], BASE_TAG );
+		wcscpy( m_Text[TeamIndex], BASE_TAG );
 		break;
 	case HFLG_PICKUP:
 		if ( g_PR )
@@ -241,7 +241,7 @@ void CHudFlagCarrier::UpdateFlagState( int TeamIndex )
 				int playerindex = engine->GetPlayerForUserID( m_iTakenByPlayer[ TeamIndex ] );
 				const char *playername = g_PR->GetPlayerName( playerindex );
 				g_pVGuiLocalize->ConvertANSIToUnicode( playername, m_Text [TEAM_UNASSIGNED], sizeof( m_Text [TEAM_UNASSIGNED] ) );
-				_snwprintf( m_Text [TeamIndex], sizeof( m_Text [TeamIndex] ), PLAYER_TAG, m_Text [TEAM_UNASSIGNED] );
+				swprintf( m_Text[ TeamIndex ], 256, PLAYER_TAG, m_Text [TEAM_UNASSIGNED] );
 			}
 		}
 		break;
@@ -251,7 +251,7 @@ void CHudFlagCarrier::UpdateFlagState( int TeamIndex )
 	case HFLG_DROPPED_TIMER:
 		double DroppedSeconds = m_DroppedMaxTime - m_DroppedTimer [TeamIndex].GetElapsedTime();
 		DroppedSeconds = clamp( DroppedSeconds, 0.0, abs( DroppedSeconds ) );
-		_snwprintf( m_Text[ TeamIndex ], sizeof( m_Text[ TeamIndex ] ), DROPPED_TIMER_TAG, DroppedSeconds );
+		swprintf( m_Text[ TeamIndex ], 256, DROPPED_TIMER_TAG, DroppedSeconds );
 		break;
 	}
 }
