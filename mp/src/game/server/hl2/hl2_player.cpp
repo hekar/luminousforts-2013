@@ -1208,8 +1208,11 @@ void CHL2_Player::StartSprinting( void )
 		return;
 	}
 
-	if( !SuitPower_AddDevice( SuitDeviceSprint ) )
-		return;
+	if ( GameRules()->GetCurrentPhaseID() != PHASE_BUILD  )
+	{
+		if( !SuitPower_AddDevice( SuitDeviceSprint ) )
+			return;
+	}
 
 	CPASAttenuationFilter filter( this );
 	filter.UsePredictionRules();

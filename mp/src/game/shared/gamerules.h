@@ -140,6 +140,8 @@ public:
 	virtual int		Damage_GetNoPhysicsForce( void )= 0;
 	virtual int		Damage_GetShouldNotBleed( void ) = 0;
 
+	virtual int GetCurrentPhaseID() { return 0; }
+
 // Ammo Definitions
 	//CAmmoDef* GetAmmoDef();
 
