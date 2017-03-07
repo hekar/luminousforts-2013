@@ -949,6 +949,8 @@ public:
 	bool			IsCombatCharacter() { return MyCombatCharacterPointer() == NULL ? false : true; }
 	bool			IsInWorld( void ) const;
 	virtual bool	IsCombatItem( void ) const { return false; }
+	virtual bool 	IsBlock( void ) const { return false; }
+	virtual bool 	IsFlag( void ) const { return false; }
 
 	virtual bool	IsBaseCombatWeapon( void ) const { return false; }
 	virtual bool	IsWearable( void ) const { return false; }
@@ -1753,6 +1755,7 @@ private:
 	// This is a random seed used by the networking code to allow client - side prediction code
 	//  randon number generators to spit out the same random numbers on both sides for a particular
 	//  usercmd input.
+	static int						m_nPredictionRandomSeedServer;
 	static int						m_nPredictionRandomSeed;
 	static CBasePlayer				*m_pPredictionPlayer;
 
@@ -1767,7 +1770,7 @@ private:
 	
 public:
 	// Accessors for above
-	static int						GetPredictionRandomSeed( void );
+	static int						GetPredictionRandomSeed( bool bUseUnSyncedServerPlatTime = false );
 	static void						SetPredictionRandomSeed( const CUserCmd *cmd );
 	static CBasePlayer				*GetPredictionPlayer( void );
 	static void						SetPredictionPlayer( CBasePlayer *player );

@@ -386,6 +386,7 @@
       <File Name="game_controls/basemodelpanel.cpp"/>
       <File Name="game_controls/basemodel_panel.cpp"/>
       <File Name="game_controls/baseviewport.cpp"/>
+      <File Name="game_controls/classmenu.cpp"/>
       <File Name="game_controls/ClientScoreBoardDialog.cpp"/>
       <File Name="game_controls/commandmenu.cpp"/>
       <File Name="game_controls/IconPanel.cpp"/>
@@ -393,6 +394,7 @@
       <File Name="game_controls/MapOverview.cpp"/>
       <File Name="game_controls/NavProgress.cpp"/>
       <File Name="game_controls/SpectatorGUI.cpp"/>
+      <File Name="game_controls/teammenu.cpp"/>
       <File Name="game_controls/vguitextwindow.cpp"/>
       <File Name="geiger.cpp"/>
       <File Name="glow_outline_effect.cpp"/>
@@ -1120,6 +1122,7 @@
       <File Name="game_controls/basemodelpanel.h"/>
       <File Name="game_controls/basemodel_panel.h"/>
       <File Name="game_controls/baseviewport.h"/>
+      <File Name="game_controls/classmenu.h"/>
       <File Name="game_controls/clientscoreboarddialog.h"/>
       <File Name="game_controls/commandmenu.h"/>
       <File Name="game_controls/IconPanel.h"/>
@@ -1129,6 +1132,7 @@
       <File Name="game_controls/mouseoverhtmlbutton.h"/>
       <File Name="game_controls/mouseoverpanelbutton.h"/>
       <File Name="game_controls/spectatorgui.h"/>
+      <File Name="game_controls/teammenu.h"/>
       <File Name="game_controls/vguitextwindow.h"/>
       <File Name="glow_outline_effect.h"/>
       <File Name="glow_overlay.h"/>

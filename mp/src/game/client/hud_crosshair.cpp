@@ -56,7 +56,6 @@ CHudCrosshair::CHudCrosshair( const char *pElementName ) :
 	vgui::Panel *pParent = g_pClientMode->GetViewport();
 	SetParent( pParent );
 
-	m_cPreviousCrosshair = 0;
 	m_pCrosshair = 0;
 
 	m_clrCrosshair = Color( 0, 0, 0, 0 );

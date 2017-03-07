@@ -288,7 +288,7 @@ void CFlagBase::Touch( CBaseEntity *pOther )
 	}
 	
 	// If a player already has the flag, or if the flag is dropped and leeway time isn't over
-	if ( m_bPlayerHasFlag || m_bDropped && (gpGlobals->curtime - m_TimeDropped <= lf_flag_droptime.GetFloat()) )
+	if ( m_bPlayerHasFlag || ( m_bDropped && (gpGlobals->curtime - m_TimeDropped <= lf_flag_droptime.GetFloat()) ) )
 	{
 		return;
 	}

@@ -117,7 +117,7 @@ bool CHudPhaseTime::NeedsUpdate( void )
 
 void CHudPhaseTime::DisplayBlockCount( int x, int y, Color col )
 {
-	wchar_t szText[ 63 ];
+	wchar_t wszText[ 63 ];
 
 	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
 	if ( !pPlayer )
@@ -148,29 +148,31 @@ void CHudPhaseTime::DisplayBlockCount( int x, int y, Color col )
 	// Display differently if the number is negative
 	if ( StolenBlockCount >= 0)
 	{
-		_snwprintf( szText, sizeof( szText ), L"%d/%d + %d", BlockCount, BlockLimit, StolenBlockCount );
+		_snwprintf( wszText, 63, L"%d/%d + %d", BlockCount, BlockLimit, StolenBlockCount );
 	}
 	else
 	{
 		// Show the negative number with the '-' sign
-		_snwprintf( szText, sizeof( szText ), L"%d/%d - %d", BlockCount, BlockLimit, abs( StolenBlockCount ) );
+		_snwprintf( wszText, 63, L"%d/%d - %d", BlockCount, BlockLimit, abs( StolenBlockCount ) );
 	}
 
-	szText[62] = '\0';
+	wszText[62] = '\0';
 
-	DisplayText( szText, x, y, col );
+	DisplayText( wszText, x, y, col );
 }
 
 void CHudPhaseTime::DisplayTimer( int x, int y, Color col )
 {
-	wchar_t szText[ 63 ];
 
 	int TimerSeconds = m_PhaseSeconds - m_PhaseTimer.GetElapsedTime();
+	if ( TimerSeconds < 0 || TimerSeconds > 32000 )
+		return;
 
-	_snwprintf( szText, sizeof( szText ), L"%d:%02d", (TimerSeconds / 60), (TimerSeconds % 60) );
-	szText[62] = '\0';
+	wchar_t wszText[ 63 ];
+	_snwprintf( wszText, 63, L"%d:%02d", (TimerSeconds / 60), (TimerSeconds % 60) );
+	wszText[62] = '\0';
 
-	DisplayText( szText, x, y, col );
+	DisplayText( wszText, x, y, col );
 }
 
 void CHudPhaseTime::DisplayPhase( int x, int y, Color col )

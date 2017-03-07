@@ -150,16 +150,30 @@ void CHL2MPClientScoreBoardDialog::UpdateTeamInfo( )
 
 			if ( team->Get_Number_Players( ) == 1 )
 			{
-				g_pVGuiLocalize->ConstructString( string1, sizeof(string1), g_pVGuiLocalize->Find( "#SDK_ScoreBoard_Player" ), 2, teamName, wNumPlayers );
+				g_pVGuiLocalize->ConstructString(
+					string1,
+					1024,
+					g_pVGuiLocalize->Find( "#SDK_ScoreBoard_Player" ),
+					2,
+					teamName,
+					wNumPlayers
+				);
 			}
 			else
 			{
-				g_pVGuiLocalize->ConstructString( string1, sizeof(string1), g_pVGuiLocalize->Find( "#SDK_ScoreBoard_Players" ), 2, teamName, wNumPlayers );
+				g_pVGuiLocalize->ConstructString(
+					string1,
+					1024,
+					g_pVGuiLocalize->Find( "#SDK_ScoreBoard_Players" ),
+					2,
+					teamName,
+					wNumPlayers
+				);
 			}
 
 			// update stats
 			wchar_t val[6];
-			swprintf( val, L"%d", team->Get_Score( ) );
+			swprintf( val, 6, L"%d", team->Get_Score( ) );
 			GetList( i )->ModifyColumn( sectionID, "frags", val );
 			if ( team->Get_Ping( ) < 1 )
 			{
@@ -167,7 +181,7 @@ void CHL2MPClientScoreBoardDialog::UpdateTeamInfo( )
 			}
 			else
 			{
-				swprintf( val, L"%d", team->Get_Ping( ) );
+				swprintf( val, 6, L"%d", team->Get_Ping( ) );
 				GetList( i )->ModifyColumn( sectionID, "ping", val );
 			}
 

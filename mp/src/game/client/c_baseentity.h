@@ -658,6 +658,8 @@ public:
 
 	bool IsStandable() const;
 	bool IsBSPModel() const;
+	virtual bool 	IsBlock( void ) const { return false; }
+	
 
 	
 	// If this is a vehicle, returns the vehicle interface

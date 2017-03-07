@@ -1035,9 +1035,6 @@ void CBasePlayer::SelectItem( const char *pstr, int iSubType )
 	// Make sure the current weapon can be holstered
 	if ( GetActiveWeapon() )
 	{
-		if ( !GetActiveWeapon()->CanHolster() && !pItem->ForceWeaponSwitch() )
-			return;
-
 		ResetAutoaim( );
 	}
 
