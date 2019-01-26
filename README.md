@@ -9,20 +9,27 @@
 Compilation is easiest in a Docker container running Ubuntu 14.04
 
 ```
+cd ~
+git clone git@github.com:hekar/luminousforts-2013.git
+
 sudo docker run -t -i -v $(pwd):$(pwd) ubuntu:14.04 /bin/bash
-sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib build-essential
+sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib build-essential rsync
 
 # In docker instance
 cd <folder>/mp/src
 ./createallprojects
 make -f everything.mak
+rsync --progress -v ../game/mod_hl2mp/bin/* <path-to-home>/.steam/steam/steamapps/sourcemods/luminousforts/bin/
 ```
 
 #### Debugging
 
 ```
-GAME_DEBUGGER=gdb "~/.local/share/Steam/steamapps/common/Source SDK Base 2013 Multiplayer/hl2.sh" \
--game sourcetest -steam -game ~/.local/share/Steam/steamapps/sourcemods/luminousforts
+# GDB
+GAME_DEBUGGER="gdb" ~/.local/share/Steam/steamapps/common/Source\ SDK\ Base\ 2013\ Multiplayer/hl2.sh -game sourcetest -steam -game ~/.local/share/Steam/steamapps/sourcemods/luminousforts
+
+# Strace
+GAME_DEBUGGER="strace -f -o strace.log" ~/.local/share/Steam/steamapps/common/Source\ SDK\ Base\ 2013\ Multiplayer/hl2.sh -game sourcetest -steam -game ~/.local/share/Steam/steamapps/sourcemods/luminousforts
 ```
 
 
