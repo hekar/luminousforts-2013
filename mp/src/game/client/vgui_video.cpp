@@ -47,7 +47,7 @@ VideoPanel::VideoPanel( unsigned int nXPos, unsigned int nYPos, unsigned int nHe
 	SetPos( nXPos, nYPos );
 
 	SetScheme(vgui::scheme()->LoadSchemeFromFile( "resource/VideoPanelScheme.res", "VideoPanelScheme"));
-	LoadControlSettings("resource/UI/VideoPanel.res");
+	LoadControlSettings("resource/ui/VideoPanel.res");
 }
 
 //-----------------------------------------------------------------------------

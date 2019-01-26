@@ -69,7 +69,7 @@ void CReplayReminderPanel::SetupText()
 //-----------------------------------------------------------------------------
 void CReplayReminderPanel::ApplySchemeSettings( IScheme *pScheme )
 {
-	LoadControlSettings("Resource/UI/ReplayReminder.res", "GAME");
+	LoadControlSettings("resource/ui/ReplayReminder.res", "GAME");
 
 	BaseClass::ApplySchemeSettings( pScheme );
 

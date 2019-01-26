@@ -65,7 +65,7 @@ CGUIListenServer::CGUIListenServer( vgui::VPANEL parent ) :
 	BaseClass( NULL, "GUIListenServer" )
 {	
 	SetParent( parent );
-	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/sourcescheme.res", "sourcescheme" );
+	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/SourceScheme.res", "SourceScheme" );
 	SetScheme( scheme );
 	LoadControlSettings( "resource/ui/ListenServer.res" );
 

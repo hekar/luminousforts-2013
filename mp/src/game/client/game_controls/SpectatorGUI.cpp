@@ -148,7 +148,7 @@ CSpectatorMenu::CSpectatorMenu( IViewPort *pViewPort ) : Frame( NULL, PANEL_SPEC
 	menu->LoadFromFile("Resource/spectatormodes.res");
 	m_pViewOptions->SetMenu( menu );	// attach menu to combo box
 
-	LoadControlSettings("Resource/UI/BottomSpectator.res");
+	LoadControlSettings("resource/ui/BottomSpectator.res");
 	ListenForGameEvent( "spec_target_updated" );
 }
 

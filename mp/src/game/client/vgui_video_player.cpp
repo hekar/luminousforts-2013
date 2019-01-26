@@ -46,7 +46,7 @@ VideoPlayerPanel::VideoPlayerPanel( vgui::Panel *parent, const char *panelName, 
 	// use defaults for scheme and control settings for now
 
 	// SetScheme( vgui::scheme()->LoadSchemeFromFile( "resource/VideoPlayerPanelScheme.res", "VideoPlayerPanelScheme"));
-	//LoadControlSettings("resource/UI/VideoPlayerPanel.res");
+	//LoadControlSettings("resource/ui/VideoPlayerPanel.res");
 
 	// Assign video file if supplied
 	SetVideo( pVideoFile );

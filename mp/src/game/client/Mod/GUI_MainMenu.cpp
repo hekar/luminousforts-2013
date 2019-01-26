@@ -55,7 +55,7 @@ CMainMenu::CMainMenu( vgui::VPANEL parent ) :
 	BaseClass( NULL, "MainMenu" )
 {
 	SetParent( parent );
-	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/sourcescheme.res", "sourcescheme" );
+	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/SourceScheme.res", "SourceScheme" );
 	SetScheme( scheme );
 	LoadControlSettings( "resource/ui/MainMenu.res" );
 

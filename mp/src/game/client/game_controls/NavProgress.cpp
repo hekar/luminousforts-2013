@@ -46,7 +46,7 @@ CNavProgress::CNavProgress( IViewPort *pViewPort ) : Frame( NULL, PANEL_NAV_PROG
 	m_pProgressBar = new Panel( this, "ProgressBar" );
 	m_pProgressBarSizer = new Panel( this, "ProgressBarSizer" );
 
-	LoadControlSettings("Resource/UI/NavProgress.res");
+	LoadControlSettings("resource/ui/NavProgress.res");
 
 	Reset();
 }

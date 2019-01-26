@@ -145,7 +145,7 @@ void CMessageDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
-	LoadControlSettings( "resource/UI/MessageDialog.res", "GAME", m_pControlSettings );
+	LoadControlSettings( "resource/ui/MessageDialog.res", "GAME", m_pControlSettings );
 
 	m_hButtonFont = pScheme->GetFont( "GameUIButtons" );
 	m_hTextFont = pScheme->GetFont( "MenuLarge" );

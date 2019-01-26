@@ -150,7 +150,7 @@ void CReplayRenderDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 
 	BaseClass::ApplySchemeSettings( vgui::scheme()->GetIScheme( pTFScheme ) );
 
-	LoadControlSettings( "Resource/UI/replaybrowser/renderdialog.res", "GAME" );
+	LoadControlSettings( "resource/ui/replaybrowser/renderdialog.res", "GAME" );
 
 	// retrieve controls
 	m_pPlayVoiceCheck = dynamic_cast< CheckButton * >( FindChildByName( "PlayVoice" ) );

@@ -33,13 +33,13 @@ CBuyMenu::CBuyMenu(IViewPort *pViewPort) : WizardPanel( NULL, PANEL_BUY )
 
 	SetAutoDelete( false ); // we reuse this panel, don't let WizardPanel delete us
 	
-	LoadControlSettings( "Resource/UI/BuyMenu.res" );
+	LoadControlSettings( "resource/ui/BuyMenu.res" );
 	ShowButtons( false );
 
 	m_pViewPort = pViewPort;
 
 	m_pMainMenu = new CBuySubMenu( this, "mainmenu" );
-	m_pMainMenu->LoadControlSettings( "Resource/UI/MainBuyMenu.res" );
+	m_pMainMenu->LoadControlSettings( "resource/ui/MainBuyMenu.res" );
 	m_pMainMenu->SetVisible( false );
 }
 

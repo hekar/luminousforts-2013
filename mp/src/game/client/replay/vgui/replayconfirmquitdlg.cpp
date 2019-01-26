@@ -50,7 +50,7 @@ void CReplayConfirmQuitDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 
 	BaseClass::ApplySchemeSettings( vgui::scheme()->GetIScheme( pTFScheme ) );
 
-	LoadControlSettings( "Resource/UI/replaybrowser/confirmquitdlg.res", "GAME" );
+	LoadControlSettings( "resource/ui/replaybrowser/confirmquitdlg.res", "GAME" );
 
 	m_pDontShowAgain = dynamic_cast< CheckButton * >( FindChildByName( "DontShowThisAgainCheckbox" ) );
 	m_pQuitButton = dynamic_cast< CExButton * >( FindChildByName( "QuitButton" ) );

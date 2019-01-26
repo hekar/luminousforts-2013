@@ -33,7 +33,7 @@ CGwenFrame::CGwenFrame( vgui::VPANEL parent ) :
 	MFrame( NULL, "GwenFrame" )
 {
 	SetParent( parent );
-	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/sourcescheme.res", "sourcescheme" );
+	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/SourceScheme.res", "SourceScheme" );
 	SetScheme( scheme );
 
 	SetCloseButtonVisible( false );

@@ -117,7 +117,7 @@ void CReplayRenderOverlay::ApplySchemeSettings( IScheme *pScheme )
 	BaseClass::ApplySchemeSettings( pScheme );
 
 	// Load controls
-	LoadControlSettings( "Resource/UI/replayrenderoverlay.res", "GAME" );
+	LoadControlSettings( "resource/ui/replayrenderoverlay.res", "GAME" );
 
 	// Layout bottom
 	m_pBottom = dynamic_cast< EditablePanel * >( FindChildByName( "BottomPanel" ) );

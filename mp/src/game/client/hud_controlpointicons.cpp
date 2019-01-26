@@ -200,7 +200,7 @@ void CControlPointIcon::ApplySchemeSettings( IScheme *pScheme )
 		m_pCPTimerBG->SetShouldScaleImage( true );
 	}
 
-	LoadControlSettings( "resource/UI/ControlPointIcon.res" );
+	LoadControlSettings( "resource/ui/ControlPointIcon.res" );
 
 	m_pCapPlayerImage = dynamic_cast<vgui::ImagePanel *>( FindChildByName("CapPlayerImage") );
 	m_pCapNumPlayers = dynamic_cast<vgui::Label *>( FindChildByName("CapNumPlayers") );
@@ -1383,7 +1383,7 @@ void CControlPointProgressBar::ApplySchemeSettings( IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
-	LoadControlSettings( "resource/UI/ControlPointProgressBar.res" );
+	LoadControlSettings( "resource/ui/ControlPointProgressBar.res" );
 
 	m_pBar = dynamic_cast<vgui::CircularProgressBar *>( FindChildByName("ProgressBar") );
 	m_pBarText = dynamic_cast<vgui::Label *>( FindChildByName("ProgressText") );
@@ -1786,7 +1786,7 @@ void CControlPointCountdown::ApplySchemeSettings( IScheme *pScheme )
 	BaseClass::ApplySchemeSettings( pScheme );
 
 	// load control settings...
-	LoadControlSettings( "resource/UI/ControlPointCountdown.res" );
+	LoadControlSettings( "resource/ui/ControlPointCountdown.res" );
 }
 
 //-----------------------------------------------------------------------------

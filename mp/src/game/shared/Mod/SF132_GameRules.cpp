@@ -139,12 +139,12 @@ int CSF132GameRules::GetClassCount( void )
 
 const char *CSF132GameRules::GetClassmenuRed() const
 {
-	return "Resource/UI/SF132_ClassMenu_Red.res";
+	return "resource/ui/SF132_ClassMenu_Red.res";
 }
 
 const char *CSF132GameRules::GetClassmenuBlue() const
 {
-	return "Resource/UI/SF132_ClassMenu_Blue.res";
+	return "resource/ui/SF132_ClassMenu_Blue.res";
 }
 
 #endif // MOD_SF132

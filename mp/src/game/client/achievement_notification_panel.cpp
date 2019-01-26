@@ -68,7 +68,7 @@ void CAchievementNotificationPanel::Init()
 void CAchievementNotificationPanel::ApplySchemeSettings( IScheme *pScheme )
 {
 	// load control settings...
-	LoadControlSettings( "resource/UI/AchievementNotification.res" );
+	LoadControlSettings( "resource/ui/AchievementNotification.res" );
 	
 	BaseClass::ApplySchemeSettings( pScheme );
 }

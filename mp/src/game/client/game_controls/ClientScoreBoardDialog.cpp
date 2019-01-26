@@ -66,7 +66,7 @@ CClientScoreBoardDialog::CClientScoreBoardDialog( IViewPort *pViewPort ) : Edita
 	m_pRedList = new SectionedListPanel( this, "RedList" );
 	m_pRedList->SetVerticalScrollbar( false );
 
-	LoadControlSettings( "Resource/UI/ScoreBoard.res" );
+	LoadControlSettings( "resource/ui/ScoreBoard.res" );
 	m_iDesiredHeight = GetTall( );
 	m_pBlueList->SetVisible( false ); // hide this until we load the images in applyschemesettings
 	m_pRedList->SetVisible( false );

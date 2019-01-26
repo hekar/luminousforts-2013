@@ -44,7 +44,7 @@ void CCommentaryModelViewer::ApplySchemeSettings( vgui::IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
-	LoadControlSettings( "Resource/UI/CommentaryModelViewer.res" );
+	LoadControlSettings( "resource/ui/CommentaryModelViewer.res" );
 
 	m_pModelPanel = dynamic_cast<CCommentaryModelPanel*>( FindChildByName( "modelpanel" ) );
 }

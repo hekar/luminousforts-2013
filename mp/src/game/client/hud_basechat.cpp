@@ -504,7 +504,7 @@ CHudChatFilterPanel::CHudChatFilterPanel( vgui::Panel *pParent, const char *pNam
 
 void CHudChatFilterPanel::ApplySchemeSettings(vgui::IScheme *pScheme)
 {
-	LoadControlSettings( "resource/UI/ChatFilters.res" );
+	LoadControlSettings( "resource/ui/ChatFilters.res" );
 
 	BaseClass::ApplySchemeSettings( pScheme );
 
@@ -693,7 +693,7 @@ CHudChatFilterPanel *CBaseHudChat::GetChatFilterPanel( void )
 
 void CBaseHudChat::ApplySchemeSettings( vgui::IScheme *pScheme )
 {
-	LoadControlSettings( "resource/UI/BaseChat.res" );
+	LoadControlSettings( "resource/ui/BaseChat.res" );
 
 	BaseClass::ApplySchemeSettings( pScheme );
 

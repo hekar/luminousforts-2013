@@ -183,7 +183,7 @@ public:
 		}
 	}
 
-	virtual const char* GetResFile() const { return "resource/UI/YouTubeUploadWaitingDialog.res"; }
+	virtual const char* GetResFile() const { return "resource/ui/YouTubeUploadWaitingDialog.res"; }
 	virtual const char *GetResFilePathId() const { return "GAME"; }
 
 	virtual void OnUserClose()
@@ -377,7 +377,7 @@ public:
 	}
 
 protected:
-	virtual const char *GetResFile() { return "Resource/UI/YouTubeLoginDialog.res"; }
+	virtual const char *GetResFile() { return "resource/ui/YouTubeLoginDialog.res"; }
 	virtual const char *GetResFilePathId() { return "GAME"; }
 
 	void Login( const char* pUserName, const char *pPassword )
@@ -586,7 +586,7 @@ public:
 	}
 
 protected:
-	virtual const char *GetResFile() { return "Resource/UI/YouTubeUploadDialog.res"; }
+	virtual const char *GetResFile() { return "resource/ui/YouTubeUploadDialog.res"; }
 	virtual const char *GetResFilePathId() { return "GAME"; }
 
 private:

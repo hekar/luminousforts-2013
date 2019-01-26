@@ -143,7 +143,7 @@ void CTitleScreen::InitSettings()
 		m_pTitle->SetContentAlignment( vgui::Label::a_west );
 	}
 
-	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/sourcescheme.res", "sourcescheme" );
+	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/SourceScheme.res", "SourceScheme" );
 	HFont titleFont = vgui::scheme()->GetIScheme( scheme )->GetFont( "LFTitle" );
 	m_hoverFont = vgui::scheme()->GetIScheme( scheme )->GetFont( "LFToolTip" );
 	m_pTitle->SetFont( titleFont );

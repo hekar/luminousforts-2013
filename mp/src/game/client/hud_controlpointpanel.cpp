@@ -438,7 +438,7 @@ CHudCapturePanel::CHudCapturePanel( const char *pElementName ) : CHudElement( pE
 	m_pMessage = new vgui::Label( this, "CapturePanelMessage", " " );
 
 	// load control settings...
-	LoadControlSettings( "resource/UI/HudCapturePanel.res" );
+	LoadControlSettings( "resource/ui/HudCapturePanel.res" );
 }
 
 //-----------------------------------------------------------------------------
@@ -468,7 +468,7 @@ void CHudCapturePanel::LevelInit( void )
 //-----------------------------------------------------------------------------
 void CHudCapturePanel::OnScreenSizeChanged( int iOldWide, int iOldTall )
 {
-	LoadControlSettings( "resource/UI/HudCapturePanel.res" );
+	LoadControlSettings( "resource/ui/HudCapturePanel.res" );
 }
 
 //-----------------------------------------------------------------------------

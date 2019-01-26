@@ -30,7 +30,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 CPanelOptionsMisc::CPanelOptionsMisc( vgui::Panel *Parent ) :
 	BaseClass( Parent, "PanelOptionsMisc" )
 {
-	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/sourcescheme.res", "sourcescheme" );
+	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/SourceScheme.res", "SourceScheme" );
 	SetScheme( scheme );
 	LoadControlSettings( "resource/ui/Options_Misc.res" );
 }

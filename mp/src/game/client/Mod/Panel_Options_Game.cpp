@@ -30,7 +30,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 CPanelOptionsGame::CPanelOptionsGame( vgui::Panel *Parent ) :
 	BaseClass( Parent, "PanelOptionsGame" )
 {
-	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/sourcescheme.res", "sourcescheme" );
+	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/SourceScheme.res", "SourceScheme" );
 	SetScheme( scheme );
 	LoadControlSettings( "resource/ui/Options_Game.res" );
 }

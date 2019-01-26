@@ -117,7 +117,7 @@ void CTextWindow::ApplySchemeSettings( IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
-	LoadControlSettings("Resource/UI/TextWindow.res");
+	LoadControlSettings("resource/ui/TextWindow.res");
 
 	Reset();
 }

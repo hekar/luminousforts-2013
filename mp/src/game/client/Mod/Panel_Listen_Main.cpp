@@ -35,7 +35,7 @@ static CDllDemandLoader g_GameUI( "gameui" );
 CPanelListenMain::CPanelListenMain( vgui::Panel *Parent ) :
 	BaseClass( Parent, "PanelListenMain" )
 {
-	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/sourcescheme.res", "sourcescheme" );
+	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFile( "resource/SourceScheme.res", "SourceScheme" );
 	SetScheme( scheme );
 	LoadControlSettings( "resource/ui/Listen_Main.res" );
 	

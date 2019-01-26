@@ -3820,7 +3820,7 @@ BaseClass(parent, panelName)
 void SixenseBaseWarning::ApplySchemeSettings(vgui::IScheme *pScheme)
 {
 	BaseClass::ApplySchemeSettings(pScheme);
-	LoadControlSettings("resource/UI/basemodui/SixenseBaseWarning.res");
+	LoadControlSettings("resource/ui/basemodui/SixenseBaseWarning.res");
 }
 
 #endif

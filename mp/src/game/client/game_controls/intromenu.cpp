@@ -59,7 +59,7 @@ void CIntroMenu::ApplySchemeSettings( IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
-	LoadControlSettings("Resource/UI/IntroMenu.res");
+	LoadControlSettings("resource/ui/IntroMenu.res");
 
 	m_pTitleLabel = dynamic_cast<Label *>( FindChildByName( "titlelabel" ) );
 }

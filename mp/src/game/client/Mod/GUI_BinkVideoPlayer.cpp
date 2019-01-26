@@ -84,7 +84,7 @@ CON_COMMAND( smod_panel_binkvideo_show, "Show Video Player Window" )
 CBinkWindow::CBinkWindow( vgui::VPANEL parent ) :
 	BaseClass( NULL, "BinkWindow" )
 {
-	SetScheme(vgui::scheme()->LoadSchemeFromFile( "resource/sourcescheme.res", "sourcescheme" ) );
+	SetScheme(vgui::scheme()->LoadSchemeFromFile( "resource/SourceScheme.res", "SourceScheme" ) );
 	LoadControlSettings( "resource/ui/BinkPlayer.res" );
 
 	SetTitle( "#lf_video_tutorial_title", true );

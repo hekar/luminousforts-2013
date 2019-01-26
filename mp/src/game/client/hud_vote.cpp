@@ -228,7 +228,7 @@ void CVoteSetupDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 
 	SetProportional( true );
 
-	LoadControlSettings( "Resource/UI/VoteHud.res" );
+	LoadControlSettings( "resource/ui/VoteHud.res" );
 
 	m_pComboBox->GetComboButton()->SetFgColor( Color( 117,107,94,255 ) ); 
 	m_pComboBox->GetComboButton()->SetDefaultColor( Color( 117,107,94,255), Color( 0,0,0,0) );
@@ -896,7 +896,7 @@ void CHudVote::ApplySchemeSettings( vgui::IScheme *pScheme )
 
 	SetProportional( true );
 
-	LoadControlSettings( "Resource/UI/VoteHud.res" );
+	LoadControlSettings( "resource/ui/VoteHud.res" );
 }
 
 //-----------------------------------------------------------------------------
