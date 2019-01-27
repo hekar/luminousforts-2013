@@ -126,8 +126,8 @@ BEGIN_PREDICTION_DATA( CWeaponPistol )
 END_PREDICTION_DATA()
 #endif
 
-LINK_ENTITY_TO_CLASS( weapon_pistol, CWeaponPistol );
-PRECACHE_WEAPON_REGISTER( weapon_pistol );
+LINK_ENTITY_TO_CLASS( weapon_hl2_pistol, CWeaponPistol );
+PRECACHE_WEAPON_REGISTER( weapon_hl2_pistol );
 
 #ifndef CLIENT_DLL
 acttable_t CWeaponPistol::m_acttable[] = 

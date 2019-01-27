@@ -131,8 +131,8 @@ BEGIN_PREDICTION_DATA( CWeaponFrag )
 END_PREDICTION_DATA()
 #endif
 
-LINK_ENTITY_TO_CLASS( weapon_frag, CWeaponFrag );
-PRECACHE_WEAPON_REGISTER(weapon_frag);
+LINK_ENTITY_TO_CLASS( weapon_hl2_frag, CWeaponFrag );
+PRECACHE_WEAPON_REGISTER(weapon_hl2_frag);
 
 CWeaponFrag::CWeaponFrag( void ) :
 	CBaseHL2MPCombatWeapon()
