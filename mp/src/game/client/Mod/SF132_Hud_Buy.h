@@ -40,7 +40,7 @@ class CSF132HudBuy : public vgui::Frame, public IViewPortPanel
 public:
 	CSF132HudBuy( vgui::Panel *Parent );
 
-	const char *GetName( void ) { return PANEL_BUYMENU; }
+	const char *GetName( void ) { return "buy"; }
 	void SetData(KeyValues *data) {}
 	void Reset( void ) {}
 	void Update( void ) {}

@@ -51,14 +51,14 @@ enum BlockStatus_t
 class CBlockBase : public CPhysicsProp, public CGameEventListener
 {
 public:
-	DECLARE_CLASS (CBlockBase, CPhysicsProp);
+	DECLARE_CLASS(CBlockBase, CPhysicsProp);
 	DECLARE_SERVERCLASS();
-	DECLARE_DATADESC ();
+	DECLARE_DATADESC();
 
-	CBlockBase ();
-	virtual ~CBlockBase ();
+	CBlockBase();
+	virtual ~CBlockBase();
 
-	bool IsBlock() { return true; }
+	virtual bool IsBlock( void ) const { return true; }
 
 	virtual void Precache( void );
 	virtual void Spawn( void );

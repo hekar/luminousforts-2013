@@ -45,7 +45,6 @@ void CDomLinearZoneManager::RegisterLinks()
 	for ( unsigned int i = 0; i < linearZones.Count(); i++ )
 	{
 		CDomLinearZone *zone = linearZones.Element( i );
-		int zoneId = zone->GetZoneId();
 
 		if ( zone != NULL )
 		{

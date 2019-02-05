@@ -49,7 +49,7 @@ public:
 	int GetLastFrozenByUserID() const { return m_iUserIDFreezer; }
 	int GetLastUnFrozenByUserID() const { return m_iUserIDUnFreezer; }
 
-	bool IsBlock() { return true; }
+	virtual bool IsBlock( void ) const { return true; }
 
 private:
 	int m_iHealth;

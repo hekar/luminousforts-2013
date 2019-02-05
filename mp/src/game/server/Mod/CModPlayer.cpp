@@ -94,6 +94,19 @@ CModPlayer *CModPlayer::CreatePlayer( const char *className, edict_t *ed )
 	return ( CModPlayer* )CreateEntityByName( className );
 }
 
+bool CModPlayer::CanBecomeRagdoll( void )
+{
+	if ( GameRules()->GetGameMode() == GAMEMODE_CLASSIC &&
+		ClassicGameRules()->GetCurrentPhaseID() == PHASE_BUILD )
+	{
+		return false;
+	}
+	else
+	{
+		return BaseClass::CanBecomeRagdoll();
+	}
+}
+
 CFlagBase *CModPlayer::GetFlag()
 {
 	return ( CFlagBase * ) m_pFlag;
@@ -500,6 +513,10 @@ void CModPlayer::RemoveFromHud( unsigned int hud )
 void CModPlayer::AddToHud( unsigned int hud )
 {
 	m_Local.m_iHideHUD |= hud;
+}
+
+void CModPlayer::Weapon_DropAll(bool bDisallowWeaponPickup)
+{
 }
 
 bool CModPlayer::HandleCommand_JoinClass( int iClass )

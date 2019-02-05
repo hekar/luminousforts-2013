@@ -41,7 +41,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "in_buttons.h"
 #include "hl2mp/weapon_physcannon.h"
 #ifndef CLIENT_DLL
-#include "CBlockBase.h"
+#include "Mod/CBlockBase.h"
 #endif
 #include "SF132_GameRules.h"
 
@@ -140,7 +140,7 @@ void CWeaponSF132Cannon::ItemPostFrame( void )
 	}
 
 #ifndef CLIENT_DLL
-	if ( pOwner->m_nButtons & IN_FREEZE &&
+	if ( pOwner->m_nButtons & IN_RELOAD &&
 		gpGlobals->curtime - m_flLastFreezeTime >= 1.0 &&
 		sf132_allow_physcannon_freeze.GetBool())
 	{

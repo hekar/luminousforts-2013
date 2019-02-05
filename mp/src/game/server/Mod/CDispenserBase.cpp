@@ -116,8 +116,8 @@ ProtectedMethod void CDispenserBase::HealPlayer( CBasePlayer *pPlayer )
 // shit code, omg
 ProtectedMethod void CDispenserBase::StockPlayer( CBasePlayer *pPlayer )
 {
-	CHL2MP_Player *hl2player = ToHL2MPPlayer( pPlayer );
 #if 0
+	CHL2MP_Player *hl2player = ToHL2MPPlayer( pPlayer );
 	int team = hl2player->GetTeamNumber();
 	CTeam *pTeam = GetGlobalTeam( team );
 

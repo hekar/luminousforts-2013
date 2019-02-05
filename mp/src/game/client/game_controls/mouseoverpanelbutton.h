@@ -79,14 +79,14 @@ public:
 	const char *GetClassPage( const char *className )
 	{
 		static char classPanel[ _MAX_PATH ];
-		Q_snprintf( classPanel, sizeof( classPanel ), "classes/%s.res", className);
+		Q_snprintf( classPanel, sizeof( classPanel ), "resource/classes/%s.res", className);
 
 		if ( g_pFullFileSystem->FileExists( classPanel, IsX360() ? "MOD" : "GAME" ) )
 		{
 		}
-		else if (g_pFullFileSystem->FileExists( "classes/default.res", IsX360() ? "MOD" : "GAME" ) )
+		else if (g_pFullFileSystem->FileExists( "resource/classes/default.res", IsX360() ? "MOD" : "GAME" ) )
 		{
-			Q_snprintf ( classPanel, sizeof( classPanel ), "classes/default.res" );
+			Q_snprintf ( classPanel, sizeof( classPanel ), "resource/classes/default.res" );
 		}
 		else
 		{

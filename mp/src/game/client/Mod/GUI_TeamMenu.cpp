@@ -134,19 +134,6 @@ void CModTeamMenu::OnCommand( const char *command )
 {
 	if ( Q_stricmp( command, "vguicancel" ) )
 	{
-		C_ModPlayer *pPlayer = C_ModPlayer::GetLocalModPlayer();
-		
-		if ( !Q_stricmp( command, "jointeam 2" ) )
-		{
-			// TODO: Implement local team number
-			//pPlayer->SetLocalTeamNumber( Mod_TEAM_BLUE );
-		}
-		else if ( !Q_stricmp( command, "jointeam 3" ) )
-		{
-			// TODO: Implement local team number
-			//pPlayer->SetLocalTeamNumber( Mod_TEAM_RED );
-		}
-
 		engine->ClientCmd( command );
 	}
 

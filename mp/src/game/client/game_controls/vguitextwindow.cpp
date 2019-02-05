@@ -108,6 +108,9 @@ CTextWindow::CTextWindow(IViewPort *pViewPort) : Frame(NULL, PANEL_INFO	)
 	m_pOK->SetCommand("okay");
 	m_pTextMessage->SetMultiline( true );
 	m_nContentType = TYPE_TEXT;
+
+	LoadControlSettings("resource/ui/TextWindow.res");
+	InvalidateLayout();
 }
 
 //-----------------------------------------------------------------------------
@@ -116,8 +119,6 @@ CTextWindow::CTextWindow(IViewPort *pViewPort) : Frame(NULL, PANEL_INFO	)
 void CTextWindow::ApplySchemeSettings( IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
-
-	LoadControlSettings("resource/ui/TextWindow.res");
 
 	Reset();
 }

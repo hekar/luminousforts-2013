@@ -88,7 +88,6 @@ const char *CSF132GameRules::GetGameDescription( void )
 
 bool CSF132GameRules::IsAllowedToSpawn( CBaseEntity *pEntity )
 {
-	if ( pEntity->
 	return BaseClass::IsAllowedToSpawn( pEntity );
 }
 

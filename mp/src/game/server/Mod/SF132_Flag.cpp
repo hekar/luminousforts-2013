@@ -34,15 +34,15 @@ the terms of any one of the MPL, the GPL or the LGPL.
 ===============================================================*/
 #include "cbase.h"
 #ifdef MOD_SF132
-#include "sdk_team.h"
-#include "hl2mp_player.h"
+#include "team.h"
+#include "CModPlayer.h"
 #include "CFlagBase.h"
 #include "CFlagClassic.h"
 #include "SF132_Flag.h"
 
 void CSF132FlagBase::OnScore()
 {
-	CTeam *pTeam = GetGlobalSDKTeam( GetTeamNumber() );
+	CTeam *pTeam = GetGlobalTeam((GetTeamNumber() == SDK_TEAM_RED) ? SDK_TEAM_BLUE : SDK_TEAM_RED);
 	if ( !pTeam )
 	{
 		Error( "Flag has no team" );
@@ -68,16 +68,16 @@ void CSF132FlagBase::OnPlayerTouch( CBasePlayer *pPlayer )
 {
 	if ( !m_bDropped )
 	{
-		CHL2MP_Player *pSDKPlayer = ToSDKPlayer( pPlayer );
-		if ( pSDKPlayer )
+		CModPlayer *pModPlayer = ToModPlayer( pPlayer );
+		if (pModPlayer)
 		{
-			if ( pSDKPlayer->HasFlag() )
+			if (pModPlayer->HasFlag())
 			{
 				OnScore();
 				OnScoreEvent();
 				OnScoreOutput();
 
-				pSDKPlayer->ReturnFlag( true );
+				pModPlayer->ReturnFlag(true);
 			}
 		}
 	}

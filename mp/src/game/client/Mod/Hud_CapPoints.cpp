@@ -80,7 +80,7 @@ bool CHudCapPoints::ShouldDraw( void )
  */
 void CHudCapPoints::Paint( void )
 {
-	int x = 0; int y = 0;
+	int x = 0;
 	for ( int i = 0; i < m_CPs.Count(); i++ )
 	{
 		C_DomCaptureZone *cp = m_CPs.Element( i );
@@ -90,9 +90,9 @@ void CHudCapPoints::Paint( void )
 			continue;
 		}
 
-		int w = m_BarWidth; int h = m_BarHeight;
+		int w = m_BarWidth;
 		int percentage = cp->GetCapturePercentage();
-		int pw = w * (((float)percentage) / 100); int ph = h;
+		int pw = w * (((float)percentage) / 100);
 		
 		Color color = m_ProgressColorSpec;
 		Color borderColor = m_BorderColorSpec;

@@ -32,8 +32,8 @@ the terms of any one of the MPL, the GPL or the LGPL.
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-DECLARE_HUDELEMENT( CHudNotification );
-DECLARE_HUD_MESSAGE( CHudNotification, NotificationIcon );
+// DECLARE_HUDELEMENT( CHudNotification );
+// DECLARE_HUD_MESSAGE( CHudNotification, NotificationIcon );
 
 CHudNotification::CHudNotification( const char* pElementName ) :
 	CModHudElement( pElementName ),
@@ -69,13 +69,6 @@ bool CHudNotification::ShouldDraw (void)
 
 void CHudNotification::Paint( void )
 {
-	// Draw icons
-	for ( int i = 0; i < min( ICON_LIST_DISPLAY_AT_ONCE, m_IconList.Count() ); i++ )
-	{
-		IconNotify_t *icon = m_IconList.Element( i );
-		CHudTexture *texture = icon->icon;
-		
-	}
 }
 
 /**
@@ -85,8 +78,4 @@ void CHudNotification::Paint( void )
  */
 void CHudNotification::MsgFunc_NotificationIcon( bf_read& data )
 {
-	short icon = data.ReadShort();
-	int duration = data.ReadLong();
-
-	m_IconList.AddToTail( );
 }

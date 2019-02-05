@@ -88,7 +88,7 @@ PRECACHE_WEAPON_REGISTER( weapon_lf_railgun );
 //	Name: CWeaponRailgun
 //	Author: Hekar Khani
 //	Description: A Railgun
-//		(kinda like a laser rifle, but it can shoot through certain object)
+//		(kinda like a laser rifle, but it can shoot through certain objects)
 //	Notes:
 //
 CWeaponRailgun::CWeaponRailgun()

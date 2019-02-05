@@ -33,7 +33,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #ifdef MOD_SF132
 
-#include "ClassicGameRules.h"
+#include "Mod/ClassicGameRules.h"
 
 #ifdef CLIENT_DLL
 #define CSF132GameRules C_SF132GameRules

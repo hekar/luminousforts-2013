@@ -56,6 +56,8 @@ public:
 
 	static CModPlayer *CreatePlayer( const char *className, edict_t *ed );
 
+	bool CanBecomeRagdoll( void );
+
 	CFlagBase *GetFlag();
 
 	// Has touched the flag before
@@ -101,6 +103,8 @@ public:
 
 	virtual void RemoveFromHud( unsigned int hud );
 	virtual void AddToHud( unsigned int hud );
+
+	virtual void Weapon_DropAll(bool bDisallowWeaponPickup = false);
 
 	virtual bool HandleCommand_JoinClass( int iClass );
 

@@ -733,7 +733,6 @@ int CClassicGameRules::CountPlayerClass( int team, int cls )
 
 bool CClassicGameRules::IsPlayerClassOnTeam( int cls, int team )
 {
-	CTeam *pTeam = GetGlobalTeam( team );
 	return (cls >= 0 && cls < CLASSIC_GAME_CLASSCOUNT);
 }
 

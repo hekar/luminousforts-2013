@@ -6798,47 +6798,6 @@ void CBasePlayer::UpdateClientData( void )
 		world->SetDisplayTitle( false );
 	}
 
-	if (m_ArmorValue != m_iClientBattery)
-	{
-		m_iClientBattery = m_ArmorValue;
-
-		// send "battery" update message
-		if ( usermessages->LookupUserMessage( "Battery" ) != -1 )
-		{
-			UserMessageBegin( user, "Battery" );
-				WRITE_SHORT( (int)m_ArmorValue);
-			MessageEnd();
-		}
-	}
-
-#if 0 // BYE BYE!!
-	// Update Flashlight
-	if ((m_flFlashLightTime) && (m_flFlashLightTime <= gpGlobals->curtime))
-	{
-		if (FlashlightIsOn())
-		{
-			if (m_iFlashBattery)
-			{
-				m_flFlashLightTime = FLASH_DRAIN_TIME + gpGlobals->curtime;
-				m_iFlashBattery--;
-				
-				if (!m_iFlashBattery)
-					FlashlightTurnOff();
-			}
-		}
-		else
-		{
-			if (m_iFlashBattery < 100)
-			{
-				m_flFlashLightTime = FLASH_CHARGE_TIME + gpGlobals->curtime;
-				m_iFlashBattery++;
-			}
-			else
-				m_flFlashLightTime = 0;
-		}
-	}
-#endif 
-
 	CheckTrainUpdate();
 
 	// Update all the items

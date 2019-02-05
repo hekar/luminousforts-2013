@@ -79,7 +79,7 @@ CGUIOptions::CGUIOptions( vgui::VPANEL parent ) :
 	GetPropertySheet()->SetDraggableTabs( false );
 
 	AddPage( new CPanelOptionsGame( this ), "Game", false );
-	AddPage( new CPanelOptionsFMOD( this ), "Music", false );
+	//AddPage( new CPanelOptionsFMOD( this ), "Music", false );
 	AddPage( new CPanelOptionsTitle( this ), "Titlescreen", false );
 	AddPage( new CPanelOptionsHud( this ), "Hud", false );
 	AddPage( new CPanelOptionsMisc( this ), "Misc", false );

@@ -102,14 +102,8 @@ the terms of any one of the MPL, the GPL or the LGPL.
 // Sourceforts 194 backward map compatiblity
 // (Can only be enabled with MOD_CLASSIC enabled)
 #ifdef MOD_CLASSIC
+#define MOD_SF132
 #define MOD_SF194
-#endif // MOD_CLASSIC
-
-#if defined( MOD_CLASSIC ) && !defined( MOD_SF194 )
-// Same goes for the SF 132 gamemode. Needs classicmode, 
-// but cannot have 194 support
-// Sourceforts 132 Gamemode and map compatibilty
-// #define MOD_SF132
 #endif 
 
 //----------------------------------------------------------------------

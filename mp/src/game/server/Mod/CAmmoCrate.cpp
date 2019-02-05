@@ -221,6 +221,11 @@ void CAmmoCrate::GiveAmmo( CBasePlayer *pBasePlayer )
 			pWeapon = dynamic_cast< CBaseCombatWeapon * > (pPlayer->GiveNamedItem( buf ));
 		}
 
+		if ( !pWeapon )
+		{
+			continue;
+		}
+
 		// Do not restock the slam
 		if ( !Q_strcmp( pWeapon->GetClassname(), "weapon_hl2_slam" ) )
 		{

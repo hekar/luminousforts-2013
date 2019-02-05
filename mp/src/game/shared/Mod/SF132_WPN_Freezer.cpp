@@ -36,7 +36,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #include "cbase.h"
 #ifdef MOD_SF132
-#include "weapon_sdkbase.h"
 #include "ieffects.h"
 
 #if defined( CLIENT_DLL )
@@ -55,10 +54,10 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #define UNFREEZE_DELAY 5.0f
 
 
-class CWeaponFreezer : public CWeaponSDKBase
+class CWeaponFreezer : public CBaseCombatWeapon
 {
 public:
-	DECLARE_CLASS( CWeaponFreezer, CWeaponSDKBase );
+	DECLARE_CLASS(CWeaponFreezer, CBaseCombatWeapon);
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
 	DECLARE_ACTTABLE();

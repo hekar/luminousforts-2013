@@ -50,7 +50,7 @@ private:
 	CPanelAnimationVarAliasType( int, m_iTextY, "text_ypos", "8", "proportional_int" );
 };
 
-DECLARE_HUDELEMENT( CTeamPlayHud );
+// DECLARE_HUDELEMENT( CTeamPlayHud );
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor

@@ -240,7 +240,7 @@ public:
 
 
 	// For weapon strip
-	void				Weapon_DropAll( bool bDisallowWeaponPickup = false );
+	virtual void		Weapon_DropAll( bool bDisallowWeaponPickup = false );
 
 	virtual bool			AddPlayerItem( CBaseCombatWeapon *pItem ) { return false; }
 	virtual bool			RemovePlayerItem( CBaseCombatWeapon *pItem ) { return false; }

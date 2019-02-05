@@ -37,7 +37,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "cbase.h"
 #ifdef MOD_SF132
 #include "hl2mp_player.h"
-#include "weapon_sdkbase.h"
 #include "CModPlayer.h"
 #include "SF132_GameRules.h"
 #include "SF132_ItemRegister.h"
@@ -121,10 +120,10 @@ void CItemRegister::AddItem( const BoughtItem_t& Item )
 
 void CItemRegister::GiveItems( CBasePlayer *pPlayer )
 {
-	CHL2MP_Player *pSDKPlayer = ToSDKPlayer( pPlayer );
+	CModPlayer *pModPlayer = ToModPlayer(pPlayer);
 	for (int i = 0; i < m_Items.Count(); i++)
 	{
-		GiveItem( pSDKPlayer, m_Items [i].name );	
+		GiveItem(pModPlayer, m_Items[i].name);
 	}
 }
 

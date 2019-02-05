@@ -5666,7 +5666,6 @@ int CNPC_Hunter::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 		float flDamage = myInfo.GetDamage();
 		if ( flDamage < HUNTER_MIN_PHYSICS_DAMAGE )
 		{
-			//DevMsg( "hunter: <<<< ZERO PHYSICS DAMAGE: %f\n", flDamage );
 			myInfo.SetDamage( 0 );
 		}
 		else

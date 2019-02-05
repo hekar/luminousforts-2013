@@ -1596,19 +1596,6 @@ void CBaseCombatCharacter::Event_Killed( const CTakeDamageInfo &info )
 		forceVector += pMagnet->GetForceVector( this );
 	}
 
-	CBaseCombatWeapon *pDroppedWeapon = m_hActiveWeapon.Get();
-
-	// Drop any weapon that I own
-	if ( VPhysicsGetObject() )
-	{
-		Vector weaponForce = forceVector * VPhysicsGetObject()->GetInvMass();
-		Weapon_Drop( m_hActiveWeapon, NULL, &weaponForce );
-	}
-	else
-	{
-		Weapon_Drop( m_hActiveWeapon );
-	}
-	
 	// if flagged to drop a health kit
 	if (HasSpawnFlags(SF_NPC_DROP_HEALTHKIT))
 	{
@@ -1626,7 +1613,7 @@ void CBaseCombatCharacter::Event_Killed( const CTakeDamageInfo &info )
 	SendOnKilledGameEvent( info );
 
 	// Ragdoll unless we've gibbed
-	if ( ShouldGib( info ) == false )
+	if ( ShouldGib(info) == false && CanBecomeRagdoll() )
 	{
 		bool bRagdollCreated = false;
 		if ( (info.GetDamageType() & DMG_DISSOLVE) && CanBecomeRagdoll() )
@@ -1638,23 +1625,7 @@ void CBaseCombatCharacter::Event_Killed( const CTakeDamageInfo &info )
 			}
 
 			bRagdollCreated = Dissolve( NULL, gpGlobals->curtime, false, nDissolveType );
-
-			// Also dissolve any weapons we dropped
-			if ( pDroppedWeapon )
-			{
-				pDroppedWeapon->Dissolve( NULL, gpGlobals->curtime, false, nDissolveType );
-			}
 		}
-#ifdef HL2_DLL
-		else if ( PlayerHasMegaPhysCannon() )
-		{
-			if ( pDroppedWeapon )
-			{
-				pDroppedWeapon->Dissolve( NULL, gpGlobals->curtime, false, ENTITY_DISSOLVE_NORMAL );
-			}
-		}
-#endif
-
 		if ( !bRagdollCreated && ( info.GetDamageType() & DMG_REMOVENORAGDOLL ) == 0 )
 		{
 			BecomeRagdoll( info, forceVector );
@@ -1663,14 +1634,6 @@ void CBaseCombatCharacter::Event_Killed( const CTakeDamageInfo &info )
 	
 	// no longer standing on a nav area
 	ClearLastKnownArea();
-
-#if 0
-	// L4D specific hack for zombie commentary mode
-	if( GetOwnerEntity() != NULL )
-	{
-		GetOwnerEntity()->DeathNotice( this );
-	}
-#endif
 	
 #ifdef NEXT_BOT
 	// inform bots

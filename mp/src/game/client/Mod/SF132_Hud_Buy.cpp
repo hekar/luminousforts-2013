@@ -39,17 +39,16 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #ifdef MOD_SF132
 #include <vgui/ISurface.h>
 #include <vgui/ILocalize.h>
+#include <game/client/iviewport.h>
 #include "c_team.h"
-#include "c_hl2mp_player.h"
+#include "C_ModPlayer.h"
 #include "c_playerresource.h"
-#include "sdk_backgroundpanel.h"
-#include "SDKViewPort.h"
 
 #include "IGameUIFuncs.h" // for key bindings
 
 #include "Hud_Base.h"
 #include "ClientGlobals.h"
-#include "ClassicGameRules.h"
+#include "Mod/ClassicGameRules.h"
 #include "SF132_Hud_Buy.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -58,7 +57,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 bool g_IsVisible = false;
 
 CSF132HudBuy::CSF132HudBuy( vgui::Panel *Parent ) :
-	BaseClass( NULL, PANEL_BUYMENU )
+	BaseClass( NULL, "buy" )
 {
 	SetScheme( "sourcescheme" );
 	LoadControlSettings( "resource/ui/SF132_BuyMenu.res" );
@@ -77,7 +76,7 @@ CSF132HudBuy::CSF132HudBuy( vgui::Panel *Parent ) :
 
 bool CSF132HudBuy::ShouldDraw()
 {
-	C_HL2MP_Player *pPlayer = C_HL2MP_Player::GetLocalSDKPlayer();
+	C_ModPlayer *pPlayer = C_ModPlayer::GetLocalModPlayer();
 	if ( !pPlayer )
 		return false;
 
@@ -96,7 +95,7 @@ void CSF132HudBuy::PaintBackground()
 
 	BaseClass::PaintBackground();
 
-	C_HL2MP_Player *pLocalPlayer = C_HL2MP_Player::GetLocalSDKPlayer();
+	C_ModPlayer *pLocalPlayer = C_ModPlayer::GetLocalModPlayer();
 
 	if ( !pLocalPlayer )
 		return;
@@ -171,7 +170,7 @@ CON_COMMAND( sf132_buymenu_toggle, "Toggle the Display of the Buy Menu" )
 	if ( gViewPortInterface )
 	{
 		g_IsVisible = !g_IsVisible;
-		gViewPortInterface->ShowPanel( PANEL_BUYMENU, g_IsVisible );
+		gViewPortInterface->ShowPanel( "buy", g_IsVisible );
 	}
 }
 
