@@ -35,10 +35,12 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #include "cbase.h"
 #ifdef MOD_SF132
-#include "CSpawnPoint.h"
+#ifndef CLIENT_DLL
+#include "Mod/CSpawnPoint.h"
 #include "SF132_SpawnPoint.h"
 
 LINK_ENTITY_TO_CLASS( info_player_rebel, CRedSpawnPoint );
 LINK_ENTITY_TO_CLASS( info_player_combine, CBlueSpawnPoint );
 
+#endif
 #endif // MOD_SF132

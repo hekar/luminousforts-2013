@@ -143,10 +143,6 @@ public:
 					switch ( m_Type )
 					{
 						case DPT_Int : 
-<<<<<<< HEAD
-							#pragma GCC diagnostic ignored "-Wformat"
-=======
->>>>>>> e9ad9827... commit
 							Q_snprintf( text, sizeof(text), "%i", m_Int );
 							break;
 						case DPT_Float :
