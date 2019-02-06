@@ -5,7 +5,8 @@ services:
 
 before_install:
   - 'docker pull ubuntu:14.04'
-  - 'docker run -t -i -w $(pwd) -e BUILDPATH=$(pwd) -v $(pwd):$(pwd) ubuntu:14.04 "/bin/bash ./.travis-build.sh"'
+  - 'echo $(pwd)'
+  - 'docker run -t -i -w $(pwd) -e BUILDPATH=$(pwd) -v $(pwd):$(pwd) ubuntu:14.04 "./.travis-build.sh"'
 
 notifications:
   recipients:
