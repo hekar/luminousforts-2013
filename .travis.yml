@@ -1,22 +1,15 @@
 language: cpp
-compiler:
-    - gcc
+
+services:
+  - docker
+
+before_install:
+  - 'docker pull ubuntu:14.04'
+  - 'docker run -t -i -w $(pwd) -e BUILDPATH=$(pwd) -v $(pwd):$(pwd) ubuntu:14.04 "/bin/bash ./.travis-build.sh"'
+
 notifications:
   recipients:
     - hekark@gmail.com
   email:
     on_success: change
     on_failure: always
-branches:
-  only:
-    - dev
-script: |
-    wget http://media.steampowered.com/client/runtime/steam-runtime-sdk_latest.tar.xz
-    tar xvf steam-runtime-sdk_latest.tar.xz
-    rm steam-runtime-sdk_latest.tar.xz
-    ls
-    cd steam-runtime-sdk_*
-    ls
-    export AUTO_UPGRADE=true
-    ./setup.sh --host=i368 --target=i386 --release
-    ./shell.sh --arch=i386 "cd mp/src/ && creategameprojects && make -f games.mak"
