@@ -303,8 +303,6 @@ void CFlagClassic::OnScore()
 	m_pPlayerWithFlag->AddPoints( FLAG_CLASSIC_PLAYER_CAPTURE_POINTS, false );
 	pTeam->AddCapturePoints( FLAG_CLASSIC_CAPTURE_POINTS );
 
-	Msg ( "Score %d\n", pTeam->GetCapturePoints() );
-
 	switch( GetTeamNumber() )
 	{
 		case SDK_TEAM_BLUE:

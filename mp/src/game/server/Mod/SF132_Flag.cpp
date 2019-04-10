@@ -50,8 +50,6 @@ void CSF132FlagBase::OnScore()
 
 	pTeam->AddCapturePoints( FLAG_CLASSIC_CAPTURE_POINTS );
 
-	Msg ( "Score %d\n", pTeam->GetCapturePoints() );
-
 	switch( GetTeamNumber() )
 	{
 		case SDK_TEAM_BLUE:
