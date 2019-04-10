@@ -147,7 +147,11 @@ public:
 
 	virtual bool	CanHearAndReadChatFrom( CBasePlayer *pPlayer );
 
-		
+protected:
+	CNetworkVar( int, m_iRunSpeed );
+	CNetworkVar( int, m_iSprintSpeed );
+	CNetworkVar( int, m_iProneSpeed );
+
 private:
 
 	CNetworkQAngle( m_angEyeAngles );

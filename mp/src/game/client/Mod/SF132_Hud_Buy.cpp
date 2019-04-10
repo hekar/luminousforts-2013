@@ -109,7 +109,7 @@ void CSF132HudBuy::PaintBackground()
 		vgui::surface()->DrawSetTextPos( 5, posy );
 
 		vgui::surface()->DrawSetTextColor( LF_CLR_WHITE );
-		Q_snprintf( text, sizeof( text ), "%02d. %s Price: %02d\0", (i + 1), g_WeaponCommands[i].WeaponName, g_WeaponCommands[i].Price );
+		Q_snprintf( text, sizeof( text ), "%02d. %s Price: %02d", (i + 1), g_WeaponCommands[i].WeaponName, g_WeaponCommands[i].Price );
 
 		g_pVGuiLocalize->ConvertANSIToUnicode( text, wtext, sizeof( wtext ) );
 		vgui::surface()->DrawPrintText( wtext, Q_wcslen( wtext ) );

@@ -97,11 +97,11 @@ public:
 	virtual int GetDesiredPlayerClass() const { return m_HL2Local.m_iDesiredPlayerClass; }
 	virtual void SetDesiredPlayerClass(int playerclass) { m_HL2Local.m_iDesiredPlayerClass = playerclass; }
 
-	virtual float GetRunSpeed() const  { return 400; }
-	virtual void SetRunSpeed(float speed) { }
+	virtual float GetRunSpeed() const  { return m_iRunSpeed; }
+	virtual void SetRunSpeed(float speed) { m_iRunSpeed = speed; }
 
-	virtual float GetSprintSpeed() const { return 420; }
-	virtual void SetSprintSpeed(float speed) { }
+	virtual float GetSprintSpeed() const { return m_iSprintSpeed; }
+	virtual void SetSprintSpeed(int speed) { m_iSprintSpeed = speed; }
 
 	virtual void RemoveFromHud( unsigned int hud );
 	virtual void AddToHud( unsigned int hud );

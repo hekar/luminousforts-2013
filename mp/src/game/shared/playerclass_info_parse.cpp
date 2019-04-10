@@ -304,21 +304,5 @@ void FilePlayerClassInfo_t::Parse( KeyValues *pKeyValuesData, const char *szPlay
 	m_flStaminaRestoreRate = pKeyValuesData->GetFloat( "StaminaRestoreRate", lf_combat_default_restorerate.GetFloat() );
 
 	m_iArmor			= pKeyValuesData->GetInt( "armor", 0 );
-
-
-#if defined(_DEBUG) && defined(HL2_CLIENT_DLL)
-
-	// Use this for class select keys
-
-	/*
-	// make sure two weapons aren't in the same slot & position
-	if (g_bUsedPlayerClassSlots[iSlot])
-	{
-		Msg( "Weapon slot info: %s (%d, %d)\n", szPrintName, iSlot, iPosition );
-		Warning( "Duplicately assigned weapon to slots in selection hud\n" );
-	}
-	g_bUsedPlayerClassSlots[iSlot][iPosition] = true;
-	*/
-#endif
 }
 

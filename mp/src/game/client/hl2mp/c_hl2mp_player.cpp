@@ -24,6 +24,9 @@ IMPLEMENT_CLIENTCLASS_DT(C_HL2MP_Player, DT_HL2MP_Player, CHL2MP_Player)
 	RecvPropFloat( RECVINFO( m_angEyeAngles[0] ) ),
 	RecvPropFloat( RECVINFO( m_angEyeAngles[1] ) ),
 	RecvPropEHandle( RECVINFO( m_hRagdoll ) ),
+	RecvPropInt( RECVINFO( m_iRunSpeed ) ),
+	RecvPropInt( RECVINFO( m_iSprintSpeed ) ),
+	RecvPropInt( RECVINFO( m_iProneSpeed ) ),
 	RecvPropInt( RECVINFO( m_iSpawnInterpCounter ) ),
 	RecvPropInt( RECVINFO( m_iPlayerSoundType) ),
 
@@ -47,6 +50,9 @@ C_HL2MP_Player::C_HL2MP_Player() : m_PlayerAnimState( this ), m_iv_angEyeAngles(
 {
 	m_iIDEntIndex = 0;
 	m_iSpawnInterpCounterCache = 0;
+	m_iRunSpeed = HL2_NORM_SPEED;
+	m_iSprintSpeed = HL2_SPRINT_SPEED;
+	m_iProneSpeed = HL2_WALK_SPEED;
 
 	m_angEyeAngles.Init();
 
@@ -578,7 +584,7 @@ void C_HL2MP_Player::StartSprinting( void )
 	filter.UsePredictionRules();
 	EmitSound( filter, entindex(), "HL2Player.SprintStart" );
 
-	SetMaxSpeed( HL2_SPRINT_SPEED );
+	SetMaxSpeed( m_iSprintSpeed );
 	m_fIsSprinting = true;
 }
 
@@ -587,7 +593,7 @@ void C_HL2MP_Player::StartSprinting( void )
 //-----------------------------------------------------------------------------
 void C_HL2MP_Player::StopSprinting( void )
 {
-	SetMaxSpeed( HL2_NORM_SPEED );
+	SetMaxSpeed( m_iRunSpeed );
 	m_fIsSprinting = false;
 }
 
@@ -642,7 +648,7 @@ void C_HL2MP_Player::HandleSpeedChanges( void )
 //-----------------------------------------------------------------------------
 void C_HL2MP_Player::StartWalking( void )
 {
-	SetMaxSpeed( HL2_WALK_SPEED );
+	SetMaxSpeed( m_iProneSpeed );
 	m_fIsWalking = true;
 }
 
@@ -650,7 +656,7 @@ void C_HL2MP_Player::StartWalking( void )
 //-----------------------------------------------------------------------------
 void C_HL2MP_Player::StopWalking( void )
 {
-	SetMaxSpeed( HL2_NORM_SPEED );
+	SetMaxSpeed( m_iRunSpeed );
 	m_fIsWalking = false;
 }
 
