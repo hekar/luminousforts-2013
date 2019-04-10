@@ -186,9 +186,9 @@ static const char *s_PreserveEnts[] =
 char *sTeamNames[] =
 {
 	"Unassigned",
-	"Spectator",
-	"Blue Patrol",
-	"Red Seekers",
+	"Spec",
+	"Blu",
+	"Red",
 };
 
 CHL2MPRules::CHL2MPRules()

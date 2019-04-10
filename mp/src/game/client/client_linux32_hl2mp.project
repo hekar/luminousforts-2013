@@ -738,6 +738,7 @@
       <File Name="../../game/shared/IVehicle.h"/>
       <File Name="../../game/shared/mapdata_shared.h"/>
       <File Name="../../game/shared/mapentities_shared.h"/>
+      <File Name="../../game/shared/Mod/ClassicGameRules.h"/>
       <File Name="../../game/shared/movevars_shared.h"/>
       <File Name="../../game/shared/mp_shareddefs.h"/>
       <File Name="../../game/shared/multiplay_gamerules.h"/>

@@ -51,13 +51,13 @@ ConVar	mp_limit_red_class_sf132( "mp_limit_red_class_sf132", "-1", FCVAR_REPLICA
 
 char *g_SF132GameRules_Classes_Blue [SF132_GAME_CLASSCOUNT + 1] =
 {
-	"blue_class_sf132",
+	"blue_sf132",
 	NULL
 };
 
 char *g_SF132GameRules_Classes_Red [SF132_GAME_CLASSCOUNT + 1] =
 {
-	"red_class_sf132",
+	"red_sf132",
 	NULL
 };
 

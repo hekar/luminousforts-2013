@@ -54,7 +54,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-bool g_IsVisible = false;
+static bool g_IsVisible = false;
 
 CSF132HudBuy::CSF132HudBuy( vgui::Panel *Parent ) :
 	BaseClass( NULL, "buy" )

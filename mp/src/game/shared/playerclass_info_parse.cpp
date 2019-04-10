@@ -20,6 +20,7 @@
 static CUtlDict< FilePlayerClassInfo_t*, unsigned short > m_PlayerClassInfoDatabase;
 
 #define MAX_PLAYERCLASSES	32
+#define MAX_DIGITS 2
 
 #ifdef _DEBUG
 
@@ -185,7 +186,7 @@ bool ReadPlayerClassDataFromFileForSlot( IFileSystem* filesystem, const char *sz
 		return true;
 
 	char sz[128];
-	Q_snprintf( sz, sizeof( sz ), "scripts/playerclass_%s", szPlayerClassName );
+	Q_snprintf( sz, sizeof( sz ), "scripts/pc_%s", szPlayerClassName );
 	KeyValues *pKV = ReadEncryptedKVFile( filesystem, sz, pICEKey );
 	if ( !pKV )
 		return false;
@@ -228,7 +229,7 @@ void FilePlayerClassInfo_t::Parse( KeyValues *pKeyValuesData, const char *szPlay
 	m_bParsedScript = true;
 
 	// Classname
-	Q_strncpy( m_szPlayerClassName, szPlayerClassName, MAX_WEAPON_STRING );
+	Q_strncpy( m_szPlayerClassName, szPlayerClassName, MAX_PLAYERCLASS_NAME_LENGTH );
 
 	// Printable name
 	Q_strncpy( m_szPrintName, pKeyValuesData->GetString( "printname", "!! Missing printname on Player Class" ), MAX_PLAYERCLASS_NAME_LENGTH );
@@ -262,31 +263,27 @@ void FilePlayerClassInfo_t::Parse( KeyValues *pKeyValuesData, const char *szPlay
 		Assert( false );
 	}
 
+	const int keyLength = sizeof( "weapon_" ) + MAX_DIGITS;
+	char keyName[ keyLength ];
+	int ammoKeyLength = sizeof( "weapon__ammo" ) + MAX_DIGITS;
+	char ammoKeyName[ ammoKeyLength ];
 	for (int i = 1; i <= WEAPON_MAX; i++)
 	{
-		// This code sucks...
-		int Length = strlen ("weapon_") + 3;
-		char *WeaponKeyName = new char [Length];
-		Q_snprintf (WeaponKeyName, Length, "weapon_%d", i);
-		const char *pszWeapon = pKeyValuesData->GetString( WeaponKeyName, NULL );
-
-		if (!pszWeapon) // At the end of the weaponlist, give up
+		Q_snprintf( keyName, keyLength, "weapon_%d", i );
+		
+		const char *pszWeapon = pKeyValuesData->GetString( keyName, NULL );
+		if( !pszWeapon )
 		{
+			Warning( "Weapon %s requested by class %s not found", keyName, m_szPlayerClassName );
 			break;
 		}
 
-		int iWeapon = AliasToWeaponID( pszWeapon );
+		int weaponId = AliasToWeaponID( pszWeapon );
+		m_WeaponVector.AddToTail( weaponId );
 
-		m_WeaponVector.AddToTail (iWeapon);
-		delete WeaponKeyName;
-
-		int AmmoLength = strlen ("weapon_ammo") + 4;
-		char *AmmoKeyName = new char [AmmoLength];
-		Q_snprintf (AmmoKeyName, AmmoLength, "weapon_%d_ammo", i);
-		int iAmmoCount = pKeyValuesData->GetInt( AmmoKeyName, 0 );
-
-		m_AmmoVector.AddToTail (iAmmoCount);
-		delete AmmoKeyName;
+		Q_snprintf( ammoKeyName, ammoKeyLength, "weapon_%d_ammo", i );
+		int ammoCount = pKeyValuesData->GetInt( ammoKeyName, 0 );
+		m_AmmoVector.AddToTail( ammoCount );
 
 		m_iWeaponCount = i;
 	}

@@ -26,7 +26,7 @@ ConVar mp_forcecamera(
 #ifdef CSTRIKE
 	"0", 
 #else
-	"1",
+	"0",
 #endif
 	FCVAR_REPLICATED,
 	"Restricts spectator modes for dead players"

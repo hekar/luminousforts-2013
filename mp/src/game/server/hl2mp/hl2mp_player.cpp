@@ -859,14 +859,14 @@ bool CHL2MP_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 
 void CHL2MP_Player::ChangeTeam( int iTeam )
 {
-/*	if ( GetNextTeamChangeTime() >= gpGlobals->curtime )
+	if ( GetNextTeamChangeTime() >= gpGlobals->curtime )
 	{
 		char szReturnString[128];
 		Q_snprintf( szReturnString, sizeof( szReturnString ), "Please wait %d more seconds before trying to switch teams again.\n", (int)(GetNextTeamChangeTime() - gpGlobals->curtime) );
 
 		ClientPrint( this, HUD_PRINTTALK, szReturnString );
 		return;
-	}*/
+	}
 
 	bool bKill = false;
 
@@ -878,10 +878,18 @@ void CHL2MP_Player::ChangeTeam( int iTeam )
 
 	if ( HL2MPRules()->IsTeamplay() == true )
 	{
-		if ( iTeam != GetTeamNumber() && GetTeamNumber() != TEAM_UNASSIGNED )
+		if ( iTeam != GetTeamNumber() &&
+			GetTeamNumber() != TEAM_UNASSIGNED &&
+			GetTeamNumber() != TEAM_SPECTATOR )
 		{
 			bKill = true;
 		}
+		else if ( iTeam != GetTeamNumber() &&
+			GetTeamNumber() == TEAM_SPECTATOR )
+		{
+			RemoveAllItems( true );
+		}
+		
 	}
 
 	BaseClass::ChangeTeam( iTeam );
@@ -918,6 +926,8 @@ bool CHL2MP_Player::HandleCommand_JoinTeam( int team )
 		return false;
 	}
 
+	m_HL2Local.m_iDesiredPlayerClass = PLAYERCLASS_UNDEFINED;
+	m_HL2Local.m_iPlayerClass = PLAYERCLASS_UNDEFINED;
 	if ( team == TEAM_SPECTATOR )
 	{
 		// Prevent this is the cvar is set
@@ -943,15 +953,10 @@ bool CHL2MP_Player::HandleCommand_JoinTeam( int team )
 	}
 	else
 	{
+		ChangeTeam( team );
 		StopObserverMode();
 		State_Transition(STATE_ACTIVE);
 	}
-
-	// Switch their actual team...
-	ChangeTeam( team );
-
-	m_HL2Local.m_iDesiredPlayerClass = PLAYERCLASS_UNDEFINED;
-	m_HL2Local.m_iPlayerClass = PLAYERCLASS_UNDEFINED;
 
 	return true;
 }
@@ -1232,20 +1237,6 @@ void CHL2MP_Player::Event_Killed( const CTakeDamageInfo &info )
 		{
 			m_hRagdoll->GetBaseAnimating()->Dissolve( NULL, gpGlobals->curtime, false, ENTITY_DISSOLVE_NORMAL );
 		}
-	}
-
-	CBaseEntity *pAttacker = info.GetAttacker();
-
-	if ( pAttacker )
-	{
-		int iScoreToAdd = 1;
-
-		if ( pAttacker == this )
-		{
-			iScoreToAdd = -1;
-		}
-
-		GetGlobalTeam( pAttacker->GetTeamNumber() )->AddScore( iScoreToAdd );
 	}
 
 	FlashlightTurnOff();

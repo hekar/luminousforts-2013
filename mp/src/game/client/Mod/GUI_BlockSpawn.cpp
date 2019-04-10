@@ -46,7 +46,7 @@ ConVar smod_panel_block_gap_y( "smod_panel_block_gap_y", "8" );
 
 #define BLOCK_COMMAND_PREFIX "block_"
 
-bool g_IsVisible = false;
+static bool g_IsVisible = false;
 
 
 // Toggle visibility of the buy menu

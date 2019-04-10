@@ -263,9 +263,9 @@ int CBlockBase::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 	// Scale weapon damage here
 	if ( !Q_strcmp ( Info.GetAmmoName(), "RPG_Round" ) )
 	{
-		DevMsg ("Damage Not Scaled %d\n", Info.GetDamage());
+		DevMsg ("Damage Not Scaled %f\n", Info.GetDamage());
 		Info.ScaleDamage( 0.3f );
-		DevMsg ("Damage Scaled %d\n", Info.GetDamage());
+		DevMsg ("Damage Scaled %f\n", Info.GetDamage());
 	}
 	int RetValue = BaseClass::OnTakeDamage( Info );
 

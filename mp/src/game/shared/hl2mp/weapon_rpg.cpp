@@ -40,7 +40,7 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-#define	RPG_SPEED	1500
+#define	RPG_SPEED	1200
 
 #ifndef CLIENT_DLL
 const char *g_pLaserDotThink = "LaserThinkContext";
@@ -461,20 +461,22 @@ void CMissile::CreateSmokeTrail( void )
 		m_hRocketTrail->FollowEntity( this, "0" );
 	}
 
-	const Color& col = GetTeamColor( GetOwnerEntity()->GetTeamNumber() );
-	byte Red (col.r());
-	byte Green (col.g());
-	byte Blue (col.b());
-
 	m_pGlowTrail = CSpriteTrail::SpriteTrailCreate( "sprites/bluelaser1.vmt", GetLocalOrigin(), false );
-
-	int	nAttachment = LookupAttachment( "fuse" );
 
 	if ( m_pGlowTrail != NULL )
 	{
+		int	nAttachment = LookupAttachment( "fuse" );
 		m_pGlowTrail->FollowEntity( this );
 		m_pGlowTrail->SetAttachment( this, nAttachment );
-		m_pGlowTrail->SetTransparency( kRenderTransAdd, Red, Green, Blue, 255, kRenderFxNone );
+		const Color& teamColor = GetTeamColor( GetOwnerEntity()->GetTeamNumber() );
+		m_pGlowTrail->SetTransparency(
+			kRenderTransAdd,
+			teamColor.r(),
+			teamColor.g(),
+			teamColor.b(),
+			255,
+			kRenderFxNone
+		);
 		m_pGlowTrail->SetStartWidth( 25.0f );
 		m_pGlowTrail->SetEndWidth( 20.0f );
 		m_pGlowTrail->SetLifeTime( 0.8f );
@@ -503,14 +505,6 @@ void CMissile::IgniteThink( void )
 
 	SetThink( &CMissile::SeekThink );
 	SetNextThink( gpGlobals->curtime );
-
-	if ( m_hOwner && m_hOwner->GetOwner() )
-	{
-		CBasePlayer *pPlayer = ToBasePlayer( m_hOwner->GetOwner() );
-
-		color32 white = { 255,225,205,64 };
-		UTIL_ScreenFade( pPlayer, white, 0.1f, 0.0f, FFADE_IN );
-	}
 
 	CreateSmokeTrail();
 }
@@ -1416,20 +1410,7 @@ void CWeaponRPG::Precache( void )
 void CWeaponRPG::Activate( void )
 {
 	BaseClass::Activate();
-
-	// Restore the laser pointer after transition
-	if ( m_bGuiding )
-	{
-		CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
-		
-		if ( pOwner == NULL )
-			return;
-
-		if ( pOwner->GetActiveWeapon() == this )
-		{
-			StartGuiding();
-		}
-	}
+	StopGuiding();
 }
 
 //-----------------------------------------------------------------------------
@@ -1542,8 +1523,6 @@ void CWeaponRPG::SuppressGuiding( bool state )
 
 	if ( m_hLaserDot == NULL )
 	{
-		StartGuiding();
-
 		//STILL!?
 		if ( m_hLaserDot == NULL )
 			 return;
@@ -1588,7 +1567,6 @@ void CWeaponRPG::ItemPostFrame( void )
 	//If we're pulling the weapon out for the first time, wait to draw the laser
 	if ( ( m_bInitialStateUpdate ) && ( GetActivity() != ACT_VM_DRAW ) )
 	{
-		StartGuiding();
 		m_bInitialStateUpdate = false;
 	}
 
@@ -1747,14 +1725,7 @@ void CWeaponRPG::StopGuiding( void )
 //-----------------------------------------------------------------------------
 void CWeaponRPG::ToggleGuiding( void )
 {
-	if ( IsGuiding() )
-	{
-		StopGuiding();
-	}
-	else
-	{
-		StartGuiding();
-	}
+	StopGuiding();
 }
 
 //-----------------------------------------------------------------------------

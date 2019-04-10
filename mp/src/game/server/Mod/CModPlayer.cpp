@@ -169,10 +169,7 @@ void CModPlayer::DropFlag()
 
 void CModPlayer::ChangeTeam( int iTeamNum )
 {
-	if ( iTeamNum == TEAM_SPECTATOR )
-	{
-		DropFlag();
-	}
+	CancelTeamActions();
 
 	if ( iTeamNum != TEAM_UNASSIGNED && iTeamNum != TEAM_SPECTATOR )
 	{
@@ -187,24 +184,16 @@ void CModPlayer::ChangeTeam( int iTeamNum )
 
 void CModPlayer::Event_Disconnected()
 {
-	// TODO: Fix
-	if ( HasFlag() )
-	{
-		DropFlag();
-	}
-
-	m_bHasTouched = false;
-
-#if 0
-	// Remove all the player's beacons
-	RemoveBeacons();
-
-	BaseClass::Event_Disconnected();
-#endif // 0
+	CancelTeamActions();
 }
 
 void CModPlayer::Event_Killed( const CTakeDamageInfo &info )
 {
+	CancelTeamActions();
+	BaseClass::Event_Killed( info );
+}
+
+void CModPlayer::CancelTeamActions() {
 	// TODO: Fix
 	if ( HasFlag() )
 	{
@@ -212,9 +201,6 @@ void CModPlayer::Event_Killed( const CTakeDamageInfo &info )
 	}
 
 	m_bHasTouched = false;
-
-	// Detonate all the slams!
-	DetonateTripmines();
 
 	CBaseCombatWeapon *wpn = GetActiveWeapon();
 	if ( wpn && wpn->GetWeaponID() == LF_WEAPON_COMBATCANNON )
@@ -235,7 +221,12 @@ void CModPlayer::Event_Killed( const CTakeDamageInfo &info )
 		}
 	}
 
-	BaseClass::Event_Killed( info );
+#if 0
+	// Remove all the player's beacons
+	RemoveBeacons();
+
+	BaseClass::Event_Disconnected();
+#endif // 0
 }
 
 void CModPlayer::Precache()
@@ -429,7 +420,6 @@ bool CModPlayer::SelectTeamSpawnSpot( int iTeamNum, CBaseEntity* &pSpot )
 					}
 					else if ( pNewSpot->GetTeamNumber() == iTeamNum )
 					{
-						Msg( "Choosing a generic spawn point of team: %d\n", iTeamNum );
 						pSpot = pNewSpot;
 						return true;
 					}

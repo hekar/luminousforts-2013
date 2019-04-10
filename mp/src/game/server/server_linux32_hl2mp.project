@@ -115,7 +115,6 @@
       <File Name="../../game/shared/Mod/MiscCvars.cpp"/>
       <File Name="../../game/shared/Mod/SF132_GameRules.cpp"/>
       <File Name="../../game/shared/Mod/SF132_SharedDefs.cpp"/>
-      <File Name="../../game/shared/Mod/SF132_Spawnpoint.cpp"/>
       <File Name="../../game/shared/Mod/SF132_WPN_Freezer.cpp"/>
       <File Name="../../game/shared/Mod/SF132_WPN_Physcannon.cpp"/>
       <File Name="../../game/shared/Mod/SF194_SpawnPoint.cpp"/>
@@ -791,6 +790,7 @@
       <File Name="../../game/shared/itempents.h"/>
       <File Name="../../game/shared/IVehicle.h"/>
       <File Name="../../game/shared/mapentities_shared.h"/>
+      <File Name="../../game/shared/Mod/ClassicGameRules.h"/>
       <File Name="../../game/shared/movevars_shared.h"/>
       <File Name="../../game/shared/mp_shareddefs.h"/>
       <File Name="../../game/shared/multiplay_gamerules.h"/>
@@ -1193,6 +1193,7 @@
       <File Name="logicrelay.h"/>
       <File Name="mapentities.h"/>
       <File Name="maprules.h"/>
+      <File Name="Mod/CSpawnPoint.h"/>
       <File Name="modelentities.h"/>
       <File Name="monstermaker.h"/>
       <File Name="movehelper_server.h"/>

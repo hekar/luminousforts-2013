@@ -25,9 +25,9 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-#define	SLAM_PRIMARY_VOLUME		450
-#define SLAM_REFIRE_DELAY		0.05f
-#define SLAM_ATTACH_DELAY		1.15f
+#define	SLAM_PRIMARY_VOLUME		370
+#define SLAM_REFIRE_DELAY		0.025f
+#define SLAM_ATTACH_DELAY		0.75f
 
 IMPLEMENT_NETWORKCLASS_ALIASED( Weapon_SLAM, DT_Weapon_SLAM )
 

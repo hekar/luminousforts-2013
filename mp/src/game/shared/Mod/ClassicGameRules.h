@@ -129,6 +129,9 @@ public:
 	virtual bool IsPlayerClassOnTeam( int cls, int team );
 	virtual const char *GetPlayerClassName( int cls, int team );
 
+	virtual bool SwitchToNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon );
+	virtual CBaseCombatWeapon *GetNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon );
+
 #ifdef CLIENT_DLL
 	virtual bool IsBuildPhase() { return m_iCurrentPhaseID == PHASE_BUILD; }
 	virtual bool IsCombatPhase() { return m_iCurrentPhaseID == PHASE_COMBAT; }
@@ -143,6 +146,7 @@ public:
 #endif // CLIENT_DLL
 
 	virtual int GetCurrentPhaseID();
+
 };
 
 

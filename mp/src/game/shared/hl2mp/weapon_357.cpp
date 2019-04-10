@@ -115,7 +115,7 @@ void CWeapon357::PrimaryAttack( void )
 		return;
 	}
 
-	WeaponSound( SINGLE );
+	WeaponSound( BURST );
 	pPlayer->DoMuzzleFlash();
 
 	SendWeaponAnim( ACT_VM_PRIMARYATTACK );
@@ -127,12 +127,16 @@ void CWeapon357::PrimaryAttack( void )
 	m_iClip1--;
 
 	Vector vecSrc		= pPlayer->Weapon_ShootPosition();
-	Vector vecAiming	= pPlayer->GetAutoaimVector( AUTOAIM_5DEGREES );	
+	Vector vecAiming	= pPlayer->GetAutoaimVector( AUTOAIM_5DEGREES );
+	Vector vecSpread = VECTOR_CONE_10DEGREES * RandomVector( 1.0, 1.35 ) * Vector(
+		RandomInt( -1, 1 ) > 0 ? 1 : -1,
+		RandomInt( -1, 1 ) > 0 ? 1 : -1,
+		RandomInt( -1, 1 ) > 0 ? 1 : -1
+	);
 
-	FireBulletsInfo_t info( 1, vecSrc, vecAiming, vec3_origin, MAX_TRACE_LENGTH, m_iPrimaryAmmoType );
+	FireBulletsInfo_t info( 3, vecSrc, vecAiming, vecSpread, MAX_TRACE_LENGTH, m_iPrimaryAmmoType );
 	info.m_pAttacker = pPlayer;
 
-	// Fire the bullets, and force the first shot to be perfectly accuracy
 	pPlayer->FireBullets( info );
 
 	//Disorient the player
@@ -146,7 +150,7 @@ void CWeapon357::PrimaryAttack( void )
 	pPlayer->SnapEyeAngles( angles );
 #endif
 
-	pPlayer->ViewPunch( QAngle( -8, random->RandomFloat( -2, 2 ), 0 ) );
+	pPlayer->ViewPunch( QAngle( -4, random->RandomFloat( -2, 2 ), 0 ) );
 
 	if ( !m_iClip1 && pPlayer->GetAmmoCount( m_iPrimaryAmmoType ) <= 0 )
 	{

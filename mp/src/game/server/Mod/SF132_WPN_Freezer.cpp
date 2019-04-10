@@ -37,7 +37,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "cbase.h"
 #ifdef MOD_SF132
 #include "weapon_sdkbase.h"
-#include "ieffects.h"
+#include "IEffects.h"
 
 #if defined( CLIENT_DLL )
 

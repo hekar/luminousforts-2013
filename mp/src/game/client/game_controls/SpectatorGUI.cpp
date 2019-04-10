@@ -61,14 +61,14 @@ CSpectatorGUI *g_pSpectatorGUI = NULL;
 // NB disconnect between localization text and observer mode enums
 static const char *s_SpectatorModes[] =
 {
-	"#Spec_Mode0",	// 	OBS_MODE_NONE = 0,	
-	"#Spec_Mode1",	// 	OBS_MODE_DEATHCAM,	
-	"",				// 	OBS_MODE_FREEZECAM,	
-	"#Spec_Mode2",	// 	OBS_MODE_FIXED,		
-	"#Spec_Mode3",	// 	OBS_MODE_IN_EYE,	
-	"#Spec_Mode4",	// 	OBS_MODE_CHASE,		
+	"#Spec_Mode0",	// 	OBS_MODE_NONE = 0,
+	"#Spec_Mode1",	// 	OBS_MODE_DEATHCAM,
+	"",				// 	OBS_MODE_FREEZECAM,
+	"#Spec_Mode2",	// 	OBS_MODE_FIXED,
+	"#Spec_Mode3",	// 	OBS_MODE_IN_EYE,
+	"#Spec_Mode4",	// 	OBS_MODE_CHASE,
 	"#Spec_Mode_POI",	// 	OBS_MODE_POI, PASSTIME
-	"#Spec_Mode5",	// 	OBS_MODE_ROAMING,	
+	"#Spec_Mode5",	// 	OBS_MODE_ROAMING,
 };
 
 using namespace vgui;
@@ -473,8 +473,8 @@ void CSpectatorGUI::ApplySchemeSettings(IScheme *pScheme)
 		pConditions->deleteThis();
 	}
 
-	m_pBottomBarBlank->SetVisible( true );
-	m_pTopBar->SetVisible( true );
+	m_pBottomBarBlank->SetVisible( false );
+	m_pTopBar->SetVisible( false );
 
 	BaseClass::ApplySchemeSettings( pScheme );
 	SetBgColor(Color( 0,0,0,0 ) ); // make the background transparent

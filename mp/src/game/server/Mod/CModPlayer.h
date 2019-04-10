@@ -75,6 +75,8 @@ public:
 	virtual void Event_Disconnected();
 	virtual void Event_Killed( const CTakeDamageInfo &info );
 
+	virtual void CancelTeamActions();
+
 	virtual void Precache();
 	virtual void InitialSpawn();
 	virtual void Spawn();

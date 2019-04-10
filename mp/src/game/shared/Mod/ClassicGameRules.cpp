@@ -78,21 +78,21 @@ CFileConfig g_CGRConfig( "classicgamerules", "config/gamemode/classic.txt" );
 
 char *g_ClassicGameRules_Classes_Blue[ CLASSIC_GAME_CLASSCOUNT + 1 ] =
 {
-	"blue_classscout",
-	"blue_classengineer",
-	"blue_classsoldier",
-	"blue_classsniper",
-	"blue_classrocketeer",
+	"blue_scout",
+	"blue_engineer",
+	"blue_soldier",
+	"blue_sniper",
+	"blue_rocketeer",
 	NULL
 };
 
 char *g_ClassicGameRules_Classes_Red[ CLASSIC_GAME_CLASSCOUNT + 1 ] =
 {
-	"red_classscout",
-	"red_classengineer",
-	"red_classsoldier",
-	"red_classsniper",
-	"red_classrocketeer",
+	"red_scout",
+	"red_engineer",
+	"red_soldier",
+	"red_sniper",
+	"red_rocketeer",
 	NULL
 };
 
@@ -458,7 +458,6 @@ void CClassicGameRules::GivePlayerWeapons( CModPlayer *pPlayer )
 			// Primary Ammo
 			CBaseCombatWeapon *pWeapon = dynamic_cast< CBaseCombatWeapon * > ( pPlayer->GiveNamedItem( buf ) );
 
-			Msg( "Weapon %s found %d\n", buf, pWeapon );
 			Assert( pWeapon );
 			if ( !pWeapon )
 			{
@@ -541,6 +540,7 @@ void CClassicGameRules::PlayerSpawn( CBasePlayer *pBasePlayer )
 			}
 
 			GivePlayerWeapons( player );
+			SwitchToNextBestWeapon( player, player->GetActiveWeapon() );
 			player->RemoveFromHud( HIDEHUD_BUILDPHASE );
 		}
 		else // Is buildphase
@@ -757,4 +757,37 @@ const char *CClassicGameRules::GetPlayerClassName( int cls, int team )
 	}
 
 	return pTeam->GetPlayerClassInfo( cls ).m_szPrintName;
+}
+
+bool CClassicGameRules::SwitchToNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon )
+{
+	CBaseCombatWeapon *pWeapon = GetNextBestWeapon( pPlayer, pCurrentWeapon );
+	if ( pWeapon != NULL )
+	{
+		return pPlayer->Weapon_Switch( pWeapon );
+	}
+
+	return false;
+}
+
+CBaseCombatWeapon *CClassicGameRules::GetNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon )
+{
+	CBaseCombatWeapon *pHighestWeightWeapon = pCurrentWeapon;
+	for(int i = 0; i < pPlayer->WeaponCount(); i++)
+	{
+		CBaseCombatWeapon* pWeapon = pPlayer->GetWeapon( i );
+		if ( pWeapon &&
+			pWeapon->IsAllowedToSwitch() &&
+			pWeapon->CanBeSelected() &&
+			pWeapon->VisibleInWeaponSelection() &&
+			pWeapon->HasAmmo() )
+		{
+			if ( !pHighestWeightWeapon || pHighestWeightWeapon->GetWeight() < pWeapon->GetWeight() )
+			{
+				pHighestWeightWeapon = pWeapon;
+			}
+		}
+	}
+
+	return pHighestWeightWeapon;
 }
