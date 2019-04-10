@@ -61,7 +61,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #define TAKEN_INVALID_PLAYER -1
 
 #define BASE_TAG L"Base"
-#define PLAYER_TAG L"%s"
 #define DROPPED_TAG L"Dropped"
 #define DROPPED_TIMER_TAG L"Dropped: %.1f"
 
@@ -240,8 +239,8 @@ void CHudFlagCarrier::UpdateFlagState( int TeamIndex )
 			{
 				int playerindex = engine->GetPlayerForUserID( m_iTakenByPlayer[ TeamIndex ] );
 				const char *playername = g_PR->GetPlayerName( playerindex );
-				g_pVGuiLocalize->ConvertANSIToUnicode( playername, m_Text [TEAM_UNASSIGNED], sizeof( m_Text [TEAM_UNASSIGNED] ) );
-				swprintf( m_Text[ TeamIndex ], 256, PLAYER_TAG, m_Text [TEAM_UNASSIGNED] );
+				g_pVGuiLocalize->ConvertANSIToUnicode( playername, m_Text[ TEAM_UNASSIGNED ], 256 );
+				Q_wcsncpy( m_Text[ TeamIndex ], m_Text[ TEAM_UNASSIGNED ], 256 );
 			}
 		}
 		break;
@@ -274,7 +273,7 @@ void CHudFlagCarrier::UpdateTakenAvatar( int TeamIndex )
 					CSteamID steamIDForPlayer( pi.friendsID, 1, steamapicontext->SteamUtils()->GetConnectedUniverse(), k_EAccountTypeIndividual );
 
 					CAvatarImage *pAvImage = m_pAvatar[ TeamIndex ];
-					if ( pAvImage->SetAvatarSteamID( steamIDForPlayer ) )
+					if ( !pAvImage->SetAvatarSteamID( steamIDForPlayer ) )
 					{
 						Warning( "Failed to Get Player Avatar\n" );
 					}
