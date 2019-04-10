@@ -955,7 +955,7 @@ bool CHL2MP_Player::HandleCommand_JoinTeam( int team )
 	{
 		ChangeTeam( team );
 		StopObserverMode();
-		State_Transition(STATE_ACTIVE);
+		State_Transition( STATE_CLASS_REQUIRED );
 	}
 
 	return true;

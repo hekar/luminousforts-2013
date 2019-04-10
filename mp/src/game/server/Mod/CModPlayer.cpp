@@ -171,14 +171,6 @@ void CModPlayer::ChangeTeam( int iTeamNum )
 {
 	CancelTeamActions();
 
-	if ( iTeamNum != TEAM_UNASSIGNED && iTeamNum != TEAM_SPECTATOR )
-	{
-		if ( GetPlayerClass() == PLAYERCLASS_UNDEFINED )
-		{
-			State_Transition( STATE_CLASS_REQUIRED );
-		}
-	}
-
 	BaseClass::ChangeTeam( iTeamNum );
 }
 

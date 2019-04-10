@@ -43,7 +43,6 @@ extern bool			g_fGameOver;
 void FinishClientPutInServer( CModPlayer *pPlayer )
 {
 	pPlayer->InitialSpawn();
-	pPlayer->Spawn();
 
 	char sName[128];
 	Q_strncpy( sName, pPlayer->GetPlayerName(), sizeof( sName ) );
@@ -59,11 +58,6 @@ void FinishClientPutInServer( CModPlayer *pPlayer )
 	// notify other clients of player joining the game
 	UTIL_ClientPrintAll( HUD_PRINTNOTIFY, "#Game_connected", sName[0] != 0 ? sName : "<unconnected>" );
 
-	if ( HL2MPRules()->IsTeamplay() == true )
-	{
-		ClientPrint( pPlayer, HUD_PRINTTALK, "You are on team %s1\n", pPlayer->GetTeam()->GetName() );
-	}
-
 	const ConVar *hostname = cvar->FindVar( "hostname" );
 	const char *title = (hostname) ? hostname->GetString() : "MESSAGE OF THE DAY";
 
@@ -71,6 +65,7 @@ void FinishClientPutInServer( CModPlayer *pPlayer )
 	data->SetString( "title", title );		// info panel title
 	data->SetString( "type", "1" );			// show userdata from stringtable entry
 	data->SetString( "msg",	"motd" );		// use this stringtable entry
+	data->SetInt( "cmd",	2 );		// choose team immediately after
 	data->SetBool( "unload", sv_motd_unload_on_dismissal.GetBool() );
 
 	pPlayer->ShowViewPortPanel( PANEL_INFO, true, data );

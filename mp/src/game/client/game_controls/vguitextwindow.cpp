@@ -329,7 +329,7 @@ void CTextWindow::OnCommand( const char *command )
 				break;
 
 			case TEXTWINDOW_CMD_CHANGETEAM:
-				pszCommand = "changeteam";
+				pszCommand = "lf_hud_teammenu";
 				break;
 
 			case TEXTWINDOW_CMD_IMPULSE101:
@@ -380,7 +380,14 @@ void CTextWindow::OnKeyCodePressed( vgui::KeyCode code )
 
 void CTextWindow::SetData(KeyValues *data)
 {
-	SetData( data->GetInt( "type" ), data->GetString( "title" ), data->GetString( "msg" ), data->GetString( "msg_fallback" ), data->GetInt( "cmd" ), data->GetBool( "unload" ) );
+	SetData(
+		data->GetInt( "type" ),
+		data->GetString( "title" ),
+		data->GetString( "msg" ),
+		data->GetString( "msg_fallback" ),
+		data->GetInt( "cmd" ),
+		data->GetBool( "unload" )
+	);
 }
 
 void CTextWindow::SetData( int type, const char *title, const char *message, const char *message_fallback, int command, bool bUnload )

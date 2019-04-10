@@ -56,8 +56,6 @@ CON_COMMAND_F( lf_hud_classmenu, "Choose a new class", FCVAR_SERVER_CAN_EXECUTE|
 			gViewPortInterface->ShowPanel( PANEL_CLASS_RED, true );
 			break;
 		case TEAM_UNASSIGNED:
-			gViewPortInterface->ShowPanel( PANEL_CLASS, true );
-			break;
 		default:
 			break;
 		}

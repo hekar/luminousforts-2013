@@ -274,7 +274,7 @@ void FilePlayerClassInfo_t::Parse( KeyValues *pKeyValuesData, const char *szPlay
 		const char *pszWeapon = pKeyValuesData->GetString( keyName, NULL );
 		if( !pszWeapon )
 		{
-			Warning( "Weapon %s requested by class %s not found", keyName, m_szPlayerClassName );
+			Warning( "weapon_%s: %s requested by class %s not found\n", keyName, pszWeapon, m_szPlayerClassName );
 			break;
 		}
 
