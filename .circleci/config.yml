@@ -18,8 +18,7 @@ jobs:
       - image: hekar/luminousforts-ci-commit:latest
     steps:
       - attach_workspace:
-          at:
-            - /tmp/project
+          at: /tmp/project
       - run: cd /tmp
       - run: git clone --depth 1 https://${GITHUB_TOKEN}@github.com/hekar/luminousforts.git
       - run: rsync --progress -v /tmp/project/mp/src/game/mod_hl2mp/bin/* ./luminousforts/bin/
@@ -35,7 +34,9 @@ jobs:
             git push -q https://${GITHUB_TOKEN}@github.com/hekar/luminousforts.git master
 workflows:
   version: 2
-  build_and_test:
+  build_and_publish:
     jobs:
       - build
       - publish
+        requires:
+          - build
