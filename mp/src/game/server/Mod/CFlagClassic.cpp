@@ -320,7 +320,11 @@ void CFlagClassic::OnPickup()
 	if ( !lf_reverse_flags.GetBool() && !m_pPlayerWithFlag->HasTouched() && !m_bFirstTake )
 	{
 		m_pPlayerWithFlag->AddPoints( FLAG_CLASSIC_TOUCH_POINTS, false );
-		GetGlobalTeam( m_pPlayerWithFlag->GetTeamNumber() )->AddCapturePoints( FLAG_CLASSIC_TOUCH_POINTS );
+		CTeam *pTeam = GetGlobalTeam( m_pPlayerWithFlag->GetTeamNumber() );
+		if ( pTeam )
+		{
+			pTeam->AddCapturePoints( FLAG_CLASSIC_TOUCH_POINTS );
+		}
 	}
 
 	m_pPlayerWithFlag->SetTouched( true );
