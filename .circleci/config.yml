@@ -5,10 +5,11 @@ jobs:
       - image: hekar/luminousforts-ci:latest
     steps:
       - checkout
-      - run: ls
-      - run: cd ./mp/src
-      - run: ./createallprojects
-      - run: make -f everything.mak
+      - run:
+          command: |
+            cd ./mp/src
+            ./createallprojects
+            make -f everything.mak
       - persist_to_workspace:
           root: .
           paths:
@@ -20,9 +21,11 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/project
-      - run: cd /tmp
-      - run: git clone --depth 1 https://${GITHUB_TOKEN}@github.com/hekar/luminousforts.git
-      - run: rsync --progress -v /tmp/project/mp/src/game/mod_hl2mp/bin/* ./luminousforts/bin/
+      - run:
+          command: |
+            cd /tmp
+            git clone --depth 1 https://${GITHUB_TOKEN}@github.com/hekar/luminousforts.git
+            rsync --progress -v /tmp/project/mp/src/game/mod_hl2mp/bin/* ./luminousforts/bin/
       - deploy:
           name: Trigger docs deployment
           working_directory: /tmp/luminousforts
