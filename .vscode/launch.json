@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${env:HOME}/.local/share/Steam/steamapps/common/Source SDK Base 2013 Multiplayer/hl2_linux",
+            "args": [
+                "-game",
+                "sourcetest",
+                "-steam",
+                "-game",
+                "${env:HOME}/.local/share/Steam/steamapps/sourcemods/luminousforts"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${env:HOME}/.local/share/Steam/steamapps/common/Source SDK Base 2013 Multiplayer/",
+            "environment": [{
+                "name": "LD_LIBRARY_PATH",
+                "value": "${env:HOME}/.local/share/Steam/steamapps/common/Source SDK Base 2013 Multiplayer/bin"
+            }],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
