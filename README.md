@@ -1,5 +1,7 @@
 # LuminousForts 2013
 
+[![CircleCI](https://circleci.com/gh/hekar/luminousforts-2013/tree/master.svg?style=shield&circle-token=30c9378850b61d1265c749fd92e3a0513e7a68ad)](https://circleci.com/gh/hekar/luminousforts-2013/tree/master)
+
 ## Getting started
 
 ### Linux

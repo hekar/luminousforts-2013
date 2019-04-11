@@ -5,11 +5,12 @@ jobs:
       - image: hekar/luminousforts-ci:latest
     steps:
       - checkout
-      - run: cd ./project/mp/src
+      - run: ls
+      - run: cd ./mp/src
       - run: ./createallprojects
       - run: make -f everything.mak
       - persist_to_workspace:
-          root: ./project
+          root: .
           paths:
             - mp/
       
