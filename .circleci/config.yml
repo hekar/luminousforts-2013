@@ -37,6 +37,6 @@ workflows:
   build_and_publish:
     jobs:
       - build
-      - publish
-        requires:
-          - build
+      - publish:
+          requires:
+            - build
