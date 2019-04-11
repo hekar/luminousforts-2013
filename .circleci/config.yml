@@ -9,16 +9,17 @@ jobs:
       - run: ./createallprojects
       - run: make -f everything.mak
       - persist_to_workspace:
-        root: .
-        paths:
-          - mp/
+          root: .
+          paths:
+            - mp/
       
   publish:
     docker:
       - image: hekar/luminousforts-ci-commit:latest
     steps:
       - attach_workspace:
-        at: /tmp/project
+          at:
+            - /tmp/project
       - run: cd /tmp
       - run: git clone --depth 1 https://${GITHUB_TOKEN}@github.com/hekar/luminousforts.git
       - run: rsync --progress -v /tmp/project/mp/src/game/mod_hl2mp/bin/* ./luminousforts/bin/
