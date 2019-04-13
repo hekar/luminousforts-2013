@@ -32,7 +32,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 
 ConVar lf_dispenser_radius( "lf_dispenser_radius", "10.f", FCVAR_ARCHIVE );
-BALANCE_DEFINE( lfm_dispenser_thinktime, 1.0 );
+BALANCE_DEFINE( lfm_dispenser_thinktime, 1 );
 BALANCE_DEFINE( lfm_dispenser_health_rate, 20 );
 
 #define DISPENSER_MODELNAME "models/crate/crate.mdl"

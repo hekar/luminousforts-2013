@@ -79,6 +79,7 @@ private:
 //-----------------------------------------------------------------------------
 CFPSPanel::CFPSPanel( vgui::VPANEL parent ) : BaseClass( NULL, "CFPSPanel" )
 {
+	SetScheme( vgui::scheme()->LoadSchemeFromFile( "resource/SourceScheme.res", "SourceScheme" ) );
 	SetParent( parent );
 	SetVisible( false );
 	SetCursor( null );
@@ -133,7 +134,7 @@ void CFPSPanel::ComputeSize( void )
 
 void CFPSPanel::ApplySchemeSettings(vgui::IScheme *pScheme)
 {
-	BaseClass::ApplySchemeSettings(pScheme);
+	BaseClass::ApplySchemeSettings( pScheme );
 
 	m_hFont = pScheme->GetFont( "DefaultFixedOutline" );
 	Assert( m_hFont );
@@ -325,16 +326,22 @@ void CFPSPanel::Paint()
 			}
 		}
 
-		g_pMatSystemSurface->DrawColoredText( m_hFont, x, 2+ i * ( vgui::surface()->GetFontTall( m_hFont ) + 2 ), 
-											  255, 255, 255, 255, 
-											  "pos:  %.02f %.02f %.02f", 
-											  vecOrigin.x, vecOrigin.y, vecOrigin.z );
+		g_pMatSystemSurface->DrawColoredText(
+			m_hFont,
+			x, 2 + i * ( vgui::surface()->GetFontTall( m_hFont ) + 2 ), 
+			255, 255, 255, 255, 
+			"pos:  %.02f %.02f %.02f", 
+			vecOrigin.x, vecOrigin.y, vecOrigin.z
+		);
 		i++;
 
-		g_pMatSystemSurface->DrawColoredText( m_hFont, x, 2 + i * ( vgui::surface()->GetFontTall( m_hFont ) + 2 ), 
-											  255, 255, 255, 255, 
-											  "ang:  %.02f %.02f %.02f", 
-											  angles.x, angles.y, angles.z );
+		g_pMatSystemSurface->DrawColoredText(
+			m_hFont,
+			x, 2 + i * ( vgui::surface()->GetFontTall( m_hFont ) + 2 ), 
+			255, 255, 255, 255, 
+			"ang:  %.02f %.02f %.02f", 
+			angles.x, angles.y, angles.z
+		);
 		i++;
 
 		Vector vel( 0, 0, 0 );
@@ -344,10 +351,29 @@ void CFPSPanel::Paint()
 			vel = player->GetLocalVelocity();
 		}
 
-		g_pMatSystemSurface->DrawColoredText( m_hFont, x, 2 + i * ( vgui::surface()->GetFontTall( m_hFont ) + 2 ), 
-											  255, 255, 255, 255, 
-											  "vel:  %.2f", 
-											  vel.Length() );
+		g_pMatSystemSurface->DrawColoredText(
+			m_hFont,
+			x, 2 + i * ( vgui::surface()->GetFontTall( m_hFont ) + 2 ), 
+			255, 255, 255, 255, 
+			"vel:  %.2f", 
+			vel.Length()
+		);
+		i++;
+
+		float max = 0;
+		if ( player )
+		{
+			max = player->GetPlayerMaxSpeed();
+		}
+
+		g_pMatSystemSurface->DrawColoredText(
+			m_hFont,
+			x, 2 + i * ( vgui::surface()->GetFontTall( m_hFont ) + 2 ), 
+			255, 255, 255, 255, 
+			"max:  %.2f", 
+			max
+		);
+		i++;
 	}
 	
 	if ( cl_showbattery.GetInt() > 0 )

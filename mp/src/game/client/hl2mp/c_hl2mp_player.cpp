@@ -24,9 +24,6 @@ IMPLEMENT_CLIENTCLASS_DT(C_HL2MP_Player, DT_HL2MP_Player, CHL2MP_Player)
 	RecvPropFloat( RECVINFO( m_angEyeAngles[0] ) ),
 	RecvPropFloat( RECVINFO( m_angEyeAngles[1] ) ),
 	RecvPropEHandle( RECVINFO( m_hRagdoll ) ),
-	RecvPropInt( RECVINFO( m_iRunSpeed ) ),
-	RecvPropInt( RECVINFO( m_iSprintSpeed ) ),
-	RecvPropInt( RECVINFO( m_iProneSpeed ) ),
 	RecvPropInt( RECVINFO( m_iSpawnInterpCounter ) ),
 	RecvPropInt( RECVINFO( m_iPlayerSoundType) ),
 
@@ -37,10 +34,6 @@ BEGIN_PREDICTION_DATA( C_HL2MP_Player )
 	DEFINE_PRED_FIELD( m_fIsWalking, FIELD_BOOLEAN, FTYPEDESC_INSENDTABLE ),
 END_PREDICTION_DATA()
 
-#define	HL2_WALK_SPEED 150
-#define	HL2_NORM_SPEED 190
-#define	HL2_SPRINT_SPEED 320
-
 static ConVar cl_playermodel( "cl_playermodel", "none", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_SERVER_CAN_EXECUTE, "Default Player Model");
 static ConVar cl_defaultweapon( "cl_defaultweapon", "weapon_physcannon", FCVAR_USERINFO | FCVAR_ARCHIVE, "Default Spawn Weapon");
 
@@ -50,9 +43,9 @@ C_HL2MP_Player::C_HL2MP_Player() : m_PlayerAnimState( this ), m_iv_angEyeAngles(
 {
 	m_iIDEntIndex = 0;
 	m_iSpawnInterpCounterCache = 0;
-	m_iRunSpeed = HL2_NORM_SPEED;
-	m_iSprintSpeed = HL2_SPRINT_SPEED;
-	m_iProneSpeed = HL2_WALK_SPEED;
+	m_iRunSpeed = 0;
+	m_iSprintSpeed = 0;
+	m_iProneSpeed = 0;
 
 	m_angEyeAngles.Init();
 

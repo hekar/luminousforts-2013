@@ -44,9 +44,6 @@ IMPLEMENT_SERVERCLASS_ST(CHL2MP_Player, DT_HL2MP_Player)
 	SendPropAngle( SENDINFO_VECTORELEM(m_angEyeAngles, 0), 11, SPROP_CHANGES_OFTEN ),
 	SendPropAngle( SENDINFO_VECTORELEM(m_angEyeAngles, 1), 11, SPROP_CHANGES_OFTEN ),
 	SendPropEHandle( SENDINFO( m_hRagdoll ) ),
-	SendPropInt( SENDINFO( m_iRunSpeed), 12 ),
-	SendPropInt( SENDINFO( m_iSprintSpeed), 12 ),
-	SendPropInt( SENDINFO( m_iProneSpeed), 12 ),
 	SendPropInt( SENDINFO( m_iSpawnInterpCounter), 4 ),
 	SendPropInt( SENDINFO( m_iPlayerSoundType), 3 ),
 	
@@ -641,8 +638,6 @@ Activity CHL2MP_Player::TranslateTeamActivity( Activity ActToTranslate )
 	return ActToTranslate;
 }
 
-extern ConVar hl2_normspeed;
-
 // Set the activity based on an event or current state
 void CHL2MP_Player::SetAnimation( PLAYER_ANIM playerAnim )
 {
@@ -651,18 +646,6 @@ void CHL2MP_Player::SetAnimation( PLAYER_ANIM playerAnim )
 	float speed;
 
 	speed = GetAbsVelocity().Length2D();
-
-	
-	// bool bRunning = true;
-
-	//Revisit!
-/*	if ( ( m_nButtons & ( IN_FORWARD | IN_BACK | IN_MOVELEFT | IN_MOVERIGHT ) ) )
-	{
-		if ( speed > 1.0f && speed < hl2_normspeed.GetFloat() - 20.0f )
-		{
-			bRunning = false;
-		}
-	}*/
 
 	if ( GetFlags() & ( FL_FROZEN | FL_ATCONTROLS ) )
 	{

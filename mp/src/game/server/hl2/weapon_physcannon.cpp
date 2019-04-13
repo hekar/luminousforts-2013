@@ -65,9 +65,6 @@ ConVar player_throwforce( "player_throwforce", "1000" );
 ConVar physcannon_dmg_glass( "physcannon_dmg_glass", "15" );
 ConVar physcannon_right_turrets( "physcannon_right_turrets", "0" );
 
-extern ConVar hl2_normspeed;
-extern ConVar hl2_walkspeed;
-
 #define PHYSCANNON_BEAM_SPRITE "sprites/orangelight1.vmt"
 #define PHYSCANNON_GLOW_SPRITE "sprites/glow04_noz.vmt"
 #define PHYSCANNON_ENDCAP_SPRITE "sprites/orangeflare1.vmt"

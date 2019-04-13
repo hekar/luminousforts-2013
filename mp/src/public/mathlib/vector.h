@@ -1774,6 +1774,7 @@ public:
 	// Construction/destruction
 	QAngle(void);
 	QAngle(vec_t X, vec_t Y, vec_t Z);
+	QAngle( const QAngle& angle ) : QAngle( angle.x, angle.y, angle.z ) {}
 //	QAngle(RadianEuler const &angles);	// evil auto type promotion!!!
 
 	// Allow pass-by-value

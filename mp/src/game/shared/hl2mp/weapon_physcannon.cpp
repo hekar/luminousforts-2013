@@ -59,11 +59,6 @@ ConVar physcannon_cone( "physcannon_cone", "0.97", FCVAR_REPLICATED | FCVAR_CHEA
 ConVar physcannon_ball_cone( "physcannon_ball_cone", "0.997", FCVAR_REPLICATED | FCVAR_CHEAT );
 ConVar player_throwforce( "player_throwforce", "1000", FCVAR_REPLICATED | FCVAR_CHEAT );
 
-#ifndef CLIENT_DLL
-extern ConVar hl2_normspeed;
-extern ConVar hl2_walkspeed;
-#endif
-
 #define PHYSCANNON_BEAM_SPRITE "sprites/orangelight1.vmt"
 #define PHYSCANNON_BEAM_SPRITE_NOZ "sprites/orangelight1_noz.vmt"
 #define PHYSCANNON_GLOW_SPRITE "sprites/glow04_noz"
@@ -536,7 +531,7 @@ void CGrabController::DetachEntity( bool bClearVelocity )
 			else
 			{
 #ifndef CLIENT_DLL
-				ClampPhysicsVelocity( pPhys, hl2_normspeed.GetFloat() * 1.5f, 2.0f * 360.0f );
+				ClampPhysicsVelocity( pPhys, 400 * 1.5f, 2.0f * 360.0f );
 #endif
 			}
 
@@ -1570,17 +1565,6 @@ bool CWeaponPhysCannon::AttachObject( CBaseEntity *pObject, const Vector &vPosit
 		m_bResetOwnerEntity = true;
 	}
 
-/*	if( pOwner )
-	{
-		pOwner->EnableSprint( false );
-
-		float	loadWeight = ( 1.0f - GetLoadPercentage() );
-		float	maxSpeed = hl2_walkspeed.GetFloat() + ( ( hl2_normspeed.GetFloat() - hl2_walkspeed.GetFloat() ) * loadWeight );
-
-		//Msg( "Load perc: %f -- Movement speed: %f/%f\n", loadWeight, maxSpeed, hl2_normspeed.GetFloat() );
-		pOwner->SetMaxSpeed( maxSpeed );
-	}*/
-
 	// Don't drop again for a slight delay, in case they were pulling objects near them
 	m_flNextSecondaryAttack = gpGlobals->curtime + 0.4f;
 
@@ -1908,11 +1892,6 @@ void CWeaponPhysCannon::DetachObject( bool playSound, bool wasLaunched )
 		return;
 
 	CHL2MP_Player *pOwner = (CHL2MP_Player *)ToBasePlayer( GetOwner() );
-	if( pOwner != NULL )
-	{
-		//pOwner->EnableSprint( true );
-		//pOwner->SetMaxSpeed( hl2_normspeed.GetFloat() );
-	}
 
 	CBaseEntity *pObject = m_grabController.GetAttached();
 

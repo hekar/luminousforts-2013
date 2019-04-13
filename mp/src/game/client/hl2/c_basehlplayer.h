@@ -59,6 +59,11 @@ public:
 	float				m_flSpeedModTime;
 	bool				m_fIsSprinting;
 
+protected:
+	int m_iRunSpeed;
+	int m_iSprintSpeed;
+	int m_iProneSpeed;
+
 private:
 	C_BaseHLPlayer( const C_BaseHLPlayer & ); // not defined, not accessible
 	

@@ -124,10 +124,7 @@ private:
 	void ReleaseFlashlight( void );
 	Beam_t	*m_pFlashlightBeam;
 
-	CNetworkVar( HL2MPPlayerState, m_iPlayerState );	
-	int m_iRunSpeed;
-	int m_iSprintSpeed;
-	int m_iProneSpeed;
+	CNetworkVar( HL2MPPlayerState, m_iPlayerState );
 
 	bool m_fIsWalking;
 };

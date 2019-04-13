@@ -2553,8 +2553,7 @@ public:
 			// default constructor (ought not to be actually used)
 			HashValueType() : activityIdx(-1), startingIdx(-1), count(-1), totalWeight(-1) 
 				{ AssertMsg(false, "Don't use default HashValueType()!"); }
-
-
+			
 			class HashFuncs
 			{
 			public:

@@ -79,21 +79,7 @@ extern int gEvilImpulse101;
 
 ConVar sv_autojump( "sv_autojump", "0" );
 
-ConVar hl2_walkspeed( "hl2_walkspeed", "150" );
-ConVar hl2_normspeed( "hl2_normspeed", "190" );
-ConVar hl2_sprintspeed( "hl2_sprintspeed", "320" );
-
 ConVar hl2_darkness_flashlight_factor ( "hl2_darkness_flashlight_factor", "1" );
-
-#ifdef HL2MP
-	#define	HL2_WALK_SPEED 150
-	#define	HL2_NORM_SPEED 190
-	#define	HL2_SPRINT_SPEED 320
-#else
-	#define	HL2_WALK_SPEED hl2_walkspeed.GetFloat()
-	#define	HL2_NORM_SPEED hl2_normspeed.GetFloat()
-	#define	HL2_SPRINT_SPEED hl2_sprintspeed.GetFloat()
-#endif
 
 ConVar player_showpredictedposition( "player_showpredictedposition", "0" );
 ConVar player_showpredictedposition_timestep( "player_showpredictedposition_timestep", "1.0" );
@@ -419,6 +405,9 @@ CSuitPowerDevice SuitDeviceBreather( bits_SUIT_DEVICE_BREATHER, 6.7f );		// 100 
 IMPLEMENT_SERVERCLASS_ST(CHL2_Player, DT_HL2_Player)
 	SendPropDataTable(SENDINFO_DT(m_HL2Local), &REFERENCE_SEND_TABLE(DT_HL2Local), SendProxy_SendLocalDataTable),
 	SendPropBool( SENDINFO(m_fIsSprinting) ),
+	SendPropInt( SENDINFO( m_iRunSpeed), 12 ),
+	SendPropInt( SENDINFO( m_iSprintSpeed), 12 ),
+	SendPropInt( SENDINFO( m_iProneSpeed), 12 ),
 END_SEND_TABLE()
 
 
@@ -1218,7 +1207,7 @@ void CHL2_Player::StartSprinting( void )
 	filter.UsePredictionRules();
 	EmitSound( filter, entindex(), "HL2Player.SprintStart" );
 
-	SetMaxSpeed( HL2_SPRINT_SPEED );
+	SetMaxSpeed( m_iSprintSpeed );
 	m_fIsSprinting = true;
 }
 
@@ -1234,11 +1223,11 @@ void CHL2_Player::StopSprinting( void )
 
 	if( IsSuitEquipped() )
 	{
-		SetMaxSpeed( HL2_NORM_SPEED );
+		SetMaxSpeed( m_iRunSpeed );
 	}
 	else
 	{
-		SetMaxSpeed( HL2_WALK_SPEED );
+		SetMaxSpeed( m_iProneSpeed );
 	}
 
 	m_fIsSprinting = false;
@@ -1270,7 +1259,7 @@ void CHL2_Player::EnableSprint( bool bEnable )
 //-----------------------------------------------------------------------------
 void CHL2_Player::StartWalking( void )
 {
-	SetMaxSpeed( HL2_WALK_SPEED );
+	SetMaxSpeed( m_iProneSpeed );
 	m_fIsWalking = true;
 }
 
@@ -1278,7 +1267,7 @@ void CHL2_Player::StartWalking( void )
 //-----------------------------------------------------------------------------
 void CHL2_Player::StopWalking( void )
 {
-	SetMaxSpeed( HL2_NORM_SPEED );
+	SetMaxSpeed( m_iRunSpeed );
 	m_fIsWalking = false;
 }
 

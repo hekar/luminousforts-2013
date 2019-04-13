@@ -63,6 +63,17 @@ public:
 		m_LastAngles()
 		{
 		}
+	
+	CPluginBot( const CPluginBot& bot ) : 
+		m_bBackwards(bot.m_bBackwards),
+		m_flNextTurnTime(bot.m_flNextTurnTime),
+		m_bLastTurnToRight(bot.m_bLastTurnToRight),
+		m_flNextStrafeTime(bot.m_flNextStrafeTime),
+		m_flSideMove(bot.m_flSideMove),
+		m_ForwardAngle(bot.m_ForwardAngle),
+		m_LastAngles(bot.m_LastAngles)
+		{
+		}
 
 	bool			m_bBackwards;
 
