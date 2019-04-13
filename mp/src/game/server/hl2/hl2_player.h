@@ -163,7 +163,6 @@ public:
 	void UpdateLocatorPosition( const Vector &vecPosition );
 
 	// Sprint Device
-	void StartAutoSprint( void );
 	void StartSprinting( void );
 	void StopSprinting( void );
 	void InitSprinting( void );
@@ -309,8 +308,6 @@ protected:
 	float				m_flTimeAllSuitDevicesOff;
 
 	bool				m_bSprintEnabled;		// Used to disable sprint temporarily
-	bool				m_bIsAutoSprinting;		// A proxy for holding down the sprint key.
-	float				m_fAutoSprintMinTime;	// Minimum time to maintain autosprint regardless of player speed. 
 
 	CNetworkVar( bool, m_fIsSprinting );
 	CNetworkVarForDerived( bool, m_fIsWalking );

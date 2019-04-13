@@ -77,8 +77,6 @@ extern ConVar autoaim_max_dist;
 
 extern int gEvilImpulse101;
 
-ConVar sv_autojump( "sv_autojump", "0" );
-
 ConVar hl2_darkness_flashlight_factor ( "hl2_darkness_flashlight_factor", "1" );
 
 ConVar player_showpredictedposition( "player_showpredictedposition", "0" );
@@ -90,8 +88,6 @@ ConVar player_squad_double_tap_time( "player_squad_double_tap_time", "0.25" );
 ConVar sv_infinite_aux_power( "sv_infinite_aux_power", "0", FCVAR_CHEAT );
 
 ConVar autoaim_unlock_target( "autoaim_unlock_target", "0.8666" );
-
-ConVar sv_stickysprint("sv_stickysprint", "0", FCVAR_ARCHIVE | FCVAR_ARCHIVE_XBOX);
 
 #define	FLASH_DRAIN_TIME	 1.1111	// 100 units / 90 secs
 #define	FLASH_CHARGE_TIME	 50.0f	// 100 units / 2 secs
@@ -309,12 +305,6 @@ BEGIN_DATADESC( CHL2_Player )
 	DEFINE_FIELD( m_fIsSprinting, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_fIsWalking, FIELD_BOOLEAN ),
 
-	/*
-	// These are initialized every time the player calls Activate()
-	DEFINE_FIELD( m_bIsAutoSprinting, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_fAutoSprintMinTime, FIELD_TIME ),
-	*/
-
 	// 	Field is used within a single tick, no need to save restore
 	// DEFINE_FIELD( m_bPlayUseDenySound, FIELD_BOOLEAN ),  
 	//							m_pPlayerAISquad reacquired on load
@@ -481,21 +471,11 @@ void CHL2_Player::HandleSpeedChanges( void )
 		// We want a full debounce of the key to resume sprinting after the suit is completely drained
 		if ( bWantSprint )
 		{
-			if ( sv_stickysprint.GetBool() )
-			{
-				StartAutoSprint();
-			}
-			else
-			{
-				StartSprinting();
-			}
+			StartSprinting();
 		}
 		else
 		{
-			if ( !sv_stickysprint.GetBool() )
-			{
-				StopSprinting();
-			}
+			StopSprinting();
 			// Reset key, so it will be activated post whatever is suppressing it.
 			m_nButtons &= ~IN_SPEED;
 		}
@@ -589,77 +569,10 @@ void CHL2_Player::PreThink(void)
 		return;
 	}
 
-	// This is an experiment of mine- autojumping! 
-	// only affects you if sv_autojump is nonzero.
-	if( (GetFlags() & FL_ONGROUND) && sv_autojump.GetFloat() != 0 )
-	{
-		VPROF( "CHL2_Player::PreThink-Autojump" );
-		// check autojump
-		Vector vecCheckDir;
-
-		vecCheckDir = GetAbsVelocity();
-
-		float flVelocity = VectorNormalize( vecCheckDir );
-
-		if( flVelocity > 200 )
-		{
-			// Going fast enough to autojump
-			vecCheckDir = WorldSpaceCenter() + vecCheckDir * 34 - Vector( 0, 0, 16 );
-
-			trace_t tr;
-
-			UTIL_TraceHull( WorldSpaceCenter() - Vector( 0, 0, 16 ), vecCheckDir, NAI_Hull::Mins(HULL_TINY_CENTERED),NAI_Hull::Maxs(HULL_TINY_CENTERED), MASK_PLAYERSOLID, this, COLLISION_GROUP_PLAYER, &tr );
-			
-			//NDebugOverlay::Line( tr.startpos, tr.endpos, 0,255,0, true, 10 );
-
-			if( tr.fraction == 1.0 && !tr.startsolid )
-			{
-				// Now trace down!
-				UTIL_TraceLine( vecCheckDir, vecCheckDir - Vector( 0, 0, 64 ), MASK_PLAYERSOLID, this, COLLISION_GROUP_NONE, &tr );
-
-				//NDebugOverlay::Line( tr.startpos, tr.endpos, 0,255,0, true, 10 );
-
-				if( tr.fraction == 1.0 && !tr.startsolid )
-				{
-					// !!!HACKHACK
-					// I KNOW, I KNOW, this is definitely not the right way to do this,
-					// but I'm prototyping! (sjb)
-					Vector vecNewVelocity = GetAbsVelocity();
-					vecNewVelocity.z += 250;
-					SetAbsVelocity( vecNewVelocity );
-				}
-			}
-		}
-	}
-
 	VPROF_SCOPE_BEGIN( "CHL2_Player::PreThink-Speed" );
 	HandleSpeedChanges();
-#ifdef HL2_EPISODIC
-	HandleArmorReduction();
-#endif
 
-	if( sv_stickysprint.GetBool() && m_bIsAutoSprinting )
-	{
-		// If we're ducked and not in the air
-		if( IsDucked() && GetGroundEntity() != NULL )
-		{
-			StopSprinting();
-		}
-		// Stop sprinting if the player lets off the stick for a moment.
-		else if( GetStickDist() == 0.0f )
-		{
-			if( gpGlobals->curtime > m_fAutoSprintMinTime )
-			{
-				StopSprinting();
-			}
-		}
-		else
-		{
-			// Stop sprinting one half second after the player stops inputting with the move stick.
-			m_fAutoSprintMinTime = gpGlobals->curtime + 0.5f;
-		}
-	}
-	else if ( IsSprinting() )
+	if ( IsSprinting() )
 	{
 		// Disable sprint while ducked unless we're in the air (jumping)
 		if ( IsDucked() && ( GetGroundEntity() != NULL ) )
@@ -719,102 +632,6 @@ void CHL2_Player::PreThink(void)
 		return;
 	}
 
-#ifdef HL2_EPISODIC
-	CheckFlashlight();
-#endif	// HL2_EPISODIC
-
-	// So the correct flags get sent to client asap.
-	//
-	if ( m_afPhysicsFlags & PFLAG_DIROVERRIDE )
-		AddFlag( FL_ONTRAIN );
-	else 
-		RemoveFlag( FL_ONTRAIN );
-
-	// Train speed control
-	if ( m_afPhysicsFlags & PFLAG_DIROVERRIDE )
-	{
-		CBaseEntity *pTrain = GetGroundEntity();
-		float vel;
-
-		if ( pTrain )
-		{
-			if ( !(pTrain->ObjectCaps() & FCAP_DIRECTIONAL_USE) )
-				pTrain = NULL;
-		}
-		
-		if ( !pTrain )
-		{
-			if ( GetActiveWeapon() && (GetActiveWeapon()->ObjectCaps() & FCAP_DIRECTIONAL_USE) )
-			{
-				m_iTrain = TRAIN_ACTIVE | TRAIN_NEW;
-
-				if ( m_nButtons & IN_FORWARD )
-				{
-					m_iTrain |= TRAIN_FAST;
-				}
-				else if ( m_nButtons & IN_BACK )
-				{
-					m_iTrain |= TRAIN_BACK;
-				}
-				else
-				{
-					m_iTrain |= TRAIN_NEUTRAL;
-				}
-				return;
-			}
-			else
-			{
-				trace_t trainTrace;
-				// Maybe this is on the other side of a level transition
-				UTIL_TraceLine( GetAbsOrigin(), GetAbsOrigin() + Vector(0,0,-38), 
-					MASK_PLAYERSOLID_BRUSHONLY, this, COLLISION_GROUP_NONE, &trainTrace );
-
-				if ( trainTrace.fraction != 1.0 && trainTrace.m_pEnt )
-					pTrain = trainTrace.m_pEnt;
-
-
-				if ( !pTrain || !(pTrain->ObjectCaps() & FCAP_DIRECTIONAL_USE) || !pTrain->OnControls(this) )
-				{
-//					Warning( "In train mode with no train!\n" );
-					m_afPhysicsFlags &= ~PFLAG_DIROVERRIDE;
-					m_iTrain = TRAIN_NEW|TRAIN_OFF;
-					return;
-				}
-			}
-		}
-		else if ( !( GetFlags() & FL_ONGROUND ) || pTrain->HasSpawnFlags( SF_TRACKTRAIN_NOCONTROL ) || (m_nButtons & (IN_MOVELEFT|IN_MOVERIGHT) ) )
-		{
-			// Turn off the train if you jump, strafe, or the train controls go dead
-			m_afPhysicsFlags &= ~PFLAG_DIROVERRIDE;
-			m_iTrain = TRAIN_NEW|TRAIN_OFF;
-			return;
-		}
-
-		SetAbsVelocity( vec3_origin );
-		vel = 0;
-		if ( m_afButtonPressed & IN_FORWARD )
-		{
-			vel = 1;
-			pTrain->Use( this, this, USE_SET, (float)vel );
-		}
-		else if ( m_afButtonPressed & IN_BACK )
-		{
-			vel = -1;
-			pTrain->Use( this, this, USE_SET, (float)vel );
-		}
-
-		if (vel)
-		{
-			m_iTrain = TrainSpeed(pTrain->m_flSpeed, ((CFuncTrackTrain*)pTrain)->GetMaxSpeed());
-			m_iTrain |= TRAIN_ACTIVE|TRAIN_NEW;
-		}
-	} 
-	else if (m_iTrain & TRAIN_ACTIVE)
-	{
-		m_iTrain = TRAIN_NEW; // turn off train
-	}
-
-
 	//
 	// If we're not on the ground, we're falling. Update our falling velocity.
 	//
@@ -823,63 +640,11 @@ void CHL2_Player::PreThink(void)
 		m_Local.m_flFallVelocity = -GetAbsVelocity().z;
 	}
 
-	if ( m_afPhysicsFlags & PFLAG_ONBARNACLE )
-	{
-		bool bOnBarnacle = false;
-		CNPC_Barnacle *pBarnacle = NULL;
-		do
-		{
-			// FIXME: Not a good or fast solution, but maybe it will catch the bug!
-			pBarnacle = (CNPC_Barnacle*)gEntList.FindEntityByClassname( pBarnacle, "npc_barnacle" );
-			if ( pBarnacle )
-			{
-				if ( pBarnacle->GetEnemy() == this )
-				{
-					bOnBarnacle = true;
-				}
-			}
-		} while ( pBarnacle );
-		
-		if ( !bOnBarnacle )
-		{
-			Warning( "Attached to barnacle?\n" );
-			Assert( 0 );
-			m_afPhysicsFlags &= ~PFLAG_ONBARNACLE;
-		}
-		else
-		{
-			SetAbsVelocity( vec3_origin );
-		}
-	}
-	// StudioFrameAdvance( );//!!!HACKHACK!!! Can't be hit by traceline when not animating?
-
-	// Update weapon's ready status
 	UpdateWeaponPosture();
 
-	// Disallow shooting while zooming
-	if ( IsX360() )
+	if ( m_nButtons & IN_ZOOM )
 	{
-		if ( IsZooming() )
-		{
-			if( GetActiveWeapon() && !GetActiveWeapon()->IsWeaponZoomed() )
-			{
-				// If not zoomed because of the weapon itself, do not attack.
-				m_nButtons &= ~(IN_ATTACK|IN_ATTACK2);
-			}
-		}
-	}
-	else
-	{
-		if ( m_nButtons & IN_ZOOM )
-		{
-			//FIXME: Held weapons like the grenade get sad when this happens
-	#ifdef HL2_EPISODIC
-			// Episodic allows players to zoom while using a func_tank
-			CBaseCombatWeapon* pWep = GetActiveWeapon();
-			if ( !m_hUseEntity || ( pWep && pWep->IsWeaponVisible() ) )
-	#endif
-			m_nButtons &= ~(IN_ATTACK|IN_ATTACK2);
-		}
+		m_nButtons &= ~(IN_ATTACK|IN_ATTACK2);
 	}
 }
 
@@ -1164,22 +929,6 @@ bool CHL2_Player::CanSprint()
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CHL2_Player::StartAutoSprint() 
-{
-	if( IsSprinting() )
-	{
-		StopSprinting();
-	}
-	else
-	{
-		StartSprinting();
-		m_bIsAutoSprinting = true;
-		m_fAutoSprintMinTime = gpGlobals->curtime + 1.5f;
-	}
-}
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 void CHL2_Player::StartSprinting( void )
 {
 	if( m_HL2Local.m_flSuitPower < 10 )
@@ -1231,12 +980,6 @@ void CHL2_Player::StopSprinting( void )
 	}
 
 	m_fIsSprinting = false;
-
-	if ( sv_stickysprint.GetBool() )
-	{
-		m_bIsAutoSprinting = false;
-		m_fAutoSprintMinTime = 0.0f;
-	}
 }
 
 
@@ -1783,19 +1526,6 @@ void CHL2_Player::SuitPower_Update( void )
 	else if( m_HL2Local.m_bitsActiveDevices )
 	{
 		float flPowerLoad = m_flSuitPowerLoad;
-
-		//Since stickysprint quickly shuts off sprint if it isn't being used, this isn't an issue.
-		if ( !sv_stickysprint.GetBool() )
-		{
-			if( SuitPower_IsDeviceActive(SuitDeviceSprint) )
-			{
-				if( !fabs(GetAbsVelocity().x) && !fabs(GetAbsVelocity().y) )
-				{
-					// If player's not moving, don't drain sprint juice.
-					flPowerLoad -= SuitDeviceSprint.GetDeviceDrainRate();
-				}
-			}
-		}
 
 		if( SuitPower_IsDeviceActive(SuitDeviceFlashlight) )
 		{
@@ -2989,44 +2719,8 @@ void CHL2_Player::UpdateWeaponPosture( void )
 		}
 	}
 
-	if( g_pGameRules->GetAutoAimMode() != AUTOAIM_NONE )
-	{
-		if( !pWeapon )
-		{
-			// This tells the client to draw no crosshair
-			m_HL2Local.m_bWeaponLowered = true;
-			return;
-		}
-		else
-		{
-			if( !pWeapon->CanLower() && m_HL2Local.m_bWeaponLowered )
-				m_HL2Local.m_bWeaponLowered = false;
-		}
-
-		if( !m_AutoaimTimer.Expired() )
-			return;
-
-		m_AutoaimTimer.Set( .1 );
-
-		VPROF( "hl2_x360_aiming" );
-
-		// Call the autoaim code to update the local player data, which allows the client to update.
-		autoaim_params_t params;
-		params.m_vecAutoAimPoint.Init();
-		params.m_vecAutoAimDir.Init();
-		params.m_fScale = AUTOAIM_SCALE_DEFAULT;
-		params.m_fMaxDist = autoaim_max_dist.GetFloat();
-		GetAutoaimVector( params );
-		m_HL2Local.m_hAutoAimTarget.Set( params.m_hAutoAimEntity );
-		m_HL2Local.m_vecAutoAimPoint.Set( params.m_vecAutoAimPoint );
-		m_HL2Local.m_bAutoAimTarget = ( params.m_bAutoAimAssisting || params.m_bOnTargetNatural );
-		return;
-	}
-	else
-	{
-		// Make sure there's no residual autoaim target if the user changes the xbox_aiming convar on the fly.
-		m_HL2Local.m_hAutoAimTarget.Set(NULL);
-	}
+	// Make sure there's no residual autoaim target if the user changes the xbox_aiming convar on the fly.
+	m_HL2Local.m_hAutoAimTarget.Set(NULL);
 }
 
 //-----------------------------------------------------------------------------
@@ -3158,17 +2852,6 @@ void CHL2_Player::ForceDropOfCarriedPhysObjects( CBaseEntity *pOnlyIfHoldingThis
 		return;
 	}
 
-#ifdef HL2_EPISODIC
-	if ( hl2_episodic.GetBool() )
-	{
-		CBaseEntity *pHeldEntity = PhysCannonGetHeldEntity( GetActiveWeapon() );
-		if( pHeldEntity && pHeldEntity->ClassMatches( "grenade_helicopter" ) )
-		{
-			return;
-		}
-	}
-#endif
-
 	// Drop any objects being handheld.
 	ClearUseEntity();
 
@@ -3234,34 +2917,6 @@ void CHL2_Player::UpdateClientData( void )
 		int iTimeBasedDamage = g_pGameRules->Damage_GetTimeBased();
 		m_bitsDamageType &= iTimeBasedDamage;
 	}
-
-	// Update Flashlight
-#ifdef HL2_EPISODIC
-	if ( Flashlight_UseLegacyVersion() == false )
-	{
-		if ( FlashlightIsOn() && sv_infinite_aux_power.GetBool() == false )
-		{
-			m_HL2Local.m_flFlashBattery -= FLASH_DRAIN_TIME * gpGlobals->frametime;
-			if ( m_HL2Local.m_flFlashBattery < 0.0f )
-			{
-				FlashlightTurnOff();
-				m_HL2Local.m_flFlashBattery = 0.0f;
-			}
-		}
-		else
-		{
-			m_HL2Local.m_flFlashBattery += FLASH_CHARGE_TIME * gpGlobals->frametime;
-			if ( m_HL2Local.m_flFlashBattery > 100.0f )
-			{
-				m_HL2Local.m_flFlashBattery = 100.0f;
-			}
-		}
-	}
-	else
-	{
-		m_HL2Local.m_flFlashBattery = -1.0f;
-	}
-#endif // HL2_EPISODIC
 
 	BaseClass::UpdateClientData();
 }

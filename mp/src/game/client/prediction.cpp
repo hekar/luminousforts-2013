@@ -173,7 +173,7 @@ void CPrediction::CheckError( int commands_acknowledged )
 
 	len = VectorLength( delta );
 	if (len > MAX_PREDICTION_ERROR )
-	{	
+	{
 		// A teleport or something, clear out error
 		len = 0;
 	}
