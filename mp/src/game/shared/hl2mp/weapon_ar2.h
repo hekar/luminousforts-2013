@@ -35,7 +35,6 @@ public:
 	void	Precache( void );
 	
 	void	SecondaryAttack( void );
-	void	DelayedAttack( void );
 
 	const char *GetTracerType( void ) { return "AR2Tracer"; }
 
@@ -73,8 +72,6 @@ private:
 
 protected:
 
-	float					m_flDelayedFire;
-	bool					m_bShotDelayed;
 	int						m_nVentPose;
 	
 #ifndef CLIENT_DLL

@@ -93,12 +93,6 @@ void CWeaponAR2::Precache( void )
 //-----------------------------------------------------------------------------
 void CWeaponAR2::ItemPostFrame( void )
 {
-	// See if we need to fire off our secondary round
-	if ( m_bShotDelayed && gpGlobals->curtime > m_flDelayedFire )
-	{
-		DelayedAttack();
-	}
-
 	// Update our pose parameter for the vents
 	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
 
@@ -159,89 +153,11 @@ void CWeaponAR2::DoImpactEffect( trace_t &tr, int nDamageType )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CWeaponAR2::DelayedAttack( void )
-{
-	m_bShotDelayed = false;
-	
-	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
-	
-	if ( pOwner == NULL )
-		return;
-
-	// Deplete the clip completely
-	SendWeaponAnim( ACT_VM_SECONDARYATTACK );
-	m_flNextSecondaryAttack = pOwner->m_flNextAttack = gpGlobals->curtime + SequenceDuration();
-
-	// Register a muzzleflash for the AI
-	pOwner->DoMuzzleFlash();
-	
-	WeaponSound( WPN_DOUBLE );
-
-	// Fire the bullets
-	Vector vecSrc	 = pOwner->Weapon_ShootPosition( );
-	Vector vecAiming = pOwner->GetAutoaimVector( AUTOAIM_2DEGREES );
-	Vector impactPoint = vecSrc + ( vecAiming * MAX_TRACE_LENGTH );
-
-	// Fire the bullets
-	Vector vecVelocity = vecAiming * 1000.0f;
-
-#ifndef CLIENT_DLL
-	// Fire the combine ball
-	CreateCombineBall(	vecSrc, 
-						vecVelocity, 
-						sk_weapon_ar2_alt_fire_radius.GetFloat(), 
-						sk_weapon_ar2_alt_fire_mass.GetFloat(),
-						sk_weapon_ar2_alt_fire_duration.GetFloat(),
-						pOwner );
-
-	// View effects
-	color32 white = {255, 255, 255, 64};
-	UTIL_ScreenFade( pOwner, white, 0.1, 0, FFADE_IN  );
-#endif
-	
-	//Disorient the player
-	QAngle angles = pOwner->GetLocalAngles();
-
-	angles.x += random->RandomInt( -4, 4 );
-	angles.y += random->RandomInt( -4, 4 );
-	angles.z = 0;
-
-//	pOwner->SnapEyeAngles( angles );
-	
-	pOwner->ViewPunch( QAngle( SharedRandomInt( "ar2pax", -8, -12 ), SharedRandomInt( "ar2pay", 1, 2 ), 0 ) );
-
-	// Decrease ammo
-	pOwner->RemoveAmmo( 1, m_iSecondaryAmmoType );
-
-	// Can shoot again immediately
-	m_flNextPrimaryAttack = gpGlobals->curtime + 0.5f;
-
-	// Can blow up after a short delay (so have time to release mouse button)
-	m_flNextSecondaryAttack = gpGlobals->curtime + 1.0f;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 void CWeaponAR2::SecondaryAttack( void )
 {
-	if ( m_bShotDelayed )
-		return;
-
-	// Cannot fire underwater
-	if ( GetOwner() && GetOwner()->GetWaterLevel() == 3 )
-	{
-		SendWeaponAnim( ACT_VM_DRYFIRE );
-		BaseClass::WeaponSound( EMPTY );
-		m_flNextSecondaryAttack = gpGlobals->curtime + 0.5f;
-		return;
-	}
-
-	m_bShotDelayed = true;
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flDelayedFire = gpGlobals->curtime + 0.5f;
-
-	SendWeaponAnim( ACT_VM_FIDGET );
-	WeaponSound( SPECIAL1 );
+	SendWeaponAnim( ACT_VM_DRYFIRE );
+	WeaponSound( EMPTY );
+	m_flNextSecondaryAttack = gpGlobals->curtime + 0.5f;
 }
 
 //-----------------------------------------------------------------------------
@@ -250,18 +166,12 @@ void CWeaponAR2::SecondaryAttack( void )
 //-----------------------------------------------------------------------------
 bool CWeaponAR2::CanHolster( void )
 {
-	if ( m_bShotDelayed )
-		return false;
-
 	return BaseClass::CanHolster();
 }
 
 
 bool CWeaponAR2::Deploy( void )
 {
-	m_bShotDelayed = false;
-	m_flDelayedFire = 0.0f;
-
 	return BaseClass::Deploy();
 }
 
@@ -270,9 +180,6 @@ bool CWeaponAR2::Deploy( void )
 //-----------------------------------------------------------------------------
 bool CWeaponAR2::Reload( void )
 {
-	if ( m_bShotDelayed )
-		return false;
-
 	return BaseClass::Reload();
 }
 
