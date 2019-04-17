@@ -304,7 +304,7 @@ void CCustomGameRules::CheckWinningTeam()
 		{
 			TeamWins( m_iWinningTeam );
 		}
-		else if ( m_iWinningTeam == SDK_TEAM_SPECTATOR )
+		else if ( m_iWinningTeam == TEAM_SPECTATOR )
 		{
 			TeamsDraw();
 		}

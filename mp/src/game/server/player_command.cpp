@@ -139,6 +139,7 @@ void CPlayerMove::SetupMove( CBasePlayer *player, CUserCmd *ucmd, IMoveHelper *p
 	move->m_bGameCodeMovedPlayer = false;
 	if ( player->GetPreviouslyPredictedOrigin() != player->GetAbsOrigin() )
 	{
+		Msg( "Previously predicted origin differs" );
 		move->m_bGameCodeMovedPlayer = true;
 	}
 

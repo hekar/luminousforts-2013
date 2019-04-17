@@ -1550,7 +1550,6 @@ void CHL2MP_Player::StopObserverMode()
 
 void CHL2MP_Player::State_Enter_OBSERVER_MODE()
 {
-	ModDebugMsg( "State_Enter_OBSERVER_MODE" );
 
 	int observerMode = m_iObserverLastMode;
 	if ( IsNetClient() )
@@ -1571,8 +1570,6 @@ void CHL2MP_Player::State_Enter_OBSERVER_MODE()
 
 void CHL2MP_Player::State_PreThink_OBSERVER_MODE()
 {
-	ModDebugMsg( "State_PreThink_OBSERVER_MODE" );
-
 	// Make sure nobody has changed any of our state.
 	//	Assert( GetMoveType() == MOVETYPE_FLY );
 	Assert( m_takedamage == DAMAGE_NO );
@@ -1586,39 +1583,32 @@ void CHL2MP_Player::State_PreThink_OBSERVER_MODE()
 
 void CHL2MP_Player::State_Enter_ENTER()
 {
-	ModDebugMsg( "State_Enter_ENTER" );
 }
 
 void CHL2MP_Player::State_Leave_ENTER()
 {
-	ModDebugMsg( "State_Leave_ENTER" );
 }
 
 void CHL2MP_Player::State_Enter_TEAM_REQUIRED()
 {
-	ModDebugMsg( "State_Enter_TEAM_REQUIRED" );
 	engine->ClientCommand( edict(), "lf_hud_teammenu" );
 }
 
 void CHL2MP_Player::State_PreThink_TEAM_REQUIRED()
 {
-	ModDebugMsg( "State_PreThink_TEAM_REQUIRED" );
 }
 
 void CHL2MP_Player::State_Enter_CLASS_REQUIRED()
 {
-	ModDebugMsg( "State_Enter_CLASS_REQUIRED" );
 	engine->ClientCommand( edict( ), "lf_hud_classmenu" );
 }
 
 void CHL2MP_Player::State_PreThink_CLASS_REQUIRED()
 {
-	ModDebugMsg( "State_PreThink_CLASS_REQUIRED" );
 }
 
 void CHL2MP_Player::State_Enter_ACTIVE()
 {
-	ModDebugMsg( "State_Enter_ACTIVE" );
 
 	SetMoveType( MOVETYPE_WALK );
 	

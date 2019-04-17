@@ -56,8 +56,8 @@ void CC_HandSpawnBlock( const CCommand& args )
 	}
 
 	int handspawn = lf_hand_spawn_enabled.GetInt();
-	if ( teamnum == TEAM_RED && !( handspawn & MOD_TEAM_RED ) ||
-		teamnum == TEAM_BLUE && !( handspawn & MOD_TEAM_BLUE ) )
+	if ( ( teamnum == TEAM_RED && !( handspawn & MOD_TEAM_RED ) ) ||
+		( teamnum == TEAM_BLUE && !( handspawn & MOD_TEAM_BLUE ) ) )
 	{
 		return;
 	}

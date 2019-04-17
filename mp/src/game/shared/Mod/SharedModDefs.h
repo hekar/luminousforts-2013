@@ -32,30 +32,12 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #define SDK_GAME_DESCRIPTION	"LuminousForts 0.5"
 
-#define SDK_USE_TEAMS
-#define SDK_USE_PLAYERCLASSES
-#define SDK_USE_STAMINA
-#define SDK_USE_SPRINTING
-#define SDK_USE_STAMINA
-#define SDK_SHOOT_WHILE_SPRINTING
-#define SDK_SHOOT_ON_LADDERS
-#define SDK_SHOOT_WHILE_JUMPING
-
-// Can your players go prone?
-//#define SDK_USE_PRONE
-
-
-#define SDK_TEAM_SPECTATOR TEAM_SPECTATOR
 enum sdkteams_e
 {
 	SDK_TEAM_BLUE = 2,
 	SDK_TEAM_RED = 3,
 };
 
-#define INITIAL_SPRINT_STAMINA_PENALTY 0
-#define LOW_STAMINA_THRESHOLD	35
-
-#define SDK_NUM_PLAYERCLASSES GameRules()->GetClassCount()
 #define SDK_PLAYERCLASS_IMAGE_LENGTH 64
 
 #define PLAYERCLASS_RANDOM		-2
@@ -67,20 +49,11 @@ enum sdkteams_e
 
 #define pszTeamBlueClasses GameRules()->GetClassNames( SDK_TEAM_BLUE )
 #define pszTeamRedClasses GameRules()->GetClassNames( SDK_TEAM_RED )
-//extern const char *pszTeamBlueClasses[];
-//extern const char *pszTeamRedClasses[];
 
 //Tony; We need to precache all possible player models that we're going to use
 extern const char *pszPossiblePlayerModels[];
 
 extern const char *pszTeamNames[];
-
-extern void ModDebugMsg( const char *message );
-
-//Tony; these defines handle the default speeds for all of these - all are listed regardless of which option is enabled.
-#define SDK_DEFAULT_PLAYER_RUNSPEED			340
-#define SDK_DEFAULT_PLAYER_SPRINTSPEED		440
-#define SDK_DEFAULT_PLAYER_PRONESPEED		100
 
 //--------------------------------------------------------------------------------------------------------
 //
@@ -153,18 +126,5 @@ typedef enum
 
 const char *WeaponIDToAlias( int id );
 int AliasToWeaponID( const char *alias );
-
-#define SDK_PLAYER_DEATH_TIME	3.0f	//Minimum Time before respawning
-
-// Special Damage types
-enum
-{
-	SDK_DMG_CUSTOM_NONE = 0,
-	SDK_DMG_CUSTOM_SUICIDE,
-};
-
-// Player avoidance
-#define PUSHAWAY_THINK_INTERVAL		(1.0f / 20.0f)
-
 
 #endif /* SHAREDMODDEFS_H_ */

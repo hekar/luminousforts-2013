@@ -234,14 +234,4 @@ void CC_ReturnToSpawn( const CCommand& args )
 
 static ConCommand lf_return_to_spawn( "lf_return_to_spawn", CC_ReturnToSpawn, "Teleport to spawn" );
 
-
-//void CC_MotdClosed( const CCommand& args )
-//{
-//	CModPlayer *pPlayer = ToModPlayer( UTIL_GetCommandClient() );
-//
-//	ModDebugMsg( pPlayer->GetPlayerName() );
-//}
-//
-//static ConCommand mod_motd_closed( "mod_motd_closed", CC_MotdClosed, "The motd dialog has been closed by a player" );
-
 #endif // CLIENT_DLL

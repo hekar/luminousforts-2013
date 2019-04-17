@@ -245,12 +245,10 @@ int CHL2MPClientScoreBoardDialog::GetSectionFromTeamNumber( int teamNumber )
 {
 	switch ( teamNumber )
 	{
-#if defined ( SDK_USE_TEAMS )
 	case SDK_TEAM_BLUE:
 		return SCORESECTION_TEAM1;
 	case SDK_TEAM_RED:
 		return SCORESECTION_TEAM2;
-#endif
 	case TEAM_SPECTATOR:
 		AssertMsg( 0, "Scoreboard trying to get section for Spectator!" );
 		return -1;

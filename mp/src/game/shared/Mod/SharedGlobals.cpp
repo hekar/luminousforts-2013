@@ -43,7 +43,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 //
 int GetOtherTeamNumber( int iTeamNum )
 {
-	return ( iTeamNum == SDK_TEAM_BLUE ) ? SDK_TEAM_RED : SDK_TEAM_BLUE;
+	return ( iTeamNum == TEAM_BLUE ) ? TEAM_RED : TEAM_BLUE;
 }
 
 //
@@ -65,11 +65,11 @@ int TeamMaskToNumber( int TeamMask )
 	}
 	else if ( TeamMask & MOD_TEAM_BLUE )
 	{
-		return SDK_TEAM_BLUE;
+		return TEAM_BLUE;
 	}
 	else if ( TeamMask & MOD_TEAM_RED )
 	{
-		return SDK_TEAM_RED;
+		return TEAM_RED;
 	}
 	else if ( TeamMask & MOD_TEAM_SPEC )
 	{
@@ -124,10 +124,10 @@ int TeamMaskToNumber( int TeamMask )
 #endif // CLIENT_DLL
 	switch ( nTeamIndex )
 	{
-	case SDK_TEAM_RED:
+	case TEAM_RED:
 		return Color( LF_CLR_TEAM_RED );
 		break;
-	case SDK_TEAM_BLUE:
+	case TEAM_BLUE:
 		return Color( LF_CLR_TEAM_BLUE );
 		break;
 	default:
@@ -146,10 +146,10 @@ int TeamMaskToNumber( int TeamMask )
 {
 	switch ( nTeamIndex )
 	{
-	case SDK_TEAM_RED:
+	case TEAM_RED:
 		return Color( LF_CLR_TEAM_RED_LITE );
 		break;
-	case SDK_TEAM_BLUE:
+	case TEAM_BLUE:
 		return Color( LF_CLR_TEAM_BLUE_LITE );
 		break;
 	default:
@@ -168,10 +168,10 @@ int TeamMaskToNumber( int TeamMask )
 {
 	switch ( nTeamIndex )
 	{
-	case SDK_TEAM_RED:
+	case TEAM_RED:
 		return Color( LF_CLR_TEAM_RED_MED );
 		break;
-	case SDK_TEAM_BLUE:
+	case TEAM_BLUE:
 		return Color( LF_CLR_TEAM_BLUE_MED );
 		break;
 	default:
@@ -190,10 +190,10 @@ int TeamMaskToNumber( int TeamMask )
 {
 	switch ( nTeamIndex )
 	{
-	case SDK_TEAM_RED:
+	case TEAM_RED:
 		return Color( LF_CLR_TEAM_RED_DARK );
 		break;
-	case SDK_TEAM_BLUE:
+	case TEAM_BLUE:
 		return Color( LF_CLR_TEAM_BLUE_DARK );
 		break;
 	default:
@@ -204,7 +204,7 @@ int TeamMaskToNumber( int TeamMask )
 
  bool IsPlayingTeam( int teamNumber )
  {
-	 return teamNumber == TEAM_RED || TEAM_BLUE;
+	return teamNumber == TEAM_RED || teamNumber == TEAM_BLUE;
  }
 
 int Q_StrReplace( const char *str, char *output, int size, const char *original, const char *replace )
@@ -216,7 +216,13 @@ int Q_StrReplace( const char *str, char *output, int size, const char *original,
 	Q_strncpy( output, str, clamp( pos - str, 0, size - 1 ) );
 	output[ clamp( pos - str, 0, size - 1 ) ] = '\0';
 
-	Q_snprintf( output + clamp( pos - str, 0, size - 1 ) , size, "%s%s", replace, pos + strlen( original ) );
+	Q_snprintf(
+		output + clamp( pos - str, 0, size - 1 ),
+		size,
+		"%s%s",
+		replace,
+		pos + strlen( original )
+	);
 
 	return TRUE;
 }

@@ -563,6 +563,11 @@ bool C_HL2MP_Player::CanSprint( void )
 //-----------------------------------------------------------------------------
 void C_HL2MP_Player::StartSprinting( void )
 {
+	if ( GameRules()->GetCurrentPhaseID() == PHASE_BUILD  )
+	{
+		m_HL2Local.m_flSuitPower = 100;
+	}
+
 	if( m_HL2Local.m_flSuitPower < 10 )
 	{
 		// Don't sprint unless there's a reasonable
@@ -976,6 +981,11 @@ void C_HL2MPRagdoll::SetupWeights( const matrix3x4_t *pBoneToWorld, int nFlexWei
 void C_HL2MP_Player::PostThink( void )
 {
 	BaseClass::PostThink();
+
+	if ( GetFlags() & FL_DUCKING )
+	{
+		SetCollisionBounds( VEC_CROUCH_TRACE_MIN, VEC_CROUCH_TRACE_MAX );
+	}
 
 	// Store the eye angles pitch so the client can compute its animation state correctly.
 	m_angEyeAngles = EyeAngles();

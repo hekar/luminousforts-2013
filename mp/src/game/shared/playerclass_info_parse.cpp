@@ -215,9 +215,9 @@ FilePlayerClassInfo_t::FilePlayerClassInfo_t()
 	m_iTeam				= TEAM_UNASSIGNED;
 
 	m_szLimitCvar[0]	= '\0';
-	m_flRunSpeed		= SDK_DEFAULT_PLAYER_RUNSPEED;
-	m_flSprintSpeed		= SDK_DEFAULT_PLAYER_SPRINTSPEED;
-	m_flProneSpeed		= SDK_DEFAULT_PLAYER_PRONESPEED;
+	m_flRunSpeed		= 200;
+	m_flSprintSpeed		= 340;
+	m_flProneSpeed		= 160;
 
 	m_iHealth			= 0;
 	m_iArmor			= 0;
@@ -297,9 +297,9 @@ void FilePlayerClassInfo_t::Parse( KeyValues *pKeyValuesData, const char *szPlay
 	Q_strncpy( m_szClassImageBG, pKeyValuesData->GetString( "classimagebg", "white" ), sizeof( m_szClassImageBG ) );
 
 	m_iHealth		= pKeyValuesData->GetFloat( "Health", 100 );
-	m_flRunSpeed		= pKeyValuesData->GetFloat( "RunSpeed", SDK_DEFAULT_PLAYER_RUNSPEED );
-	m_flSprintSpeed		= pKeyValuesData->GetFloat( "SprintSpeed", SDK_DEFAULT_PLAYER_SPRINTSPEED );
-	m_flProneSpeed		= pKeyValuesData->GetFloat( "ProneSpeed", SDK_DEFAULT_PLAYER_PRONESPEED );
+	m_flRunSpeed		= pKeyValuesData->GetFloat( "RunSpeed", 200 );
+	m_flSprintSpeed		= pKeyValuesData->GetFloat( "SprintSpeed", 340 );
+	m_flProneSpeed		= pKeyValuesData->GetFloat( "ProneSpeed", 160 );
 	m_flStaminaDrainRate = pKeyValuesData->GetFloat( "StaminaDrainRate", lf_combat_default_drainrate.GetFloat() );
 	m_flStaminaRestoreRate = pKeyValuesData->GetFloat( "StaminaRestoreRate", lf_combat_default_restorerate.GetFloat() );
 

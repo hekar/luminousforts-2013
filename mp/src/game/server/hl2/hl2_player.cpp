@@ -654,7 +654,7 @@ void CHL2_Player::PostThink( void )
 
 	if ( !g_fGameOver && !IsPlayerLockedInPlace() && IsAlive() )
 	{
-		 HandleAdmireGlovesAnimation();
+		HandleAdmireGlovesAnimation();
 	}
 }
 
@@ -931,6 +931,12 @@ bool CHL2_Player::CanSprint()
 //-----------------------------------------------------------------------------
 void CHL2_Player::StartSprinting( void )
 {
+	bool isBuildPhase = GameRules()->GetCurrentPhaseID() == PHASE_BUILD;
+	if ( isBuildPhase )
+	{
+		m_HL2Local.m_flSuitPower = 100;
+	}
+
 	if( m_HL2Local.m_flSuitPower < 10 )
 	{
 		// Don't sprint unless there's a reasonable
@@ -946,7 +952,7 @@ void CHL2_Player::StartSprinting( void )
 		return;
 	}
 
-	if ( GameRules()->GetCurrentPhaseID() != PHASE_BUILD  )
+	if ( !isBuildPhase )
 	{
 		if( !SuitPower_AddDevice( SuitDeviceSprint ) )
 			return;
