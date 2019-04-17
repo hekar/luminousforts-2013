@@ -94,7 +94,7 @@ private:
 	CPanelAnimationVarAliasType( float, m_flRedRectWidth, "RedRectWidth", "192", "proportional_float" );
 	CPanelAnimationVarAliasType( float, m_flRedRectHeight, "RedRectHeight", "26", "proportional_float" );
 
-	CAvatarImage *m_pAvatar[ TEAM_COUNT ];
+	CAvatarImage m_pAvatar[ TEAM_COUNT ];
 
 	float m_DroppedMaxTime;
 	CountdownTimer m_DroppedTimer[ TEAM_COUNT ];

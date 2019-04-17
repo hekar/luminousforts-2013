@@ -72,33 +72,22 @@ void CFlagZoneBase::Spawn()
 
 void CFlagZoneBase::Touch( CBaseEntity *pOther )
 {
-	if ( m_bDisabled )
-		return;
-
-	if ( !pOther )
-	{
-		return;
-	}
-	else if ( !pOther->IsPlayer() )
+	if ( m_bDisabled || !pOther || !pOther->IsPlayer() )
 	{
 		return;
 	}
 
 	CModPlayer *pPlayer = ToModPlayer( pOther );
-	if ( GetTeamNumber() == pPlayer->GetTeamNumber() ||
-		GetTeamNumber() == TEAM_SPECTATOR )
+	if ( pPlayer && pPlayer->HasFlag() &&
+		GetTeamNumber() == pPlayer->GetTeamNumber() &&
+		GetTeamNumber() != TEAM_SPECTATOR )
 	{
-		if ( pPlayer->HasFlag () )
-		{
-			Capture( pPlayer );
-		}
+		Capture( pPlayer, pPlayer->GetFlag() );
 	}
 }
 
-void CFlagZoneBase::Capture( CModPlayer *pPlayer )
+void CFlagZoneBase::Capture( CModPlayer *pPlayer, CFlagBase *pFlag )
 {
-	CFlagBase *pFlag = pPlayer->GetFlag();
-
 	pFlag->OnScore();
 	pFlag->OnScoreEvent();
 	pFlag->OnScoreOutput();

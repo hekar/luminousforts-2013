@@ -356,16 +356,12 @@ void CFlagBase::FireGameEvent(IGameEvent* pEvent)
 // Event on Pickup
 void CFlagBase::OnPickupEvent()
 {
-#if 0
-	CReliableBroadcastRecipientFilter filter;
-	UserMessageBegin( filter, "UpdateFlagCarrier" );
-		WRITE_LONG( HFLG_PICKUP );
-		WRITE_LONG( m_pPlayerWithFlag->GetTeamNumber() );
-		WRITE_LONG( GetTeamNumber() );
-		WRITE_LONG( m_pPlayerWithFlag->GetUserID() );
-	MessageEnd();
-#endif // 0
-	SetFlagStatus( HFLG_PICKUP, m_pPlayerWithFlag->GetTeamNumber(), GetTeamNumber(), m_pPlayerWithFlag->GetUserID() );
+	SetFlagStatus(
+		HFLG_PICKUP,
+		m_pPlayerWithFlag->GetTeamNumber(),
+		GetTeamNumber(),
+		m_pPlayerWithFlag->GetUserID()
+	);
 
 	IGameEvent* pEvent = gameeventmanager->CreateEvent( "flag_pickup", true );
 	
@@ -383,19 +379,14 @@ void CFlagBase::OnScoreEvent()
 // Event on Drop
 void CFlagBase::OnDropEvent()
 {
-#if 0
-	CReliableBroadcastRecipientFilter filter;
-	UserMessageBegin( filter, "UpdateFlagCarrier" );
-		WRITE_LONG( HFLG_DROPPED_TIMER );
-		WRITE_LONG( m_pPlayerWithFlag->GetTeamNumber() );
-		WRITE_LONG( GetTeamNumber() );
-		WRITE_LONG( m_pPlayerWithFlag->GetUserID() );
-	MessageEnd();
-#endif // 0
+	SetFlagStatus(
+		HFLG_DROPPED_TIMER,
+		m_pPlayerWithFlag->GetTeamNumber(),
+		GetTeamNumber(),
+		m_pPlayerWithFlag->GetUserID()
+	);
 
-	SetFlagStatus( HFLG_DROPPED_TIMER, m_pPlayerWithFlag->GetTeamNumber(), GetTeamNumber(), m_pPlayerWithFlag->GetUserID() );
-
-	IGameEvent* pEvent = gameeventmanager->CreateEvent("flag_dropped", true);
+	IGameEvent* pEvent = gameeventmanager->CreateEvent( "flag_dropped", true );
 	
 	pEvent->SetInt( "userid", m_pPlayerWithFlag->GetUserID() );
 	pEvent->SetInt( "teamid", m_pPlayerWithFlag->GetTeamNumber() );
@@ -410,7 +401,7 @@ void CFlagBase::OnReturnEvent()
 	// Our flag has been returned
 
 	int userid = 0;
-	int teamid = ( GetTeamNumber() == SDK_TEAM_RED ) ? SDK_TEAM_BLUE : SDK_TEAM_RED;
+	int otherTeamId = ( GetTeamNumber() == TEAM_RED ) ? TEAM_BLUE : TEAM_RED;
 
 	// If it was actually a player that returned the flag
 	if ( m_pPlayerReturnedFlag )
@@ -418,26 +409,16 @@ void CFlagBase::OnReturnEvent()
 		userid = m_pPlayerReturnedFlag->GetUserID();
 	}
 
-	// OMG, wtf - Hekar
-	if ( m_pPlayerDroppedFlag )
-	{
-		teamid = m_pPlayerDroppedFlag->GetTeamNumber();
-	}
-
-#if 0
-	CReliableBroadcastRecipientFilter filter;
-	UserMessageBegin( filter, "UpdateFlagCarrier" );
-		WRITE_LONG( HFLG_RETURNED );
-		WRITE_LONG( teamid );
-		WRITE_LONG( GetTeamNumber() );
-		WRITE_LONG( userid );
-	MessageEnd();
-#endif // 0
-	SetFlagStatus( HFLG_RETURNED, teamid, GetTeamNumber(), userid );
+	SetFlagStatus(
+		HFLG_RETURNED,
+		otherTeamId,
+		GetTeamNumber(),
+		userid
+	);
 
 	IGameEvent* pEvent = gameeventmanager->CreateEvent( "flag_returned", true );
 	pEvent->SetInt( "userid", userid );
-	pEvent->SetInt( "teamid", teamid  );
+	pEvent->SetInt( "teamid", otherTeamId  );
 	pEvent->SetInt( "flagteamid", GetTeamNumber() );
 	gameeventmanager->FireEvent( pEvent, false );
 }

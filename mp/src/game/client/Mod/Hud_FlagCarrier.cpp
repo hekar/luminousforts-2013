@@ -60,7 +60,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #define TAKEN_INVALID_PLAYER -1
 
-#define BASE_TAG L"Base"
 #define DROPPED_TAG L"Dropped"
 #define DROPPED_TIMER_TAG L"Dropped: %.1f"
 
@@ -83,41 +82,11 @@ CHudFlagCarrier::CHudFlagCarrier( const char *pElementName ) :
 
 	SetPaintBackgroundEnabled( true );
 
-	for (int i = 0; i < TEAM_COUNT; i++)
-	{
-		m_pAvatar [i] = NULL;
-		m_iTakenByPlayer[ i ] = TAKEN_INVALID_PLAYER;
-	}
-
-	m_pAvatar[ SDK_TEAM_BLUE ] = new CAvatarImage();
-	m_pAvatar[ SDK_TEAM_RED ] = new CAvatarImage();
-
-	m_pAvatar[ SDK_TEAM_BLUE ]->SetPos( 10, 10 );
-	m_pAvatar[ SDK_TEAM_RED ]->SetPos( 10, 52 );
-	
-	m_iTakenByPlayer[ SDK_TEAM_BLUE ] = TAKEN_INVALID_PLAYER;
-	m_iTakenByPlayer[ SDK_TEAM_RED ] = TAKEN_INVALID_PLAYER;
-
-	m_DroppedMaxTime = lf_flag_return.GetFloat();
-
-	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
-	{
-		m_FlagState[ i ] = HFLG_BASE;
-		m_LastFlagState[ i ] = 0;
-	}
-
 	SetHiddenBits( HIDEHUD_PLAYERDEAD | HIDEHUD_BUILDPHASE );
 }
 
 CHudFlagCarrier::~CHudFlagCarrier ()
 {
-	for (int i = 0; i < TEAM_COUNT; i++)
-	{
-		if ( m_pAvatar[ i ])
-		{
-			delete m_pAvatar[ i ];
-		}
-	}
 }
 
 void CHudFlagCarrier::Init( void )
@@ -127,42 +96,38 @@ void CHudFlagCarrier::Init( void )
 
 void CHudFlagCarrier::LevelInit( void )
 {
-	m_iTakenByPlayer[ SDK_TEAM_BLUE ] = TAKEN_INVALID_PLAYER;
-	m_iTakenByPlayer[ SDK_TEAM_RED ] = TAKEN_INVALID_PLAYER;
+	m_iTakenByPlayer[ TEAM_UNASSIGNED ] = TAKEN_INVALID_PLAYER;
+	m_iTakenByPlayer[ TEAM_SPECTATOR ] = TAKEN_INVALID_PLAYER;
+	m_iTakenByPlayer[ TEAM_BLUE ] = TAKEN_INVALID_PLAYER;
+	m_iTakenByPlayer[ TEAM_RED ] = TAKEN_INVALID_PLAYER;
 
 	m_DroppedMaxTime = lf_flag_return.GetFloat();
 
-	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
-	{
-		m_FlagState[ i ] = HFLG_BASE;
-		m_LastFlagState[ i ] = 0;
-	}
+	m_FlagState[ TEAM_BLUE ] = HFLG_BASE;
+	m_LastFlagState[ TEAM_BLUE ] = 0;
+
+	m_FlagState[ TEAM_RED ] = HFLG_BASE;
+	m_LastFlagState[ TEAM_RED ] = 0;
 }
 
 void CHudFlagCarrier::Reset( void )
 {
-	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
-	{
-		UpdateFlagState( i );
-	}
+	UpdateFlagState( TEAM_BLUE );
+	UpdateFlagState( TEAM_RED );
 }
 
 void CHudFlagCarrier::VidInit( void )
 {
-	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
-	{
-		m_pAvatar[ i ]->ClearAvatarSteamID();
-	}
+	m_pAvatar[ TEAM_BLUE ].ClearAvatarSteamID();
+	m_pAvatar[ TEAM_RED ].ClearAvatarSteamID();
 
-	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
-	{
-		m_iTakenByPlayer[ i ] = TAKEN_INVALID_PLAYER;
-		Update();
-	}
+	m_iTakenByPlayer[ TEAM_BLUE ] = TAKEN_INVALID_PLAYER;
+	m_iTakenByPlayer[ TEAM_RED ] = TAKEN_INVALID_PLAYER;
 
-	m_pAvatar[ SDK_TEAM_BLUE ]->SetPos( m_flBlueAvatarX, m_flBlueAvatarY );
-	m_pAvatar[ SDK_TEAM_RED ]->SetPos( m_flRedAvatarX, m_flRedAvatarY );
+	m_pAvatar[ TEAM_BLUE ].SetPos( m_flBlueAvatarX, m_flBlueAvatarY );
+	m_pAvatar[ TEAM_RED ].SetPos( m_flRedAvatarX, m_flRedAvatarY );
 
+	Update();
 	Reset();
 }
 
@@ -178,6 +143,11 @@ bool CHudFlagCarrier::ShouldDraw()
 		{
 			return false;
 		}
+		else
+		{
+			return m_FlagState[ TEAM_RED ] != HFLG_BASE ||
+				m_FlagState[ TEAM_BLUE ] != HFLG_BASE;
+		}
 	}
 	else if ( GameRules()->GetGameMode() == GAMEMODE_DOM )
 	{
@@ -189,10 +159,10 @@ bool CHudFlagCarrier::ShouldDraw()
 
 bool CHudFlagCarrier::NeedsUpdate ( void )
 {
-	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
+	for ( int i = TEAM_BLUE; i <= TEAM_RED; i++ )
 	{
-		if ( m_LastFlagState [i] != m_FlagState [i] ||
-			m_FlagState [i] == HFLG_DROPPED_TIMER)
+		if ( m_LastFlagState[ i ] != m_FlagState[ i ] ||
+			m_FlagState[ i ] == HFLG_DROPPED_TIMER )
 		{
 			return true;
 		}
@@ -203,85 +173,83 @@ bool CHudFlagCarrier::NeedsUpdate ( void )
 
 void CHudFlagCarrier::Update( void )
 {
-	for (int i = SDK_TEAM_BLUE; i <= SDK_TEAM_RED; i++)
+	for ( int i = TEAM_BLUE; i <= TEAM_RED; i++ )
 	{
-		if ( m_LastFlagState [i] != m_FlagState [i] ||
-			m_FlagState [i] == HFLG_DROPPED_TIMER)
+		if ( m_LastFlagState[ i ] != m_FlagState[ i ] ||
+			m_FlagState[ i ] == HFLG_DROPPED_TIMER)
 		{
-			m_LastFlagState [i] = m_FlagState [i];
+			m_LastFlagState[ i ] = m_FlagState[ i ];
 			UpdateFlagState( i );
 		}
 
-		if ( m_iTakenByPlayer [i] == TAKEN_INVALID_PLAYER )
+		if ( m_iTakenByPlayer[ i ] == TAKEN_INVALID_PLAYER )
 		{
 			UpdateTakenAvatar( i );
 		}
 	}
 }
 
-void CHudFlagCarrier::UpdateFlagState( int TeamIndex )
+void CHudFlagCarrier::UpdateFlagState( int teamIndex )
 {
-	if ( m_FlagState [TeamIndex] != HFLG_DROPPED_TIMER )
+	if ( m_FlagState[ teamIndex ] != HFLG_DROPPED_TIMER )
 	{
-		m_DroppedTimer [TeamIndex].Reset();
+		m_DroppedTimer[ teamIndex ].Reset();
 	}
 
-	switch ( m_FlagState [TeamIndex] )
+	switch ( m_FlagState[ teamIndex ] )
 	{
 	case HFLG_BASE:
-		wcscpy( m_Text[TeamIndex], BASE_TAG );
+		m_Text[ teamIndex ][ 0 ] = '\0';
 		break;
 	case HFLG_PICKUP:
-		if ( g_PR )
+		if ( g_PR && ( teamIndex == TEAM_BLUE || teamIndex == TEAM_RED ) )
 		{
-			if ( TeamIndex == SDK_TEAM_BLUE ||
-				TeamIndex == SDK_TEAM_RED )
-			{
-				int playerindex = engine->GetPlayerForUserID( m_iTakenByPlayer[ TeamIndex ] );
-				const char *playername = g_PR->GetPlayerName( playerindex );
-				g_pVGuiLocalize->ConvertANSIToUnicode( playername, m_Text[ TEAM_UNASSIGNED ], 256 );
-				Q_wcsncpy( m_Text[ TeamIndex ], m_Text[ TEAM_UNASSIGNED ], 256 );
-			}
+			int playerindex = engine->GetPlayerForUserID( m_iTakenByPlayer[ teamIndex ] );
+			const char *playername = g_PR->GetPlayerName( playerindex );
+			g_pVGuiLocalize->ConvertANSIToUnicode( playername, m_Text[ TEAM_UNASSIGNED ], 256 );
+			Q_wcsncpy( m_Text[ teamIndex ], m_Text[ TEAM_UNASSIGNED ], 256 );
 		}
 		break;
 	case HFLG_DROPPED:
-		wcscpy( m_Text [TeamIndex], DROPPED_TAG );
+		wcscpy( m_Text[ teamIndex ], DROPPED_TAG );
 		break;
 	case HFLG_DROPPED_TIMER:
-		double DroppedSeconds = m_DroppedMaxTime - m_DroppedTimer [TeamIndex].GetElapsedTime();
+		double DroppedSeconds = m_DroppedMaxTime - m_DroppedTimer[ teamIndex ].GetElapsedTime();
 		DroppedSeconds = clamp( DroppedSeconds, 0.0, abs( DroppedSeconds ) );
-		swprintf( m_Text[ TeamIndex ], 256, DROPPED_TIMER_TAG, DroppedSeconds );
+		swprintf( m_Text[ teamIndex ], 256, DROPPED_TIMER_TAG, DroppedSeconds );
 		break;
 	}
 }
 
 // CODE DUPLICATION. FIXME!
-void CHudFlagCarrier::UpdateTakenAvatar( int TeamIndex )
+void CHudFlagCarrier::UpdateTakenAvatar( int teamIndex )
 {
-	if ( m_iTakenByPlayer[ TeamIndex ] != TAKEN_INVALID_PLAYER )
+	if ( m_iTakenByPlayer[ teamIndex ] != TAKEN_INVALID_PLAYER )
 	{
-		int playerindex = engine->GetPlayerForUserID( m_iTakenByPlayer[ TeamIndex ] );
+		int playerindex = engine->GetPlayerForUserID( m_iTakenByPlayer[ teamIndex ] );
 		C_BasePlayer *pPlayer = UTIL_PlayerByIndex( playerindex );
 
 		if ( pPlayer && steamapicontext->SteamUtils() )
 		{
 			player_info_t pi;
-			if ( engine->GetPlayerInfo(playerindex, &pi) )
+			if ( engine->GetPlayerInfo(playerindex, &pi) && pi.friendsID )
 			{
-				if ( pi.friendsID )
-				{
-					CSteamID steamIDForPlayer( pi.friendsID, 1, steamapicontext->SteamUtils()->GetConnectedUniverse(), k_EAccountTypeIndividual );
+				CSteamID steamIDForPlayer(
+					pi.friendsID,
+					1,
+					steamapicontext->SteamUtils()->GetConnectedUniverse(),
+					k_EAccountTypeIndividual
+				);
 
-					CAvatarImage *pAvImage = m_pAvatar[ TeamIndex ];
-					if ( !pAvImage->SetAvatarSteamID( steamIDForPlayer ) )
-					{
-						Warning( "Failed to Get Player Avatar\n" );
-					}
-					
-					// Indent the image. These are deliberately non-resolution-scaling.
-					pAvImage->SetAvatarSize( 32, 32 );
-					pAvImage->SetSize( pAvImage->GetWide(), 32 );
+				CAvatarImage& pAvImage = m_pAvatar[ teamIndex ];
+				if ( !pAvImage.SetAvatarSteamID( steamIDForPlayer ) )
+				{
+					Warning( "Failed to Get Player Avatar\n" );
 				}
+				
+				// Indent the image. These are deliberately non-resolution-scaling.
+				pAvImage.SetAvatarSize( 32, 32 );
+				pAvImage.SetSize( pAvImage.GetWide(), 32 );
 			}
 		}
 	}
@@ -301,7 +269,7 @@ void CHudFlagCarrier::Paint ( void )
 
 	DisplayText
 	(
-		m_Text[ SDK_TEAM_BLUE ], 
+		m_Text[ TEAM_BLUE ], 
 		m_flBlueTextX, 
 		m_flBlueTextY,
 		m_BlueForegroundColor
@@ -309,21 +277,20 @@ void CHudFlagCarrier::Paint ( void )
 	
 	DisplayText
 	(
-		m_Text[ SDK_TEAM_RED ], 
+		m_Text[ TEAM_RED ], 
 		m_flRedTextX,
 		m_flRedTextY, 
 		m_RedForegroundColor
 	);
 
-	// Display avatars if required
-	for (int i = 0; i < TEAM_COUNT; i++)
+	if ( m_iTakenByPlayer[ TEAM_RED ] != TAKEN_INVALID_PLAYER )
 	{
-		if ( !m_pAvatar[ i ] || m_iTakenByPlayer[ i ] == TAKEN_INVALID_PLAYER )
-		{
-			continue;
-		}
+		m_pAvatar[ TEAM_RED ].Paint();
+	}
 
-		m_pAvatar[ i ]->Paint();
+	if ( m_iTakenByPlayer[ TEAM_BLUE ] != TAKEN_INVALID_PLAYER )
+	{
+		m_pAvatar[ TEAM_BLUE ].Paint();
 	}
 }
 
@@ -344,9 +311,9 @@ void CHudFlagCarrier::PaintBackground( void )
 	{
 		const Color BlueBorderColor = Color
 		( 
-			GetTeamColor( SDK_TEAM_BLUE ).r(), 
-			GetTeamColor( SDK_TEAM_BLUE ).g(), 
-			GetTeamColor( SDK_TEAM_BLUE ).b(), 
+			GetTeamColor( TEAM_BLUE ).r(), 
+			GetTeamColor( TEAM_BLUE ).g(), 
+			GetTeamColor( TEAM_BLUE ).b(), 
 			200
 		);
 
@@ -378,9 +345,9 @@ void CHudFlagCarrier::PaintBackground( void )
 	{
 		const Color RedBorderColor = Color
 		( 
-			GetTeamColor( SDK_TEAM_RED ).r(), 
-			GetTeamColor( SDK_TEAM_RED ).g(), 
-			GetTeamColor( SDK_TEAM_RED ).b(), 
+			GetTeamColor( TEAM_RED ).r(), 
+			GetTeamColor( TEAM_RED ).g(), 
+			GetTeamColor( TEAM_RED ).b(), 
 			200
 		);
 
@@ -400,12 +367,12 @@ void CHudFlagCarrier::PaintBackground( void )
 
 void CHudFlagCarrier::DisplayText (wchar_t *pText, int x, int y, Color col)
 {
-	vgui::surface()->DrawSetTextFont( m_hTextFont ); // set the font	
+	vgui::surface()->DrawSetTextFont( m_hTextFont );
 	vgui::surface()->DrawSetTextColor( col.r(), col.g(), col.b(), col.a() );
 	vgui::surface()->DrawSetTextPos( x, y );
 
 	int TextLength = wcslen( pText );
-	vgui::surface()->DrawPrintText( pText, TextLength ); // print text
+	vgui::surface()->DrawPrintText( pText, TextLength );
 }
 
 /*=======================================================
@@ -423,35 +390,32 @@ void CHudFlagCarrier::MsgFunc_UpdateFlagCarrier( bf_read& data )
 
 	if ( event == HFLG_PICKUP )
 	{
-		int TeamIndex = teamid;
-		TeamIndex = flagteamid;//GetOtherTeamNumber( TeamIndex );
-		m_FlagState[ TeamIndex ] = HFLG_PICKUP;
-		UpdateFlagState( TeamIndex );
+		int teamIndex = flagteamid;
+		m_FlagState[ teamIndex ] = HFLG_PICKUP;
+		UpdateFlagState( teamIndex );
 
-		m_iTakenByPlayer[ TeamIndex ] = userid;
-		UpdateTakenAvatar( TeamIndex );
+		m_iTakenByPlayer[ teamIndex ] = userid;
+		UpdateTakenAvatar( teamIndex );
 	}
 	else if ( event == HFLG_DROPPED || event == HFLG_DROPPED_TIMER )
 	{
 		m_DroppedMaxTime = data.ReadFloat();
 
-		int TeamIndex = teamid;
-		TeamIndex = flagteamid;//GetOtherTeamNumber( TeamIndex );
-		m_FlagState[ TeamIndex ] = HFLG_DROPPED_TIMER;
-		m_DroppedTimer[ TeamIndex ].Reset();
-		m_DroppedTimer[ TeamIndex ].Start( 0.0f );
-		UpdateFlagState( TeamIndex );
+		int teamIndex = flagteamid;
+		m_FlagState[ teamIndex ] = HFLG_DROPPED_TIMER;
+		m_DroppedTimer[ teamIndex ].Reset();
+		m_DroppedTimer[ teamIndex ].Start( 0.0f );
+		UpdateFlagState( teamIndex );
 
-		m_iTakenByPlayer [TeamIndex] = TAKEN_INVALID_PLAYER;
+		m_iTakenByPlayer[ teamIndex ] = TAKEN_INVALID_PLAYER;
 	}
 	else if ( event == HFLG_RETURNED )
 	{
-		int TeamIndex = teamid;
-		TeamIndex = flagteamid;//GetOtherTeamNumber( TeamIndex );
-		m_FlagState[ TeamIndex ] = HFLG_BASE;
-		m_DroppedTimer[ TeamIndex ].Reset();
-		UpdateFlagState( TeamIndex );
+		int teamIndex = flagteamid;
+		m_FlagState[ teamIndex ] = HFLG_BASE;
+		m_DroppedTimer[ teamIndex ].Reset();
+		UpdateFlagState( teamIndex );
 
-		m_iTakenByPlayer[ TeamIndex ] = TAKEN_INVALID_PLAYER;
+		m_iTakenByPlayer[ teamIndex ] = TAKEN_INVALID_PLAYER;
 	}
 }

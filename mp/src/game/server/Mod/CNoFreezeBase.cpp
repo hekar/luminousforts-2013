@@ -72,7 +72,7 @@ void CNoFreezeBase::Spawn( void )
 void CNoFreezeBase::StartTouch( CBaseEntity *pOther )
 {
 	// Do team checks
-	if ( GetTeamNumber() != SDK_TEAM_SPECTATOR &&
+	if ( GetTeamNumber() != TEAM_SPECTATOR &&
 		pOther->GetTeamNumber() != GetTeamNumber() )
 	{
 		return;

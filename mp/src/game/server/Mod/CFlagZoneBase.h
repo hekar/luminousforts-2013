@@ -34,6 +34,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "triggers.h"
 
 class CModPlayer;
+class CFlagBase;
 
 class CFlagZoneBase : public CBaseTrigger
 {
@@ -45,7 +46,7 @@ public:
 	virtual void Spawn ();
 	virtual void Touch( CBaseEntity *pOther );
 
-	virtual void Capture( CModPlayer *pPlayer );
+	virtual void Capture( CModPlayer *pPlayer, CFlagBase *pFlag );
 	virtual void OnCapture( int teamnum );
 
 	void InputEnable( inputdata_t &inputData );

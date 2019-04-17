@@ -77,15 +77,21 @@ void CFlagZoneClassic::FireGameEvent( IGameEvent* pEvent )
 	// Disable the point if the flag is not at base
 	if ( !Q_strcmp( pEvent->GetName(), "flag_pickup" ) )
 	{
-		if ( pEvent->GetInt( "teamid" ) != GetTeamNumber() )
+		int playerTeamId = pEvent->GetInt( "teamid" );
+		int teamNum = GetTeamNumber();
+		if ( playerTeamId == teamNum )
 		{
+			Msg( "CFlagZoneClassic - Disabled Event Team: %d - TeamNumber: %d\n", playerTeamId, teamNum );
 			m_bDisabled = true;
 		}
 	}
 	else if ( !Q_strcmp( pEvent->GetName(), "flag_returned" ) )
 	{
-		if ( pEvent->GetInt( "teamid" ) != GetTeamNumber() )
+		int playerTeamId = pEvent->GetInt( "teamid" );
+		int teamNum = GetTeamNumber();
+		if ( playerTeamId == teamNum )
 		{
+			Msg( "CFlagZoneClassic - Enabled Event Team: %d - TeamNumber: %d\n", playerTeamId, teamNum );
 			m_bDisabled = false;
 		}
 	}
