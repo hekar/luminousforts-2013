@@ -1410,14 +1410,11 @@ ConVar  alyx_darkness_force( "alyx_darkness_force", "0", FCVAR_CHEAT | FCVAR_REP
 
 					if( pCannon )
 					{
-						if( PhysCannonAccountableForObject(pCannon, info.GetInflictor() ) )
-						{
-							// Antlions can always be squashed!
-							if ( pVictim->Classify() == CLASS_ANTLION )
-								return true;
+						// Antlions can always be squashed!
+						if ( pVictim->Classify() == CLASS_ANTLION )
+							return true;
 
-  							return false;
-						}
+						return false;
 					}
 				}
 			}

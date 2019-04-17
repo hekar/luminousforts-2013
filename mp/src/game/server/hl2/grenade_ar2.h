@@ -19,7 +19,6 @@
 #define	MAX_AR2_NO_COLLIDE_TIME 0.2
 
 class SmokeTrail;
-class CWeaponAR2;
 
 class CGrenadeAR2 : public CBaseGrenade
 {

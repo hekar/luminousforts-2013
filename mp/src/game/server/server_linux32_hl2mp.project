@@ -1173,7 +1173,6 @@
       <File Name="hl2/vehicle_apc.h"/>
       <File Name="hl2/vehicle_crane.h"/>
       <File Name="hl2/weapon_alyxgun.h"/>
-      <File Name="hl2/weapon_crowbar.h"/>
       <File Name="hl2/weapon_flaregun.h"/>
       <File Name="hl2mp/grenade_satchel.h"/>
       <File Name="hl2mp/grenade_tripmine.h"/>
