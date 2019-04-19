@@ -2,13 +2,38 @@
 
 [![CircleCI](https://circleci.com/gh/hekar/luminousforts-2013/tree/master.svg?style=shield&circle-token=30c9378850b61d1265c749fd92e3a0513e7a68ad)](https://circleci.com/gh/hekar/luminousforts-2013/tree/master)
 
+This is the source code repository for LuminousForts. To play the game, you will need the game files in the  [hekar/luminousforts](https://github.com/hekar/luminousforts) repository.
+
+
+Cloning this repository requires [git-lfs](https://git-lfs.github.com) installed due to the size of this repository and its binary files.
+
 ## Getting started
 
-### Linux
+Clone the [LuminousForts](https://github.com/hekar/luminousforts) project into your `sourcemods` folder. Follow the instructions in [the repository for more information](https://github.com/hekar/luminousforts).
+
+### Windows
 
 #### Compiling
 
-Compilation is easiest in a Docker container running Ubuntu 14.04
+1. Install [Visual Studio Community 2013](https://visualstudio.microsoft.com/vs/older/downloads/)
+1. Run `createallprojects.bat` in `mp\src`
+1. Open the solution in Visual Studio 2013
+1. Build Solution
+
+#### Debugging
+
+Refer to the Valve Source SDK wiki for more information. In particular, the following pages are relevant:
+
+- [Launching from Visual Studio 2013](https://developer.valvesoftware.com/wiki/Launching_from_Visual_Studio_2013)
+- [Debugging the Source Code](https://developer.valvesoftware.com/wiki/Installing_and_Debugging_the_Source_Code)
+
+### Linux
+
+The Linux version of the Source SDK requires GCC 4.x due to ABI compatibility with statically linked libraries provided by Valve.
+
+#### Compiling
+
+Compilation is easiest done in a Docker container running Ubuntu 14.04
 
 ```
 cd ~
@@ -34,6 +59,13 @@ GAME_DEBUGGER="gdb" ~/.local/share/Steam/steamapps/common/Source\ SDK\ Base\ 201
 GAME_DEBUGGER="strace -f -o strace.log" ~/.local/share/Steam/steamapps/common/Source\ SDK\ Base\ 2013\ Multiplayer/hl2.sh -game sourcetest -steam -game ~/.local/share/Steam/steamapps/sourcemods/luminousforts
 ```
 
+## Binary Files
+
+Most binary files are added to [git-lfs](https://git-lfs.github.com). If you see large files directly added to the repo, feel free to add them to [git-lfs](https://git-lfs.github.com).
+
+## CircleCI
+
+Builds for Linux are automatically created and published to [hekar/luminousforts](https://github.com/hekar/luminousforts) on every commit to `master`.
 
 ## Valve License
 
