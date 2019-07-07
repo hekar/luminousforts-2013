@@ -289,6 +289,8 @@ $Project "Server (HL2MP)"
             $File	"$SRCDIR\game\shared\Mod\WPN_Railgun.cpp"
             $File	"Mod\BlockUtils.cpp"
             $File	"Mod\BuildOnlyButton.cpp"
+			$File	"Mod\CAiDirector.cpp"
+            $File	"Mod\CAiSpawnNode.cpp"
             $File	"Mod\CAmmoCrateClassic.cpp"
             $File	"Mod\CAmmoCrate.cpp"
             $File	"Mod\CArmorCharger.cpp"
@@ -353,7 +355,7 @@ $Project "Server (HL2MP)"
             $File	"Mod\SF194_FlagZone.cpp"
             $File	"Mod\SF194_GameControl.cpp"
             $File	"Mod\SF194_NoFreezeZone.cpp"
-			
+
 			$Folder	"Weapons"
 			{
 				$File	"hl2mp\grenade_satchel.cpp"

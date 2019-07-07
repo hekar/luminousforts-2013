@@ -480,6 +480,8 @@
       <File Name="message_entity.cpp"/>
       <File Name="Mod/BlockUtils.cpp"/>
       <File Name="Mod/BuildOnlyButton.cpp"/>
+      <File Name="Mod/CAiDirector.cpp"/>
+      <File Name="Mod/CAiSpawnNode.cpp"/>
       <File Name="Mod/CAmmoCrate.cpp"/>
       <File Name="Mod/CAmmoCrateClassic.cpp"/>
       <File Name="Mod/CArmorCharger.cpp"/>
