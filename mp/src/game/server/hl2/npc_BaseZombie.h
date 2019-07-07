@@ -15,6 +15,7 @@
 #include "ai_blended_movement.h"
 #include "soundenvelope.h"
 #include "ai_behavior_actbusy.h"
+#include "ai_behavior_assault.h"
 
 #define ZOM_ATTN_FOOTSTEP ATTN_IDLE
 
@@ -238,6 +239,7 @@ public:
 
 public:
 	CAI_ActBusyBehavior		m_ActBusyBehavior;
+	CAI_AssaultBehavior		m_AssaultBehavior;
 
 
 

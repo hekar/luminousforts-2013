@@ -7707,7 +7707,7 @@ CBaseEntity *CAI_BaseNPC::BestEnemy( void )
 	{
 		CBaseEntity *pEnemy = pEMemory->hEnemy;
 
-		if (!pEnemy || !pEnemy->IsAlive())
+		if ( !pEnemy || !pEnemy->IsAlive() )
 		{
 			if ( pEnemy )
 			{

@@ -144,6 +144,9 @@ void CAI_Senses::Listen( void )
 
 bool CAI_Senses::ShouldSeeEntity( CBaseEntity *pSightEnt )
 {
+	if ( pSightEnt->IsBlock() )
+		return true;
+
 	if ( pSightEnt == GetOuter() || !pSightEnt->IsAlive() )
 		return false;
 
@@ -520,7 +523,7 @@ int CAI_Senses::LookForObjects( int iDistance )
 		CBaseEntity *pEnt = g_AI_SensedObjectsManager.GetFirst( &iter );
 		while ( pEnt )
 		{
-			if ( pEnt->GetFlags() & BOX_QUERY_MASK )
+			if ( pEnt->IsBlock() || pEnt->GetFlags() & BOX_QUERY_MASK )
 			{
 				if ( origin.DistToSqr(pEnt->GetAbsOrigin()) < distSq && Look( pEnt) )
 				{
@@ -718,9 +721,22 @@ CBaseEntity *CAI_SensedObjectsManager::GetNext( int *pIter )
 
 void CAI_SensedObjectsManager::OnEntitySpawned( CBaseEntity *pEntity )
 {
-	if ( ( pEntity->GetFlags() & FL_OBJECT ) && !pEntity->IsPlayer() && !pEntity->IsNPC() )
+	if ( ( ( pEntity->GetFlags() & FL_OBJECT ) &&
+		!pEntity->IsPlayer() &&
+		!pEntity->IsNPC() ) ||
+		pEntity->IsBlock() )
 	{
+		DevMsg( "Added entity to sense '%s'\n", pEntity->GetClassname() );
 		m_SensedObjects.AddToTail( pEntity );
+	}
+	else
+	{
+		DevMsg( "AI_SENSE: Ignoring entity '%s', %d, %d, %d\n",
+			pEntity->GetClassname(),
+			!pEntity->IsPlayer(),
+			!pEntity->IsNPC(),
+			pEntity->GetFlags() & FL_OBJECT
+		);
 	}
 }
 

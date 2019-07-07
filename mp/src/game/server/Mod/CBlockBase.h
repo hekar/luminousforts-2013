@@ -70,6 +70,7 @@ public:
 	virtual void OnPhysGunDrop( CBasePlayer *pPhysGunUser, PhysGunDrop_t Reason );
 
 	virtual int OnTakeDamage( const CTakeDamageInfo &inputInfo );
+	virtual bool IsNPC( void ) const { return false; }
 
 	void InputFreeze( inputdata_t &data );
 	void InputUnFreeze( inputdata_t &data );
@@ -109,7 +110,11 @@ public:
 	void SetBlockWorthFromConfig( const char *blockworthkey );
 	void SetBlockHealthFromConfig( const char *healthKey );
 
+	Class_T Classify ( void );
+
 	void SetSpawnFrozen( bool val ) { m_bSpawnFrozen = val; }
+
+	virtual bool IsAlive( void ) { return true; }
 
 private:
 	void SetLastFrozenUserID( int UserID );

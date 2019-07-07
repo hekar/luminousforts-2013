@@ -157,6 +157,7 @@ void CBlockBase::Spawn()
 		CTeam *pTeam = static_cast< CTeam * >( GetTeam() );
 		pTeam->AddBlockCount( GetBlockWorth() );
 	}
+	AddFlag( FL_OBJECT );
 }
 
 void CBlockBase::Touch( CBaseEntity *pOther )
@@ -511,6 +512,11 @@ void CBlockBase::SetBlockHealthFromConfig( const char *healthKey )
 	{
 		SetHealth( lf_block_health.GetInt() );
 	}
+}
+
+Class_T CBlockBase::Classify ( void )
+{
+	return CLASS_BLOCK;
 }
 
 void CBlockBase::SetLastFrozenUserID( int UserID )
