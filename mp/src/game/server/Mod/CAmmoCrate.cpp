@@ -1,7 +1,7 @@
 /* ***** BEGIN LICENSE BLOCK *****
 Version: MPL 1.1/LGPL 2.1/GPL 2.0
 
-The contents of this file are subject to the Mozilla Public License Version 
+The contents of this file are subject to the Mozilla Public License Version
 1.1 (the "License"); you may not use this file except in compliance with
 ...
 for the specific language governing rights and limitations under the
@@ -50,7 +50,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-#define AMMO_CRATE_MODELNAME "models/crate/crate.mdl"
+#define AMMO_CRATE_MODELNAME "models/items/ammocrate.mdl"
 
 //---------------------------------------------------------
 // Applies ammo quantity scale.
@@ -173,13 +173,13 @@ void CAmmoCrate::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 		vOrigin.z += ( maxs.z - mins.z );
 		mins = (mins - GetAbsOrigin()) * 0.2f;
 		maxs = (maxs - GetAbsOrigin()) * 0.2f;
-		mins.z = ( GetAbsOrigin().z - vOrigin.z );  
-		
+		mins.z = ( GetAbsOrigin().z - vOrigin.z );
+
 		UTIL_TraceHull( vOrigin, vOrigin, mins, maxs, MASK_SOLID, this, COLLISION_GROUP_NONE, &tr );
 
 		if ( tr.startsolid || tr.allsolid )
 			 return;
-			
+
 		m_hActivator = pPlayer;
 
 		// Animate!
@@ -249,7 +249,7 @@ void CAmmoCrate::GiveAmmo( CBasePlayer *pBasePlayer )
 //-----------------------------------------------------------------------------
 // Purpose: Catches the monster-specific messages that occur when tagged
 //			animation frames are played.
-// Input  : *pEvent - 
+// Input  : *pEvent -
 //-----------------------------------------------------------------------------
 void CAmmoCrate::HandleAnimEvent( animevent_t *pEvent )
 {
