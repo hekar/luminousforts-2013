@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "istream": "cpp",
+        "optional": "cpp",
+        "ostream": "cpp",
+        "ratio": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp",
+        "variant": "cpp",
+        "chrono": "cpp",
+        "vector": "cpp",
+        "unordered_map": "cpp",
+        "string": "cpp"
+    },
+    "workbench.colorCustomizations": {}
+}

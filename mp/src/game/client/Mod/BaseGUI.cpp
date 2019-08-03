@@ -1,7 +1,7 @@
 /* ***** BEGIN LICENSE BLOCK *****
 Version: MPL 1.1/LGPL 2.1/GPL 2.0
 
-The contents of this file are subject to the Mozilla Public License Version 
+The contents of this file are subject to the Mozilla Public License Version
 1.1 (the "License"); you may not use this file except in compliance with
 ...
 for the specific language governing rights and limitations under the
@@ -46,8 +46,10 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "GUI_Editor.h"
 #include "GUI_Message.h"
 #include "GUI_ReportBug.h"
-#include "Gwen.h"
-#include "Gwen_Update.h"
+#ifdef GWEN_GUI
+#include "Mod/gwen/Gwen.h"
+#include "Mod/gwen/Gwen_Update.h"
+#endif
 
 CGUILoader *g_pGUIManager = NULL;
 
@@ -62,7 +64,7 @@ CGUILoader::~CGUILoader()
 
 void CGUILoader::InitPanels()
 {
-	creditspanel->Create( m_GameUI ); 
+	creditspanel->Create( m_GameUI );
 	webwindowpanel->Create( m_GameUI );
 //	mp3windowpanel->Create( m_GameUI );
 //	binkwindowpanel->Create( m_GameUI );
@@ -79,15 +81,14 @@ void CGUILoader::InitPanels()
 	// Main menu parents CBaseGamePanel
 	const int BasePanelIndex = 1; // Bit of debugging to figure this out :/
 	VPANEL BaseGamePanel = ipanel()->GetChild( m_GameUI, BasePanelIndex );
-	
+
 	mainmenupanel->Create( BaseGamePanel );
 
 	// Bootstrap Gwen
-#ifdef MOD_GWEN
+#ifdef GWEN_GUI
 	gwenbootstrap->Create( m_GameUI );
-
 	gwenupdate->Create( m_GameUI );
-#endif // MOD_GWEN
+#endif
 }
 
 void CGUILoader::DestroyPanels()
@@ -106,9 +107,8 @@ void CGUILoader::DestroyPanels()
 //	guieditor->Destroy();
 	message->Destroy();
 	reportbug->Destroy();
-#ifdef MOD_GWEN
+#ifdef GWEN_GUI
 	gwenupdate->Destroy();
-
 	gwenbootstrap->Destroy();
-#endif // MOD_GWEN
+#endif
 }

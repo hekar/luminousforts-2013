@@ -111,6 +111,7 @@
       <File Name="../../game/shared/Mod/Dom_CaptureArea.cpp"/>
       <File Name="../../game/shared/Mod/Dom_GameRules.cpp"/>
       <File Name="../../game/shared/Mod/Dom_SharedDefs.cpp"/>
+      <File Name="../../game/shared/Mod/duktape/duktape.c"/>
       <File Name="../../game/shared/Mod/FileConfig.cpp"/>
       <File Name="../../game/shared/Mod/MiscCvars.cpp"/>
       <File Name="../../game/shared/Mod/SF132_GameRules.cpp"/>
@@ -521,6 +522,7 @@
       <File Name="Mod/CustomSpawnPoint.cpp"/>
       <File Name="Mod/Dom_CaptureZone.cpp"/>
       <File Name="Mod/Dom_LinearZone.cpp"/>
+      <File Name="Mod/duktape/DuktapeEntity.cpp"/>
       <File Name="Mod/GameRuleMaker.cpp"/>
       <File Name="Mod/HealthChargers.cpp"/>
       <File Name="Mod/PhaseControl.cpp"/>

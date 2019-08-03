@@ -18,7 +18,7 @@ sp/
 *~
 mp/game/
 
-# Visual Studio 
+# Visual Studio
 *.suo
 *.user
 *.sln.docstates
@@ -110,3 +110,8 @@ config.cfg
 *.orig
 *.project
 *.a
+
+mp/src/lib/public/mathlib.lib
+mp/src/lib/public/raytrace.lib
+mp/src/lib/public/tier1.lib
+mp/src/lib/public/vgui_controls.lib

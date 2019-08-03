@@ -1,7 +1,7 @@
 /* ***** BEGIN LICENSE BLOCK *****
 Version: MPL 1.1/LGPL 2.1/GPL 2.0
 
-The contents of this file are subject to the Mozilla Public License Version 
+The contents of this file are subject to the Mozilla Public License Version
 1.1 (the "License"); you may not use this file except in compliance with
 ...
 for the specific language governing rights and limitations under the
@@ -61,11 +61,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #define MOD_HAND_BLOCK_SPAWN
 
-//#define MOD_FMOD
-
-// Enable Squirrel in the mod (Not implemented yet)
-// #define MOD_SQUIRREL
-
 // Development release of LuminousForts.
 // (Adds extra options for development)
 #define MOD_DEV
@@ -78,7 +73,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #define MOD_LATE
 
 // Features that are to be removed.
-// #define MOD_DEPRECATED
+#define MOD_DEPRECATED
 
 // Plays a video in the space of the titlescreen's background image.
 // #define MOD_BACKGROUND_VIDEO
@@ -86,8 +81,11 @@ the terms of any one of the MPL, the GPL or the LGPL.
 // Overlays an image over the titlescreen's background video.
 // #define MOD_BACKGROUND_IMAGE
 
-// Enable or Disable the Built in Client IRC client
-// #define MOD_IRC
+#define NUKLEAR_GUI
+
+// #define GWEN_GUI
+
+#define GWEN_NO_ANIMATION
 
 //---------------------------------------------------------------
 // Gamemode Definitions just enable the gamemodes.
@@ -104,7 +102,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #ifdef MOD_CLASSIC
 #define MOD_SF132
 #define MOD_SF194
-#endif 
+#endif
 
 //----------------------------------------------------------------------
 #define ProtectedMethod
@@ -201,7 +199,7 @@ enum BlockFreezerID
 	// Block has been frozen by world
 	FROZEN_BY_WORLD	= -1,
 
-	// Block has been frozen by anyone, 
+	// Block has been frozen by anyone,
 	// so don't change the last freezer ID
 	FROZEN_BY_NONE = -2,
 

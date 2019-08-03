@@ -27,6 +27,8 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #ifndef CAISPAWNNODE_H
 #define CAISPAWNNODE_H
 
+class CPowerCore;
+
 class CAiSpawnNode : public CBaseEntity, public IEntityListener
 {
 public:
@@ -37,7 +39,11 @@ public:
 	virtual ~CAiSpawnNode();
 
 	virtual void Spawn( void );
+	virtual bool SpawnZombie( void );
 	virtual void Think( void );
+
+private:
+	CPowerCore *m_pPowerCore;
 };
 
 

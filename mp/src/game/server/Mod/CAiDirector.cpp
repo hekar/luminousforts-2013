@@ -27,10 +27,18 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #include "ai_basenpc.h"
 #include "Mod/ClassicGameRules.h"
+#include "Mod/CAiSpawnNode.h"
 #include "Mod/CAiDirector.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
+
+ConVar lfs_difficulty(
+	"lfs_difficulty",
+	"1",
+	FCVAR_NOTIFY,
+	"Survival difficulty mode - 0: easy, 1: normal, 2: hard, 3: exhard"
+);
 
 ConVar lfs_max_zombie_count(
 	"lfs_max_zombie_count",
@@ -94,7 +102,6 @@ void CAiDirector::OnEntitySpawned( CBaseEntity *pEntity )
 	if ( pEntity->Classify() == CLASS_ZOMBIE )
 	{
 		// Catch Zombies not necessarily created by the director
-
 		m_iZombieCount++;
 	}
 }
@@ -114,7 +121,8 @@ void CAiDirector::OnEntityDeleted( CBaseEntity *pEntity )
 
 bool CAiDirector::ShouldSpawn( int classified )
 {
-	if ( classified == CLASS_ZOMBIE && m_iZombieCount < 5 )
+	if ( classified == CLASS_ZOMBIE &&
+		m_iZombieCount < lfs_max_zombie_count.GetInt() )
 	{
 		return true;
 	}
@@ -124,52 +132,19 @@ bool CAiDirector::ShouldSpawn( int classified )
 
 bool CAiDirector::SpawnAtBestNode( int classified )
 {
-	if ( classified == CLASS_ZOMBIE )
+	CAiSpawnNode *pSpawnNode = GetBestSpawnNode( classified );
+	if ( pSpawnNode )
 	{
-		CBaseEntity *pSpawnNode = GetBestSpawnNode( classified );
-		if ( !pSpawnNode )
+		if ( classified == CLASS_ZOMBIE )
 		{
-			return false;
+			return pSpawnNode->SpawnZombie();
 		}
-		const Vector& origin = pSpawnNode->GetAbsOrigin();
-
-		CBaseEntity *pAttemptZombie = CreateNoSpawn(
-			"npc_zombie",
-			origin,
-			vec3_angle,
-			pSpawnNode
-		);
-		if ( !pAttemptZombie || !pAttemptZombie->Classify() == CLASS_ZOMBIE )
-		{
-			return false;
-		}
-
-		CAI_BaseNPC *pZombie = (CAI_BaseNPC*) pAttemptZombie;
-		if ( !pZombie )
-		{
-			return false;
-		}
-
-		pAttemptZombie->SetHealth( 500 );
-		pAttemptZombie->SetMaxHealth( 1500 );
-		pAttemptZombie->SetDamage( 100 );
-		pZombie->SetRelationshipString( AllocPooledString( "player d_ht 150" ) );
-		pZombie->SetRelationshipString( AllocPooledString( "lfc_prop_block2x3 d_ht 125" ) );
-		pZombie->SetRelationshipString( AllocPooledString( "lfc_prop_block2x2 d_ht 100" ) );
-		pZombie->SetRelationshipString( AllocPooledString( "lfc_prop_block1x5 d_ht 200" ) );
-		pZombie->SetRelationshipString( AllocPooledString( "lfc_prop_block3x5 d_ht 100" ) );
-		pZombie->SetRelationshipString( AllocPooledString( "lfc_prop_block1x2 d_ht 50" ) );
-		pZombie->SetRelationshipString( AllocPooledString( "lfc_prop_block3x5 d_ht 100" ) );
-
-		DispatchSpawn( pAttemptZombie );
-
-		return true;
 	}
 
 	return false;
 }
 
-CBaseEntity *CAiDirector::GetBestSpawnNode( int classified )
+CAiSpawnNode *CAiDirector::GetBestSpawnNode( int classified )
 {
 	for (int i = 0; i < m_SpawnNodes.Count(); i++)
 	{
@@ -181,7 +156,13 @@ CBaseEntity *CAiDirector::GetBestSpawnNode( int classified )
 			continue;
 		}
 
-		return pEntity;
+		CAiSpawnNode *pSpawnNode = ( CAiSpawnNode * )pEntity;
+		if ( !pSpawnNode )
+		{
+			continue;
+		}
+
+		return pSpawnNode;
 	}
 
 	return NULL;

@@ -46,7 +46,7 @@ public:
 	virtual bool ShouldSpawn( int classified );
 	virtual bool SpawnAtBestNode( int classified );
 
-	virtual CBaseEntity *GetBestSpawnNode( int classified );
+	virtual CAiSpawnNode *GetBestSpawnNode( int classified );
 
 	virtual bool IsSpawnNode( CBaseEntity* pEntity );
 
