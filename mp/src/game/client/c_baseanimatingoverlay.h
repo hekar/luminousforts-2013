@@ -24,6 +24,13 @@ public:
 	DECLARE_PREDICTABLE();
 	DECLARE_INTERPOLATION();
 
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLIENTCLASS( C_BaseAnimatingOverlay );
+// =======================================
+// END PySource Additions
+// =======================================
 
 	C_BaseAnimatingOverlay();
 

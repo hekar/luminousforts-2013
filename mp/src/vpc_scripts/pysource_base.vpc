@@ -1,0 +1,20 @@
+$Configuration
+{
+	$Compiler
+	{
+		$AdditionalIncludeDirectories		"$BASE;$SRCDIR\thirdparty\boost;$SRCDIR\thirdparty\python\PC;$SRCDIR\thirdparty\python\Include" [$WINDOWS]
+		$AdditionalIncludeDirectories		"$BASE;$SRCDIR\thirdparty\boost;$SRCDIR\thirdparty\python;$SRCDIR\thirdparty\python\Include" [$POSIX]
+
+		// Pass on appropriate branch define to preprocessor
+		$PreprocessorDefinitions		"$BASE;BOOST_AUTO_LINK_NOMANGLE;BOOST_PYTHON_STATIC_LIB;BOOST_PYTHON_NO_PY_SIGNATURES;BOOST_SERIALIZATION_NO_LIB;BOOST_PYTHON_MAX_ARITY=20;Py_NO_ENABLE_SHARED;Py_BUILD_CORE;ENABLE_PYTHON" [$PYSOURCE&&!$OSX32]
+		$PreprocessorDefinitions		"$BASE;BOOST_AUTO_LINK_NOMANGLE;BOOST_PYTHON_STATIC_LIB;BOOST_PYTHON_NO_PY_SIGNATURES;BOOST_SERIALIZATION_NO_LIB;BOOST_PYTHON_MAX_ARITY=20;Py_NO_ENABLE_SHARED;Py_BUILD_CORE;ENABLE_PYTHON;BOOST_NO_CXX11_RVALUE_REFERENCES" [$PYSOURCE&&$OSX32]
+	}
+
+	$Linker [$LINUXALL || $OSX32]
+	{
+			// Needed for Python 3 library
+			$GCC_ExtraLinkerFlags		"$BASE -ldl -lutil" [$LINUXALL]
+			$GCC_ExtraLinkerFlags		"$BASE -read_only_relocs suppress" [$OSX32]
+	}
+}
+

@@ -36,6 +36,14 @@ class CGib : public CBaseAnimating,
 public:
 	DECLARE_CLASS( CGib, CBaseAnimating );
 
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLASS( CGib );
+// =======================================
+// END PySource Additions
+// =======================================
+
 	void Spawn( const char *szGibModel );
 	void Spawn( const char *szGibModel, float flLifetime );
 

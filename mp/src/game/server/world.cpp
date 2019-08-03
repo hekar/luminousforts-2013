@@ -31,8 +31,22 @@
 #include "engine/IStaticPropMgr.h"
 #include "particle_parse.h"
 #include "globalstate.h"
-
 #include "Mod/GameRuleMaker.h"
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+#include "srcpy.h"
+#ifdef SRCPY_MOD_GAMERULES
+#include "srcpy_gamerules.h"
+#endif // SRCPY_MOD_GAMERULES
+#ifdef SRCPY_MOD_ENTITIES
+#include "srcpy_entities.h"
+#endif // SRCPY_MOD_ENTITIES
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -479,10 +493,31 @@ CWorld::~CWorld( )
 	if ( g_pGameRules )
 	{
 		g_pGameRules->LevelShutdown();
-		delete g_pGameRules;
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_GAMERULES)
+		if( PyGameRules().ptr() != Py_None )
+			ClearPyGameRules();	
+		else
+#endif // ENABLE_PYTHON && SRCPY_MOD_GAMERULES
+// =======================================
+// END PySource Additions
+// =======================================
+			delete g_pGameRules;
 		g_pGameRules = NULL;
 	}
 	g_WorldEntity = NULL;
+	
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	g_bDoNotInitPythonClasses = true;
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 }
 
 
@@ -593,7 +628,28 @@ void CWorld::Precache( void )
 	Assert( !g_pGameRules );
 	if (g_pGameRules)
 	{
-		delete g_pGameRules;
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_GAMERULES)
+		if( PyGameRules().ptr() != Py_None )
+			ClearPyGameRules();	
+		else
+#endif // ENABLE_PYTHON && SRCPY_MOD_GAMERULES
+// =======================================
+// END PySource Additions
+// =======================================
+			delete g_pGameRules;
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_GAMERULES)
+		// Set to NULL to avoid "accidents"
+		g_pGameRules = NULL;
+#endif // ENABLE_PYTHON && SRCPY_MOD_GAMERULES
+// =======================================
+// END PySource Additions
+// =======================================
 	}
 
 	CreateGameRule( ( GameModeID_enum )m_iGameMode );
@@ -678,6 +734,18 @@ void CWorld::Precache( void )
 
 	// Call all registered precachers.
 	CPrecacheRegister::Precache();	
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	// Python classes init
+	g_bDoNotInitPythonClasses = false;
+	InitAllPythonEntities();
+#endif // ENABLE_PYTHON &&
+// =======================================
+// END PySource Additions
+// =======================================
 
 	if ( m_iszChapterTitle != NULL_STRING )
 	{

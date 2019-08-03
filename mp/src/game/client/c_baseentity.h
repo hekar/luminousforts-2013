@@ -36,6 +36,14 @@
 #include "toolframework/itoolentity.h"
 #include "tier0/threadtools.h"
 
+// =======================================
+// PySource Additions
+// =======================================
+#include "srcpy_client_class.h"
+// =======================================
+// END PySource Additions
+// =======================================
+
 class C_Team;
 class IPhysicsObject;
 class IClientVehicle;
@@ -157,6 +165,17 @@ struct thinkfunc_t
 	string_t	m_iszContext;
 	int			m_nNextThinkTick;
 	int			m_nLastThinkTick;
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	// MUST BE LAST
+	boost::python::object  m_pyThink; // If not Py_None and m_pfnThink != NULL, then call the python method
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 };
 
 #define CREATE_PREDICTED_ENTITY( className )	\
@@ -1706,6 +1725,62 @@ protected:
 	RenderMode_t m_PreviousRenderMode;
 	color32 m_PreviousRenderColor;
 #endif
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+public:
+	DECLARE_PYCLIENTCLASS( CBaseEntity );
+
+	// Memory allocators for python instances of entities
+	static void *PyAllocate( PyObject* self_, std::size_t holder_offset, std::size_t holder_size );
+	static void PyDeallocate( PyObject* self_, void *storage );
+
+	// This function returns the reference to the Python instance (if any)
+	boost::python::object			GetPyInstance() const;
+	void							SetPyInstance( boost::python::object inst );
+
+	// This directly returns the PyObject (if any)
+	virtual PyObject *GetPySelf() const { return NULL; }
+
+	// This returns the entity handle for usage in Python
+	boost::python::object			GetPyHandle() const;
+
+	// This functions destroys the entity
+	virtual void					DestroyPyInstance();
+
+	// For receiving messages on this entity
+	void							PyReceiveMessageInternal( int classID, bf_read &msg );
+	virtual void					PyReceiveMessage( boost::python::list msg ) {}
+
+	// Updates a Python network var after receiving
+	void							PyUpdateNetworkVar( const char *pName, boost::python::object data, bool callchanged = false, bool oncreated = false );
+	void							PyNetworkVarChanged( const char *pName );
+
+	// Python Think support
+	void							SetPyThink( boost::python::object think_method, float flNextThinkTime = 0, const char *szContext = 0 );
+	boost::python::object			GetPyThink();
+	void							PyThink();
+	bool							PhysicsPyRunSpecificThink( int nContextIndex, boost::python::object thinkFunc );
+	void							PhysicsPyDispatchThink( boost::python::object thinkFunc );
+
+	// Python touch support
+	void							SetPyTouch( boost::python::object touch_method );
+	void							PyTouch( ::CBaseEntity *pOther );
+
+private:
+
+protected:
+	bool		m_bPyManaged;
+	boost::python::object m_pyInstance; // Holds a ref to the instance. Keeps the object always alive util Remove() is called.
+	boost::python::object m_pyHandle;
+	boost::python::object m_pyTouchMethod;
+	boost::python::object m_pyThink;
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 };
 
 EXTERN_RECV_TABLE(DT_BaseEntity);
@@ -2214,5 +2289,34 @@ inline bool C_BaseEntity::ShouldRecordInTools() const
 }
 
 C_BaseEntity *CreateEntityByName( const char *className );
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+inline boost::python::object C_BaseEntity::GetPyInstance() const 
+{ 
+	return m_pyInstance; 
+}
+
+inline void C_BaseEntity::SetPyInstance( boost::python::object inst )
+{
+	Assert( GetRefEHandle() == NULL );
+	m_pyInstance = inst;
+}
+
+inline boost::python::object CBaseEntity::GetPyHandle() const 
+{ 
+	return m_pyHandle; 
+}
+
+inline boost::python::object CBaseEntity::GetPyThink()
+{
+	return m_pyThink; 
+}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 
 #endif // C_BASEENTITY_H

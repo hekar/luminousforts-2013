@@ -67,6 +67,19 @@
 #include "tf_gamerules.h"
 #endif
 
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+#include "srcpy.h"
+#include "srcpy_networkvar.h"
+#include "srcpy_usermessage.h"
+#include "srcpy_entities.h"
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -440,34 +453,45 @@ extern bool g_bDisableEhandleAccess;
 //-----------------------------------------------------------------------------
 CBaseEntity::~CBaseEntity( )
 {
-	// FIXME: This can't be called from UpdateOnRemove! There's at least one
-	// case where friction sounds are added between the call to UpdateOnRemove + ~CBaseEntity
-	PhysCleanupFrictionSounds( this );
-
-	Assert( !IsDynamicModelIndex( m_nModelIndex ) );
-	Verify( !sg_DynamicLoadHandlers.Remove( this ) );
-
-	// In debug make sure that we don't call delete on an entity without setting
-	//  the disable flag first!
-	// EHANDLE accessors will check, in debug, for access to entities during destruction of
-	//  another entity.
-	// That kind of operation should only occur in UpdateOnRemove calls
-	// Deletion should only occur via UTIL_Remove(Immediate) calls, not via naked delete calls
-	Assert( g_bDisableEhandleAccess );
-
-	VPhysicsDestroyObject();
-
-	// Need to remove references to this entity before EHANDLES go null
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	if( m_bPyManaged == false )
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 	{
-		g_bDisableEhandleAccess = false;
-		CBaseEntity::PhysicsRemoveTouchedList( this );
-		CBaseEntity::PhysicsRemoveGroundList( this );
-		SetGroundEntity( NULL ); // remove us from the ground entity if we are on it
-		DestroyAllDataObjects();
-		g_bDisableEhandleAccess = true;
+		// FIXME: This can't be called from UpdateOnRemove! There's at least one
+		// case where friction sounds are added between the call to UpdateOnRemove + ~CBaseEntity
+		PhysCleanupFrictionSounds( this );
 
-		// Remove this entity from the ent list (NOTE:  This Makes EHANDLES go NULL)
-		gEntList.RemoveEntity( GetRefEHandle() );
+		Assert( !IsDynamicModelIndex( m_nModelIndex ) );
+		Verify( !sg_DynamicLoadHandlers.Remove( this ) );
+
+		// In debug make sure that we don't call delete on an entity without setting
+		//  the disable flag first!
+		// EHANDLE accessors will check, in debug, for access to entities during destruction of
+		//  another entity.
+		// That kind of operation should only occur in UpdateOnRemove calls
+		// Deletion should only occur via UTIL_Remove(Immediate) calls, not via naked delete calls
+		Assert( g_bDisableEhandleAccess );
+
+		VPhysicsDestroyObject();
+
+		// Need to remove references to this entity before EHANDLES go null
+		{
+			g_bDisableEhandleAccess = false;
+			CBaseEntity::PhysicsRemoveTouchedList( this );
+			CBaseEntity::PhysicsRemoveGroundList( this );
+			SetGroundEntity( NULL ); // remove us from the ground entity if we are on it
+			DestroyAllDataObjects();
+			g_bDisableEhandleAccess = true;
+
+			// Remove this entity from the ent list (NOTE:  This Makes EHANDLES go NULL)
+			gEntList.RemoveEntity( GetRefEHandle() );
+		}
 	}
 }
 
@@ -509,6 +533,61 @@ void CBaseEntity::PostConstructor( const char *szClassname )
 
 	CheckHasThinkFunction( false );
 	CheckHasGamePhysicsSimulation();
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	// In case this is not created through a factory in python, retrieve the reference here.
+	if( GetPySelf() && m_pyInstance.ptr() == Py_None )
+	{
+		m_pyInstance = boost::python::object(
+			boost::python::handle<>(
+			boost::python::borrowed(GetPySelf())
+			)
+		);
+	}
+
+	// EVERY entity has a pyhandle. 
+	if( SrcPySystem()->IsPythonRunning() )
+		m_pyHandle = CreatePyHandle();
+
+	// Check the list of Python fields which require initialization
+	if( m_pyInstance.ptr() != Py_None )
+	{
+		boost::python::dict fieldinitmap;
+		try
+		{
+			fieldinitmap = boost::python::dict(m_pyInstance.attr("fieldinitmap"));
+		} 
+		catch( boost::python::error_already_set & )
+		{
+			Warning("Python entity has no field init list!\n");
+			PyErr_Clear();
+		}
+
+		boost::python::object elem;
+		boost::python::list objectValues = fieldinitmap.values();
+
+		boost::python::ssize_t n = boost::python::len(fieldinitmap);
+		for( boost::python::ssize_t i = 0; i < n; i++ ) 
+		{
+			elem = objectValues[i];
+			try 
+			{
+				elem.attr("InitField")(m_pyInstance);
+			}
+			catch( boost::python::error_already_set & )
+			{
+				Warning("Failed to initialize field: \n");
+				PyErr_Print();
+			}
+		}
+	}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 }
 
 //-----------------------------------------------------------------------------
@@ -543,7 +622,7 @@ static void AddDataMapFieldNamesToList( KeyValueNameList_t &list, datamap_t *pDa
 				list.AddToTail( pField->externalName );
 			}
 		}
-
+	
 		pDataMap = pDataMap->baseMap;
 	}
 }
@@ -3638,6 +3717,19 @@ void CBaseEntity::SetTransmit( CCheckTransmitInfo *pInfo, bool bAlways )
 
 	pInfo->m_pTransmitEdict->Set( index );
 
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	// Python networkvars: mark player as transmit
+	int iClientIdx = ENTINDEX( pInfo->m_pClientEnt ) - 1; // Client index is 0 based
+	m_PyNetworkVarsPlayerTransmitBits.Set( iClientIdx );
+	PyNetworkVarsUpdateClient( this, iClientIdx );
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 	// HLTV/Replay need to know if this entity is culled by PVS limits
 	if ( pInfo->m_pTransmitAlways )
 	{
@@ -3966,6 +4058,88 @@ bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator,
 			}
 		}
 	}
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	// Check Python input map
+	if( m_pyInstance.ptr() != Py_None )
+	{
+		try
+		{
+			boost::python::object inputmap = m_pyInstance.attr("inputmap");
+
+			boost::python::object inputmethod = inputmap.attr("get")(szInputName, boost::python::object());
+			if( inputmethod.ptr() != Py_None )
+			{
+				// found a match
+
+				char szBuffer[256];
+				// mapper debug message
+				if (pCaller != NULL)
+				{
+					V_snprintf( szBuffer, sizeof(szBuffer), "(%0.2f) input %s: %s.%s(%s)\n", gpGlobals->curtime, STRING(pCaller->m_iName), GetDebugName(), szInputName, Value.String() );
+				}
+				else
+				{
+					V_snprintf( szBuffer, sizeof(szBuffer), "(%0.2f) input <NULL>: %s.%s(%s)\n", gpGlobals->curtime, GetDebugName(), szInputName, Value.String() );
+				}
+				DevMsg( 2, "%s", szBuffer );
+				ADD_DEBUG_HISTORY( HISTORY_ENTITY_IO, szBuffer );
+
+				if (m_debugOverlays & OVERLAY_MESSAGE_BIT)
+				{
+					DrawInputOverlay(szInputName,pCaller,Value);
+				}
+
+				// convert the value if necessary
+				fieldtype_t fieldtype = boost::python::extract< fieldtype_t >( inputmethod.attr("fieldtype") );
+				if ( Value.FieldType() != fieldtype )
+				{
+					if ( !(Value.FieldType() == FIELD_VOID && fieldtype == FIELD_STRING) ) // allow empty strings
+					{
+						if ( !Value.Convert( fieldtype ) )
+						{
+							// bad conversion
+							Warning( "!! ERROR: bad input/output link:\n!! %s(%s,%s) doesn't match type from %s(%s)\n", 
+								STRING(m_iClassname), GetDebugName(), szInputName, 
+								( pCaller != NULL ) ? STRING(pCaller->m_iClassname) : "<null>",
+								( pCaller != NULL ) ? STRING(pCaller->m_iName) : "<null>" );
+							return false;
+						}
+					}
+				}
+
+				// Package the data into a struct for passing to the input handler.
+				inputdata_t data;
+				data.pActivator = pActivator;
+				data.pCaller = pCaller;
+				data.value = Value;
+				data.nOutputID = outputID;
+
+				try
+				{
+					inputmethod(m_pyInstance, data);
+				}
+				catch( boost::python::error_already_set & )
+				{
+					Warning("Exception during executing an input method:\n");
+					PyErr_Print();
+				}
+				return true;
+			}
+		} 
+		catch( boost::python::error_already_set & )
+		{
+			Warning("Python entity has an invalid inputmap map!\n");
+			PyErr_Print();
+		}
+	}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 
 	DevMsg( 2, "unhandled input: (%s) -> (%s,%s)\n", szInputName, STRING(m_iClassname), GetDebugName()/*,", from (%s,%s)" STRING(pCaller->m_iClassname), STRING(pCaller->m_iName)*/ );
 	return false;
@@ -7476,3 +7650,148 @@ void CC_Ent_Orient( const CCommand& args )
 }
 
 static ConCommand ent_orient("ent_orient", CC_Ent_Orient, "Orient the specified entity to match the player's angles. By default, only orients target entity's YAW. Use the 'allangles' option to orient on all axis.\n\tFormat: ent_orient <entity name> <optional: allangles>", FCVAR_CHEAT);
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+void *CBaseEntity::PyAllocate(PyObject* self_, std::size_t holder_offset, std::size_t holder_size)
+{
+	// call into engine to get memory
+	Assert( holder_size != 0 );
+	return engine->PvAllocEntPrivateData( holder_size );
+}
+
+void CBaseEntity::PyDeallocate(PyObject* self_, void *storage)
+{
+	// get the engine to free the memory
+	engine->FreeEntPrivateData( storage );
+}	
+
+//------------------------------------------------------------------------------
+// Purpose: Removes the Python instance
+//------------------------------------------------------------------------------
+void CBaseEntity::DestroyPyInstance()
+{
+	// Used in destructor
+	m_bPyManaged = true;
+
+	// FIXME: This can't be called from UpdateOnRemove! There's at least one
+	// case where friction sounds are added between the call to UpdateOnRemove + ~CBaseEntity
+	PhysCleanupFrictionSounds( this );
+
+	Assert( !IsDynamicModelIndex( m_nModelIndex ) );
+	Verify( !sg_DynamicLoadHandlers.Remove( this ) );
+
+	// In debug make sure that we don't call delete on an entity without setting
+	//  the disable flag first!
+	// EHANDLE accessors will check, in debug, for access to entities during destruction of
+	//  another entity.
+	// That kind of operation should only occur in UpdateOnRemove calls
+	// Deletion should only occur via UTIL_Remove(Immediate) calls, not via naked delete calls
+	Assert( g_bDisableEhandleAccess );
+
+	VPhysicsDestroyObject();
+
+	// Need to remove references to this entity before EHANDLES go null
+	{
+		g_bDisableEhandleAccess = false;
+		CBaseEntity::PhysicsRemoveTouchedList( this );
+		CBaseEntity::PhysicsRemoveGroundList( this );
+		SetGroundEntity( NULL ); // remove us from the ground entity if we are on it
+		DestroyAllDataObjects();
+		g_bDisableEhandleAccess = true;
+
+		// Remove this entity from the ent list (NOTE:  This Makes EHANDLES go NULL)
+		gEntList.RemoveEntity( GetRefEHandle() );
+	}
+
+	// CLOSE NETWORKPROP (ensure client side is cleaned up)
+	m_Network.DestroyNetworkProperty();
+
+	// Close collision property
+	m_Collision.DestroyPartitionHandle();
+
+	// Clear Python network vars
+	for( int i = m_utlPyNetworkVars.Count() - 1; i >= 0; i-- )
+		m_utlPyNetworkVars[i]->Remove( this );
+
+	// Dereference py think/touch functions
+	m_pyHandle = boost::python::object();
+	m_pyTouchMethod = boost::python::object();
+	m_pyThink = boost::python::object();
+	int i;
+	for( i=0; i < m_aThinkFunctions.Count(); i++ )
+	{
+		if( m_aThinkFunctions.Element(i).m_pyThink.ptr() != Py_None )
+			m_aThinkFunctions.Element(i).m_pyThink = boost::python::object();
+	}
+
+	// Store old class for debugging purposes. Rebind class to DeadEntity to prevent accidental access to methods.
+	// If refcount is 1, then no need to rebind, since nothing has a reference to it.
+	setattr(m_pyInstance, "__oldclass__", m_pyInstance.attr("__class__"));
+	setattr(m_pyInstance, "__class__",  _entities.attr("DeadEntity"));
+
+	// Add m_pyInstance to the delete list before dereferencing it
+	// Dereferencing m_pyInstance here might result in direct deletion of the entity
+	// This will result into heap corruption.
+	SrcPySystem()->AddToDeleteList( m_pyInstance );
+	m_pyInstance = boost::python::object();
+}
+
+
+//------------------------------------------------------------------------------
+// Purpose: Send Python Entity Message
+//------------------------------------------------------------------------------
+void CBaseEntity::PySendMessage( boost::python::list msg, bool reliable )
+{
+	// Skip parsing if none
+	if( msg.ptr() == Py_None )
+	{
+		// Shortcut
+		EntityMessageBegin( this, true );
+			WRITE_BYTE(BASEENTITY_MSG_PYTHON);
+			WRITE_BYTE(0);	// len(msg) == 0
+		MessageEnd();
+		return;
+	}
+
+	// Parse list
+	int length = 0;
+	CUtlVector<pywrite> writelist;
+	try 
+	{
+		length = boost::python::len(msg);
+		for( int i = 0; i < length; i++ )
+		{
+			pywrite write;
+			PyFillWriteElement( write, boost::python::object(msg[i]) );
+			writelist.AddToTail( write );
+		}
+	} 
+	catch( boost::python::error_already_set & ) 
+	{
+		PyErr_Print();
+		return;
+	}
+
+	EntityMessageBegin( this, reliable );
+		WRITE_BYTE(BASEENTITY_MSG_PYTHON);
+		WRITE_BYTE(length);
+		for(int i=0; i<writelist.Count(); i++)
+		{
+			PyWriteElement(writelist.Element(i));
+		}
+	MessageEnd();
+}
+
+//------------------------------------------------------------------------------
+// Purpose: Sends an event
+//------------------------------------------------------------------------------
+void CBaseEntity::PySendEvent( IRecipientFilter &filter, int event, int data )
+{
+	::PySendEvent( filter, this, event, data );
+}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================

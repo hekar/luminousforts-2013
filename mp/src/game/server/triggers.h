@@ -42,6 +42,14 @@ enum
 class CBaseTrigger : public CBaseToggle
 {
 	DECLARE_CLASS( CBaseTrigger, CBaseToggle );
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLASS( CBaseTrigger );
+// =======================================
+// END PySource Additions
+// =======================================
+
 public:
 	CBaseTrigger();
 	
@@ -109,6 +117,15 @@ protected:
 class CTriggerMultiple : public CBaseTrigger
 {
 	DECLARE_CLASS( CTriggerMultiple, CBaseTrigger );
+
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLASS( CTriggerMultiple );
+// =======================================
+// END PySource Additions
+// =======================================
+
 public:
 	void Spawn( void );
 	void MultiTouch( CBaseEntity *pOther );

@@ -122,6 +122,21 @@ private:
 	bool						m_bIsParentedToClientDLLRootPanel;
 
 	CUtlVector< int >			m_HudRenderGroups;
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_VGUI)
+public:
+	boost::python::object		m_pyInstance;
+
+	// Default placement versions of operator new. Boost Python wants them, but never calls them.
+	inline void* operator new(std::size_t, void* __p) throw() { Error("CHudElement new\n"); return __p; }
+	inline void* operator new[](std::size_t, void* __p) throw() { Error("CHudElement new[]\n"); return __p; }
+#endif // ENABLE_PYTHON && SRCPY_MOD_VGUI
+// =======================================
+// PySource Additions
+// =======================================
 };
 
 #include "utlpriorityqueue.h"

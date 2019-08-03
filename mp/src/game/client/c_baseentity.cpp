@@ -41,6 +41,17 @@
 #include "inetchannelinfo.h"
 #include "proto_version.h"
 
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+#include "srcpy.h"
+#include "srcpy_usermessage.h"
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -977,13 +988,24 @@ C_BaseEntity::C_BaseEntity() :
 //-----------------------------------------------------------------------------
 C_BaseEntity::~C_BaseEntity()
 {
-	Term();
-	ClearDataChangedEvent( m_DataChangeEventRef );
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	if( m_bPyManaged == false )
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+	{
+		Term();
+		ClearDataChangedEvent( m_DataChangeEventRef );
 #if !defined( NO_ENTITY_PREDICTION )
-	delete m_pPredictionContext;
+		delete m_pPredictionContext;
 #endif
-	RemoveFromInterpolationList();
-	RemoveFromTeleportList();
+		RemoveFromInterpolationList();
+		RemoveFromTeleportList();
+	}
 }
 
 void C_BaseEntity::Clear( void )
@@ -1094,6 +1116,50 @@ bool C_BaseEntity::Init( int entnum, int iSerialNum )
 
 	m_nCreationTick = gpGlobals->tickcount;
 
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	if( SrcPySystem()->IsPythonRunning() )
+		m_pyHandle = CreatePyHandle();
+
+	// Check Python init list
+	if( m_pyInstance.ptr() != Py_None )
+	{
+		boost::python::dict fieldinitmap;
+		try
+		{
+			fieldinitmap = boost::python::dict(m_pyInstance.attr("fieldinitmap"));
+		} 
+		catch( boost::python::error_already_set & )
+		{
+			Warning("Python entity has no field init list!\n");
+			PyErr_Clear();
+		}
+
+		boost::python::object elem;
+		boost::python::list objectValues = fieldinitmap.values();
+
+		boost::python::ssize_t n = boost::python::len(fieldinitmap);
+		for( boost::python::ssize_t i = 0; i < n; i++ ) 
+		{
+			elem = objectValues[i];
+			try 
+			{
+				elem.attr("InitField")(m_pyInstance);
+			}
+			catch( boost::python::error_already_set & )
+			{
+				Warning("Failed to initialize field: \n");
+				PyErr_Print();
+			}
+		}
+	}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 	return true;
 }
 
@@ -1141,6 +1207,28 @@ bool C_BaseEntity::InitializeAsClientEntityByIndex( int iIndex, RenderGroup_t re
 
 	// Add the client entity to the renderable "leaf system." (Renderable)
 	AddToLeafSystem( renderGroup );
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	// If we are a python entity, then grab our reference
+	if( GetPySelf() )
+	{
+		m_pyInstance = boost::python::object(
+			boost::python::handle<>(
+			boost::python::borrowed(GetPySelf())
+			)
+		);
+	}
+
+	// Create handle for python
+	if( SrcPySystem()->IsPythonRunning() )
+		m_pyHandle = CreatePyHandle();
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 
 	// Add the client entity to the spatial partition. (Collidable)
 	CollisionProp()->CreatePartitionHandle();
@@ -1240,7 +1328,22 @@ void C_BaseEntity::Release()
 
 	UpdateOnRemove();
 
-	delete this;
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	if( m_pyInstance.ptr() != Py_None )
+	{
+		DestroyPyInstance();	
+	}
+	else
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+	{
+		delete this;
+	}
 }
 
 
@@ -1459,6 +1562,17 @@ void C_BaseEntity::ReceiveMessage( int classID, bf_read &msg )
 	{
 		case BASEENTITY_MSG_REMOVE_DECALS:	RemoveAllDecals();
 											break;
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+		case BASEENTITY_MSG_PYTHON: PyReceiveMessageInternal(classID, msg); 
+											break;
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 	}
 }
 
@@ -3270,6 +3384,20 @@ void C_BaseEntity::OnPreDataChanged( DataUpdateType_t type )
 {
 	m_hOldMoveParent = m_hNetworkMoveParent;
 	m_iOldParentAttachment = m_iParentAttachment;
+
+// =======================================
+// PySource Additions
+// =======================================
+	// Ensures Python networked variables are processed on client creation of this entity
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	if ( type == DATA_UPDATE_CREATED && GetPySelf() != NULL )
+	{
+		SrcPySystem()->PreProcessDelayedUpdates( this );
+	}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 }
 
 void C_BaseEntity::OnDataChanged( DataUpdateType_t type )
@@ -3283,6 +3411,20 @@ void C_BaseEntity::OnDataChanged( DataUpdateType_t type )
 	if ( type == DATA_UPDATE_CREATED )
 	{
 		UpdateVisibility();
+
+// =======================================
+// PySource Additions
+// =======================================
+	// Ensures Python networked variables are processed on client creation of this entity
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+		if ( GetPySelf() != NULL )
+		{
+			SrcPySystem()->PostProcessDelayedUpdates( this );
+		}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 	}
 }
 
@@ -6446,6 +6588,145 @@ int C_BaseEntity::GetCreationTick() const
 {
 	return m_nCreationTick;
 }
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+void *C_BaseEntity::PyAllocate(PyObject* self_, std::size_t holder_offset, std::size_t holder_size)
+{
+	Assert( holder_size != 0 );				
+	MEM_ALLOC_CREDIT();
+	void *pMem = MemAlloc_Alloc( holder_size );
+	memset( pMem, 0, holder_size );
+	return pMem;			
+}
+
+void C_BaseEntity::PyDeallocate(PyObject* self_, void *storage)
+{
+	// get the engine to free the memory
+	MemAlloc_Free( storage );
+}
+
+//------------------------------------------------------------------------------
+// Purpose:
+//------------------------------------------------------------------------------
+void C_BaseEntity::DestroyPyInstance()
+{
+	m_bPyManaged = true;
+
+	// C_Baseentity destruction
+	Term();
+	ClearDataChangedEvent( m_DataChangeEventRef );
+#if !defined( NO_ENTITY_PREDICTION )
+	delete m_pPredictionContext;
+#endif
+	RemoveFromInterpolationList();
+	RemoveFromTeleportList();
+	
+	// Destroy collision + particle stuff
+	m_Collision.DestroyPartitionHandle();
+	//m_Particles.StopEmission( NULL, false, true );
+	m_Particles.StopEmissionAndDestroyImmediately( NULL ); // TEMP
+
+	// Dereference py think functions
+	m_pyHandle = boost::python::object();
+	m_pyTouchMethod = boost::python::object();
+	m_pyThink = boost::python::object();
+	int i;
+	for( i=0; i < m_aThinkFunctions.Count(); i++ )
+	{
+		if( m_aThinkFunctions.Element(i).m_pyThink.ptr() != Py_None )
+			m_aThinkFunctions.Element(i).m_pyThink = boost::python::object();
+	}
+
+	// Store old class for debugging purposes. Rebind class to DeadEntity to prevent accidental access to methods.
+	// If refcount is 1, then no need to rebind, since nothing has a reference to it.
+	setattr(m_pyInstance, "__oldclass__", m_pyInstance.attr("__class__"));
+	setattr(m_pyInstance, "__class__",  _entities.attr("DeadEntity"));
+
+	// Add m_pyInstance to the delete list before dereferencing it
+	// Dereferencing m_pyInstance here might result in direct deletion of the entity
+	// This will result into heap corruption.
+	SrcPySystem()->AddToDeleteList( m_pyInstance );
+	m_pyInstance = boost::python::object();
+}
+
+//------------------------------------------------------------------------------
+// Purpose: 
+//------------------------------------------------------------------------------
+void C_BaseEntity::PyReceiveMessageInternal( int classID, bf_read &msg )
+{
+	// Read message and add to a list
+	int i, length;
+	boost::python::list recvlist;
+	i = 0;
+	length = msg.ReadByte();
+	for( i = 0; i < length; i++)
+	{
+		try 
+		{
+			recvlist.append( PyReadElement(msg) );
+		} 
+		catch(boost::python::error_already_set &) 
+		{
+			PyErr_Print();
+			return;
+		}
+	}
+
+	PyReceiveMessage( recvlist );
+}
+
+//------------------------------------------------------------------------------
+// Purpose:
+//------------------------------------------------------------------------------
+void C_BaseEntity::PyUpdateNetworkVar( const char *pName, boost::python::object data, bool callchanged, bool oncreated )
+{
+	try 
+	{
+		// Maybe compare here, but would give problems with EHANDLES, which might compare to None successfully.
+		// It would also indicate the data was send for nothing if the compare succeeds here.
+		//if( hasattr( m_pyInstance, pName ) && getattr( m_pyInstance, pName ) == data )
+		//	return;
+
+		setattr( m_pyInstance, pName, data );
+	} 
+	catch(boost::python::error_already_set &) 
+	{
+		PyErr_Print();
+		return;
+	}
+
+	if( !oncreated )
+	{
+		AddDataChangeEvent( this, DATA_UPDATE_DATATABLE_CHANGED, &m_DataChangeEventRef );
+	}
+
+	if( callchanged )
+	{
+		PyNetworkVarChanged( pName );
+	}
+}
+
+//------------------------------------------------------------------------------
+// Purpose: 
+//------------------------------------------------------------------------------
+void C_BaseEntity::PyNetworkVarChanged( const char *pName )
+{
+	try 
+	{
+		getattr( m_pyInstance, (const char *)VarArgs( "__%s__Changed", pName ) )();
+	} 
+	catch( boost::python::error_already_set & ) 
+	{
+		PyErr_Print();
+	}
+}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 
 //------------------------------------------------------------------------------
 void CC_CL_Find_Ent( const CCommand& args )

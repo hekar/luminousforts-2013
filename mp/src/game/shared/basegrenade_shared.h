@@ -50,6 +50,18 @@ public:
 	DECLARE_DATADESC();
 #endif
 
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef CLIENT_DLL
+	DECLARE_PYCLIENTCLASS( CBaseGrenade );
+#else
+	DECLARE_PYSERVERCLASS( CBaseGrenade );
+#endif // CLIENT_DLL
+// =======================================
+// END PySource Additions
+// =======================================
+
 	virtual void		Precache( void );
 
 	virtual void		Explode( trace_t *pTrace, int bitsDamageType );

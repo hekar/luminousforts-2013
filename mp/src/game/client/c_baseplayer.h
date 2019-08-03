@@ -76,6 +76,14 @@ public:
 	DECLARE_PREDICTABLE();
 	DECLARE_INTERPOLATION();
 
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLIENTCLASS( C_BasePlayer );
+// =======================================
+// END PySource Additions
+// =======================================
+
 	C_BasePlayer();
 	virtual			~C_BasePlayer();
 
@@ -290,6 +298,15 @@ public:
 
 	// returns the player name
 	const char *				GetPlayerName();
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	boost::python::object		PyGetPlayerName();
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 	virtual const Vector		GetPlayerMins( void ) const; // uses local player
 	virtual const Vector		GetPlayerMaxs( void ) const; // uses local player
 

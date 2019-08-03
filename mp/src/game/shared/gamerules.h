@@ -111,18 +111,43 @@ private:
 	static CGameRulesProxy *s_pGameRulesProxy;
 };
 
-
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+abstract_class CGameRules : public CBaseGameSystemPerFrame
+{
+public:
+	DECLARE_CLASS_GAMEROOT( CGameRules, CBaseGameSystemPerFrame );
+#else
 abstract_class CGameRules : public CAutoGameSystemPerFrame
 {
 public:
 	DECLARE_CLASS_GAMEROOT( CGameRules, CAutoGameSystemPerFrame );
+#endif // ENABLE_PYTHON
 
+// =======================================
+// END PySource Additions
+// =======================================
 	virtual char const *Name() { return "CGameRules"; }
 
 	// Stuff shared between client and server.
 
 	CGameRules(void);
 	virtual ~CGameRules( void );
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_GAMERULES)
+	virtual void InitGamerules() {}
+	virtual void ShutdownGamerules() {}
+
+	virtual PyObject *GetPySelf() const { return NULL; }
+#endif // ENABLE_PYTHON && SRCPY_MOD_GAMERULES
+// =======================================
+// END PySource Additions
+// =======================================
 
 	virtual void Status( void (*print) (const char *fmt, ...) ) {}
 

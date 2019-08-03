@@ -1928,7 +1928,20 @@ bool CBaseEntity::PhysicsRunThink( thinkmethods_t thinkMethod )
 		m_iCurrentThinkContext = i;
 #endif
 
+// =======================================
+// PySource Additions
+// =======================================
+#if !defined(ENABLE_PYTHON) || !defined(SRCPY_MOD_ENTITIES)
 		bAlive = PhysicsRunSpecificThink( i, m_aThinkFunctions[i].m_pfnThink );
+#else
+		if( m_aThinkFunctions[i].m_pfnThink )
+			bAlive = PhysicsRunSpecificThink( i, m_aThinkFunctions[i].m_pfnThink );
+		else if( m_aThinkFunctions[i].m_pyThink.ptr() != Py_None )
+			bAlive = PhysicsPyRunSpecificThink( i, m_aThinkFunctions[i].m_pyThink );
+#endif // !ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 
 #ifdef _DEBUG
 		// Clear our context
@@ -2121,6 +2134,49 @@ bool CBaseEntity::PhysicsRunSpecificThink( int nContextIndex, BASEPTR thinkFunc 
 	// Return whether entity is still valid
 	return ( !IsMarkedForDeletion() );
 }
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+//-----------------------------------------------------------------------------
+// Purpose: Almost the same as above, but only with a reference to a python method
+//-----------------------------------------------------------------------------
+bool CBaseEntity::PhysicsPyRunSpecificThink( int nContextIndex, boost::python::object thinkFunc )
+{
+	int thinktick = GetNextThinkTick( nContextIndex );
+
+	if ( thinktick <= 0 || thinktick > gpGlobals->tickcount )
+		return true;
+	
+	float thinktime = thinktick * TICK_INTERVAL;
+
+	// Don't let things stay in the past.
+	//  it is possible to start that way
+	//  by a trigger with a local time.
+	if ( thinktime < gpGlobals->curtime )
+	{
+		thinktime = gpGlobals->curtime;	
+	}
+	
+	// Only do this on the game server
+#if !defined( CLIENT_DLL )
+	g_ThinkChecker.EntityThinking( gpGlobals->tickcount, this, thinktime, m_nNextThinkTick );
+#endif
+
+	SetNextThink( nContextIndex, TICK_NEVER_THINK );
+
+	PhysicsPyDispatchThink( thinkFunc );
+
+	SetLastThink( nContextIndex, gpGlobals->curtime );
+
+	// Return whether entity is still valid
+	return ( !IsMarkedForDeletion() );
+}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 
 void CBaseEntity::SetGroundEntity( CBaseEntity *ground )
 {

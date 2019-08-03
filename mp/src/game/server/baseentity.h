@@ -21,6 +21,14 @@
 #include "shareddefs.h"
 #include "engine/ivmodelinfo.h"
 
+// =======================================
+// PySource Additions
+// =======================================
+#include "srcpy_server_class.h"
+// =======================================
+// END PySource Additions
+// =======================================
+
 class CDamageModifier;
 class CDmgAccumulator;
 
@@ -84,6 +92,14 @@ class CSkyCamera;
 class CEntityMapData;
 class INextBot;
 class IHasAttributes;
+
+// =======================================
+// PySource Additions
+// =======================================
+class CPythonNetworkVarBase;
+// =======================================
+// END PySource Additions
+// =======================================
 
 typedef CUtlVector< CBaseEntity* > EntityList_t;
 
@@ -332,6 +348,18 @@ struct thinkfunc_t
 	int			m_nLastThinkTick;
 
 	DECLARE_SIMPLE_DATADESC();
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	string_t	m_iszPyThinkMethodName;
+	// MUST BE LAST
+	boost::python::object  m_pyThink;			// If not Py_None and m_pfnThink != NULL, then call the python method
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 };
 
 struct EmitSound_t;
@@ -1810,8 +1838,78 @@ public:
 	{
 		return s_bAbsQueriesValid;
 	}
-
+	
 	virtual bool ShouldBlockNav() const { return true; }
+		
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+public:
+	DECLARE_PYSERVERCLASS( CBaseEntity );
+
+	// TODO/FIXME: Default placement versions of operator new, boost python seems to wants these...
+	inline void* operator new(std::size_t, void* __p) throw() { Assert(0); Error("CBaseEntity new\n");return __p; }
+	inline void* operator new[](std::size_t, void* __p) throw() { Assert(0); Error("CBaseEntity new[]\n");return __p; }
+
+	// Memory allocators for python instances of entities
+	static void *PyAllocate( PyObject* self_, std::size_t holder_offset, std::size_t holder_size );
+	static void PyDeallocate( PyObject* self_, void *storage );
+
+	// This directly returns the PyObject (if any)
+	virtual PyObject *GetPySelf() const { return NULL; }
+
+	// This returns the reference to the Python instance (if any)
+	boost::python::object			GetPyInstance() const;
+	void							SetPyInstance( boost::python::object inst );
+
+	// This returns the entity handle for usage in Python
+	boost::python::object			GetPyHandle() const;
+
+	// This functions destroys the entity
+	virtual void					DestroyPyInstance();
+
+	// Python Think support
+	void							SetPyThink( boost::python::object think_method, float flNextThinkTime = 0, const char *szContext = 0 );
+	boost::python::object			GetPyThink();
+	void							PyThink();
+	bool							PhysicsPyRunSpecificThink( int nContextIndex, boost::python::object thinkFunc );
+	void							PhysicsPyDispatchThink( boost::python::object thinkFunc );
+
+	// Python touch support
+	void							SetPyTouch( boost::python::object touch_method );
+	void							PyTouch( ::CBaseEntity *pOther );
+
+	// Allows sending messages in Python on this entity
+	void							PySendMessage( boost::python::list msg, bool reliable = false );
+
+	// Allows sending an event on this Python entity
+	void							PySendEvent( IRecipientFilter &filter, int event, int data = 0 );
+
+protected:
+	bool		m_bPyManaged;
+
+private:
+
+	boost::python::object m_pyInstance;
+	boost::python::object m_pyHandle;
+	boost::python::object m_pyTouchMethod;
+	boost::python::object m_pyThink;
+	
+	// Save/restore for touch and think
+	string_t	m_iszPyTouchMethodName;
+	string_t	m_iszPyThinkMethodName;
+	
+public:
+	// This is the list of network vars in Python
+	CUtlVector<CPythonNetworkVarBase *> m_utlPyNetworkVars;
+
+	// This bit vector tells to who we may send data
+	CBitVec<ABSOLUTE_PLAYER_LIMIT> m_PyNetworkVarsPlayerTransmitBits;
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 };
 
 // Send tables exposed in this module.
@@ -2618,6 +2716,35 @@ inline void CBaseEntity::FireBullets( int cShots, const Vector &vecSrc,
 	FireBullets( info );
 }
 
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+inline boost::python::object CBaseEntity::GetPyInstance() const 
+{ 
+	return m_pyInstance; 
+}
+
+inline void CBaseEntity::SetPyInstance( boost::python::object inst )
+{
+	Assert( GetRefEHandle() == NULL );
+	m_pyInstance = inst;
+}
+
+inline boost::python::object CBaseEntity::GetPyHandle() const 
+{ 
+	return m_pyHandle; 
+}
+
+inline boost::python::object CBaseEntity::GetPyThink()
+{
+	return m_pyThink; 
+}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 // Ugly technique to override base member functions
 // Normally it's illegal to cast a pointer to a member function of a derived class to a pointer to a 
 // member function of a base class.  static_cast is a sleezy way around that problem.
@@ -2647,6 +2774,13 @@ class CPointEntity : public CBaseEntity
 {
 public:
 	DECLARE_CLASS( CPointEntity, CBaseEntity );
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLASS( CPointEntity );
+// =======================================
+// END PySource Additions
+// =======================================
 
 	void	Spawn( void );
 	virtual int	ObjectCaps( void ) { return BaseClass::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -2658,6 +2792,14 @@ private:
 class CServerOnlyEntity : public CBaseEntity
 {
 	DECLARE_CLASS( CServerOnlyEntity, CBaseEntity );
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLASS( CServerOnlyEntity );
+// =======================================
+// END PySource Additions
+// =======================================
+
 public:
 	CServerOnlyEntity() : CBaseEntity( true ) {}
 	
@@ -2668,6 +2810,13 @@ public:
 class CServerOnlyPointEntity : public CServerOnlyEntity
 {
 	DECLARE_CLASS( CServerOnlyPointEntity, CServerOnlyEntity );
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLASS( CServerOnlyPointEntity );
+// =======================================
+// END PySource Additions
+// =======================================
 
 public:
 	virtual bool KeyValue( const char *szKeyName, const char *szValue );
@@ -2677,6 +2826,13 @@ public:
 class CLogicalEntity : public CServerOnlyEntity
 {
 	DECLARE_CLASS( CLogicalEntity, CServerOnlyEntity );
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLASS( CLogicalEntity );
+// =======================================
+// END PySource Additions
+// =======================================
 
 public:
 	virtual bool KeyValue( const char *szKeyName, const char *szValue );

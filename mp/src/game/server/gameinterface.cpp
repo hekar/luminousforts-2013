@@ -130,6 +130,19 @@ extern ConVar tf_mm_servermode;
 #include "replay/ireplaysystem.h"
 #endif
 
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+#include "srcpy.h"
+#ifdef SRCPY_MOD_ENTITIES
+#include "srcpy_networkvar.h"
+#endif // SRCPY_MOD_ENTITIES
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
+
 extern IToolFrameworkServer *g_pToolFrameworkServer;
 extern IParticleSystemQuery *g_pParticleSystemQuery;
 
@@ -700,6 +713,16 @@ bool CServerGameDLL::DLLInit( CreateInterfaceFn appSystemFactory,
 #endif
 	// Add sound emitter
 	IGameSystem::Add( SoundEmitterSystem() );
+
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+	IGameSystem::Add( SrcPySystem() );
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
 
 	// load Mod specific game events ( MUST be before InitAllSystems() so it can pickup the mod specific events)
 	gameeventmanager->LoadEventsFromFile("resource/ModEvents.res");
@@ -1357,6 +1380,10 @@ void CServerGameDLL::Think( bool finalTick )
 		m_fAutoSaveDangerousTime = 0.0f;
 		m_fAutoSaveDangerousMinHealthToCommit = 0.0f;
 	}
+
+#ifdef ENABLE_PYTHON
+	SrcPySystem()->UpdateRealtime();
+#endif // ENABLE_PYTHON
 }
 
 void CServerGameDLL::OnQueryCvarValueFinished( QueryCvarCookie_t iCookie, edict_t *pPlayerEntity, EQueryCvarValueStatus eStatus, const char *pCvarName, const char *pCvarValue )
@@ -2510,6 +2537,18 @@ void CServerGameEnts::CheckTransmit( CCheckTransmitInfo *pInfo, const unsigned s
 				CServerNetworkProperty *pEnt = static_cast<CServerNetworkProperty*>( pEdict->GetNetworkable() );
 				if ( !pEnt )
 					break;
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+				// Python networkvars: mark player as transmit
+				int iClientIdx = ENTINDEX( pInfo->m_pClientEnt ) - 1; // Client index is 0 based
+				pEnt->GetBaseEntity()->m_PyNetworkVarsPlayerTransmitBits.Set( iClientIdx );
+				PyNetworkVarsUpdateClient(pEnt->GetBaseEntity(), iClientIdx );
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 
 				CServerNetworkProperty *pParent = pEnt->GetNetworkParent();
 				if ( !pParent )
@@ -2660,6 +2699,17 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CServerGameClients, IServerGameClients, INTERF
 //-----------------------------------------------------------------------------
 bool CServerGameClients::ClientConnect( edict_t *pEdict, const char *pszName, const char *pszAddress, char *reject, int maxrejectlen )
 {	
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	// Make sure Python network variables are marked correctly for the new player
+	PyNetworkVarsResetClientTransmitBits( ENTINDEX(pEdict) - 1 );
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 	if ( !g_pGameRules )
 		return false;
 	
@@ -3285,6 +3335,14 @@ void MessageWriteByte( int iValue)
 		Error( "WRITE_BYTE called with no active message\n" );
 
 	g_pMsgBuffer->WriteByte( iValue );
+}
+
+void MessageWriteBytes(const void *pBuf, int nBytes)
+{
+	if (!g_pMsgBuffer)
+		Error("WRITE_BYTES called with no active message\n");
+
+	g_pMsgBuffer->WriteBytes(pBuf, nBytes);
 }
 
 void MessageWriteChar( int iValue)

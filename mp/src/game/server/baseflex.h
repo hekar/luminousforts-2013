@@ -47,6 +47,14 @@ public:
 	DECLARE_DATADESC();
 	DECLARE_PREDICTABLE();
 
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYSERVERCLASS( CBaseFlex );
+// =======================================
+// END PySource Additions
+// =======================================
+
 	// Construction
 						CBaseFlex( void );
 						~CBaseFlex( void );

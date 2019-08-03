@@ -491,6 +491,44 @@ bool CBaseEntity::KeyValue( const char *szKeyName, const char *szValue )
 
 #endif
 
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	// Check Python keyvalues map
+	if( m_pyInstance.ptr() != Py_None )
+	{
+		boost::python::object keyvaluemap;
+		try
+		{
+			keyvaluemap = m_pyInstance.attr("keyvaluemap");
+		} 
+		catch( boost::python::error_already_set & )
+		{
+			Warning("Python entity has no keyvaluesmap!\n");
+			PyErr_Clear();
+		}
+
+		try
+		{
+			boost::python::object field = keyvaluemap.attr("get")(szKeyName, boost::python::object());
+			if( field.ptr() != Py_None )
+			{
+				field.attr("Set")(m_pyInstance, szValue);
+				return true;
+			}
+		} 
+		catch( boost::python::error_already_set & )
+		{
+			Warning("Python entity has an invalid keyvalues map!\n");
+			PyErr_Print();
+		}
+	}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 	// key hasn't been handled
 	return false;
 }
@@ -745,7 +783,11 @@ int CBaseEntity::RegisterThinkContext( const char *szContext )
 
 	// Make a new think func
 	thinkfunc_t sNewFunc;
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	Q_memset( &sNewFunc, 0, sizeof( sNewFunc ) - sizeof( boost::python::object ) );	//  m_pyThink is last in struct. DON'T SET TO NULL!
+#else
 	Q_memset( &sNewFunc, 0, sizeof( sNewFunc ) );
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
 	sNewFunc.m_pfnThink = NULL;
 	sNewFunc.m_nNextThinkTick = 0;
 	sNewFunc.m_iszContext = AllocPooledString(szContext);

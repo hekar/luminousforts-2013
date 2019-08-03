@@ -142,10 +142,30 @@ bool CGameRules::IsLocalPlayer( int nEntIndex )
 	return ( pLocalPlayer && pLocalPlayer == ClientEntityList().GetEnt( nEntIndex ) );
 }
 
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+CGameRules::CGameRules() : CBaseGameSystemPerFrame( )
+#else
 CGameRules::CGameRules() : CAutoGameSystemPerFrame( "CGameRules" )
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
 {
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+	// Don't set g_pGameRules here! Do this in gamerules_register instead.
+#else
 	Assert( !g_pGameRules );
-	g_pGameRules = this;
+	g_pGameRules = this; 
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
 }	
 
 #else //}{
@@ -160,10 +180,26 @@ extern bool	g_fGameOver;
 //-----------------------------------------------------------------------------
 // constructor, destructor
 //-----------------------------------------------------------------------------
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+CGameRules::CGameRules() : CBaseGameSystemPerFrame( )
+#else
 CGameRules::CGameRules() : CAutoGameSystemPerFrame( "CGameRules" )
 {
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+	// Don't set g_pGameRules here! Do this in gamerules_register instead.
+#else
 	Assert( !g_pGameRules );
-	g_pGameRules = this;
+	g_pGameRules = this; 
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
 
 	GetVoiceGameMgr()->Init( g_pVoiceGameMgrHelper, gpGlobals->maxClients );
 	ClearMultiDamage();
@@ -663,8 +699,21 @@ void CGameRules::MarkAchievement( IRecipientFilter& filter, char const *pchAchie
 
 CGameRules::~CGameRules()
 {
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+	// In python we don't know when the gamerules instance is destroyed.
+	// So don't make it NULL here!
+	if( g_pGameRules == this )
+		g_pGameRules = NULL;
+#else
 	Assert( g_pGameRules == this );
 	g_pGameRules = NULL;
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
 }
 
 char **CGameRules::GetClassNames( int TeamNum )

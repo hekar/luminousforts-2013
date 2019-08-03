@@ -8,6 +8,16 @@
 #include "iclassmap.h"
 #include "utldict.h"
 
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	#include "srcpy_entities.h"
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -19,6 +29,9 @@ public:
 		mapname[ 0 ] = 0;
 		factory = 0;
 		size = -1;
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+		pyfactory = 0;
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
 	}
 
 	char const *GetMapName() const
@@ -33,6 +46,10 @@ public:
 
 	DISPATCHFUNCTION	factory;
 	int					size;
+
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	PyEntityFactory		*pyfactory;
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
 private:
 	char				mapname[ 40 ];
 };
@@ -44,6 +61,19 @@ public:
 	virtual const char		*Lookup( const char *classname );
 	virtual C_BaseEntity	*CreateEntity( const char *mapname );
 	virtual int				GetClassSize( const char *classname );
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	virtual void			PyAdd( const char *mapname, const char *classname, int size, PyEntityFactory *factory );
+	virtual void			PyRemove( const char *classname );
+	virtual PyEntityFactory* PyGetFactory( const char *classname );
+	virtual PyEntityFactory* PyGetFactoryByMapName( const char *classname );
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 
 private:
 	CUtlDict< classentry_t, unsigned short > m_ClassDict;
@@ -102,6 +132,10 @@ C_BaseEntity *CClassMap::CreateEntity( const char *mapname )
 		if ( Q_stricmp( lookup->GetMapName(), mapname ) )
 			continue;
 
+// =======================================
+// PySource Additions
+// =======================================
+#if !defined(ENABLE_PYTHON) || !defined(SRCPY_MOD_ENTITIES)
 		if ( !lookup->factory )
 		{
 #if defined( _DEBUG )
@@ -111,6 +145,25 @@ C_BaseEntity *CClassMap::CreateEntity( const char *mapname )
 		}
 
 		return ( *lookup->factory )();
+#else
+		if( lookup->factory )
+		{
+			return ( *lookup->factory )();
+		}
+		else if( lookup->pyfactory )
+		{
+			return lookup->pyfactory->Create();
+		}
+		else
+		{
+#if defined( _DEBUG )
+			Msg( "No factory for %s/%s\n", lookup->GetMapName(), m_ClassDict.GetElementName( i ) );
+#endif
+		}
+#endif // !ENABLE_PYTHON || !SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 	}
 
 	return NULL;
@@ -135,3 +188,64 @@ int CClassMap::GetClassSize( const char *classname )
 
 	return -1;
 }
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+void CClassMap::PyAdd( const char *mapname, const char *classname, int size, PyEntityFactory *factory )
+{
+	if( !factory )
+		return;
+
+	const char *map = Lookup( classname );
+	if ( map && !Q_strcasecmp( mapname, map ) )
+		return;
+
+	if ( map )
+	{
+		int index = m_ClassDict.Find( classname );
+		Assert( index != m_ClassDict.InvalidIndex() );
+		m_ClassDict.RemoveAt( index );
+	}
+
+	classentry_t element;
+	element.SetMapName( mapname );
+	element.pyfactory = factory;
+	element.size = size;
+	m_ClassDict.Insert( classname, element );
+}
+
+void CClassMap::PyRemove( const char *classname )
+{
+	int index = m_ClassDict.Find( classname );
+	Assert( index != m_ClassDict.InvalidIndex() );
+	m_ClassDict.RemoveAt( index );
+}
+
+PyEntityFactory* CClassMap::PyGetFactory( const char *classname )
+{
+	int index = m_ClassDict.Find( classname );
+	if( index == m_ClassDict.InvalidIndex() )
+		return NULL;
+	return m_ClassDict[index].pyfactory;
+}
+
+PyEntityFactory* CClassMap::PyGetFactoryByMapName( const char *mapname )
+{
+	unsigned short idx = m_ClassDict.First();
+	while( idx != m_ClassDict.InvalidIndex() )
+	{
+		if( !Q_stricmp (m_ClassDict[idx].GetMapName(), mapname ) )
+		{
+			return m_ClassDict[idx].pyfactory;
+		}
+
+		idx = m_ClassDict.Next( idx );
+	}
+	return NULL;
+}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================

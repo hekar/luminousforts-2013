@@ -26,6 +26,14 @@ public:
 	DECLARE_CLIENTCLASS();
 	DECLARE_PREDICTABLE();
 
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLIENTCLASS( C_PlayerResource );
+// =======================================
+// END PySource Additions
+// =======================================
+
 					C_PlayerResource();
 	virtual			~C_PlayerResource();
 
@@ -55,6 +63,16 @@ public : // IGameResources intreface
 
 	virtual void ClientThink();
 	virtual	void	OnDataChanged(DataUpdateType_t updateType);
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	boost::python::object		PyGetPlayerName( int index );
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 
 protected:
 	void	UpdatePlayerName( int slot );

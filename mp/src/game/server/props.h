@@ -25,6 +25,8 @@
 class CBaseProp : public CBaseAnimating
 {
 	DECLARE_CLASS( CBaseProp, CBaseAnimating );
+	DECLARE_PYCLASS( CBaseProp );
+
 public:
 
 	void Spawn( void );
@@ -53,6 +55,7 @@ public:
 	DECLARE_CLASS( CBreakableProp, CBaseProp );
 	DECLARE_SERVERCLASS();
 	DECLARE_DATADESC();
+	DECLARE_PYSERVERCLASS( CBreakableProp );
 
 	virtual void Spawn();
 	virtual void Precache();
@@ -332,6 +335,7 @@ class CPhysicsProp : public CBreakableProp, public IPhysicsPropAutoList
 {
 	DECLARE_CLASS( CPhysicsProp, CBreakableProp );
 	DECLARE_SERVERCLASS();
+	DECLARE_PYCLASS( CPhysicsProp );
 
 public:
 	~CPhysicsProp();

@@ -1,0 +1,3 @@
+python\lib/pkgutil.py
+python\lib\importlib/machinery.py
+python\lib\importlib/_bootstrap.py

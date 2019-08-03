@@ -39,6 +39,18 @@ public:
 	DECLARE_CLASS( CBaseProjectile, CBaseAnimating );
 	DECLARE_NETWORKCLASS();
 
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef CLIENT_DLL
+	DECLARE_PYCLIENTCLASS( C_BaseProjectile );
+#else
+	DECLARE_PYSERVERCLASS( CBaseProjectile );
+#endif // CLIENT_DLL
+// =======================================
+// END PySource Additions
+// =======================================
+
 	CBaseProjectile();
 
 	virtual void Spawn();

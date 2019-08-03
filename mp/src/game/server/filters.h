@@ -35,6 +35,14 @@ class CBaseFilter : public CLogicalEntity
 {
 	DECLARE_CLASS( CBaseFilter, CLogicalEntity );
 
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYCLASS( CBaseFilter );
+// =======================================
+// END PySource Additions
+// =======================================
+
 public:
 
 	DECLARE_DATADESC();

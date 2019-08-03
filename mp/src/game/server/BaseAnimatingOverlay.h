@@ -126,6 +126,14 @@ class CBaseAnimatingOverlay : public CBaseAnimating
 {
 	DECLARE_CLASS( CBaseAnimatingOverlay, CBaseAnimating );
 
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYSERVERCLASS( CBaseAnimatingOverlay );
+// =======================================
+// END PySource Additions
+// =======================================
+
 public:
 	enum 
 	{

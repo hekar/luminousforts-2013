@@ -9,6 +9,8 @@ $Macro GAMENAME 	"hl2mp" [!$SOURCESDK]
 $Macro GAMENAME 	"mod_hl2mp" [$SOURCESDK]
 
 $Include "$SRCDIR\game\client\client_base.vpc"
+$Include "$SRCDIR\vpc_scripts\pysource_base.vpc"
+$Include "$SRCDIR\game\client\client_pysource_autogen.vpc"
 
 $macro VSLIBDIR  "." [!$VS2010]
 $macro VSLIBDIR  "VS2010" [$VS2010]
@@ -17,7 +19,7 @@ $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories		"$BASE;.\,hl2mp\ui,.\hl2mp,$SRCDIR\game\shared\hl2mp,.\hl2,.\hl2\elements,$SRCDIR\game\shared\hl2"
+		$AdditionalIncludeDirectories		"$BASE;.\,hl2mp\ui,.\hl2mp,$SRCDIR\game\shared\hl2mp,.\hl2,.\hl2\elements,$SRCDIR\game\shared\hl2,.\python,$SRCDIR\game\shared\python"
 		$PreprocessorDefinitions			"$BASE;HL2MP;HL2_CLIENT_DLL"
 	}
 }
@@ -343,5 +345,32 @@ $Project "Client (HL2MP)"
 				$File	"hl2mp\hud_deathnotice.cpp"
 			}
 		}
+
+		$Folder	"Python"
+		{
+			//$Folder	"Helpers"
+			//{
+			//	$File	"$SRCDIR\game\shared\python\helpers\filesystem_init.cpp"
+			//	$File	"$SRCDIR\game\shared\python\helpers\filesystem_init.h"
+			//}
+
+			$File	"$SRCDIR\game\shared\python\srcpy.cpp"
+			$File	"$SRCDIR\game\shared\python\srcpy.h"
+			$File	"$SRCDIR\game\shared\python\srcpy_class_shared.cpp"
+			$File	"$SRCDIR\game\shared\python\srcpy_class_shared.h"
+			$File	"$SRCDIR\game\shared\python\srcpy_config.cpp"
+			$File	"$SRCDIR\game\shared\python\srcpy_standalone.cpp"
+			$File	"$SRCDIR\game\shared\python\srcpy_standalone.h"
+
+			$File	"python\srcpy_client_class.cpp"
+			$File	"python\srcpy_client_class.h"
+		}
+	}
+
+	$Folder	"Link Libraries"
+	{
+		$Lib	"$LIBPUBLIC\boost_python"
+		$Lib	"$LIBPUBLIC\python34" [$WIN32]
+		$Lib	"$LIBPUBLIC\libpython3.4m" [$POSIX]
 	}
 }

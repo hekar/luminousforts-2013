@@ -342,3 +342,71 @@ void C_BaseEntity::PhysicsDispatchThink( BASEPTR thinkFunc )
 		}
 	}
 }
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void C_BaseEntity::PhysicsPyDispatchThink( boost::python::object thinkFunc )
+{
+	float thinkLimit = think_limit.GetFloat();
+	float startTime = 0.0;
+
+	/*
+	// This doesn't apply on the client, really
+	if ( IsDormant() )
+	{
+	Warning( "Dormant entity %s is thinking!!\n", GetClassname() );
+	Assert(0);
+	}
+	*/
+
+	if ( thinkLimit )
+	{
+		startTime = engine->Time();
+	}
+
+	if ( thinkFunc.ptr() != Py_None )
+	{
+		try 
+		{
+			thinkFunc();
+		} 
+		catch( boost::python::error_already_set & ) 
+		{
+			PyErr_Print();
+		}
+	}
+
+	if ( thinkLimit )
+	{
+		// calculate running time of the AI in milliseconds
+		float time = ( engine->Time() - startTime ) * 1000.0f;
+		if ( time > thinkLimit )
+		{
+#if 0
+			// If its an NPC print out the shedule/task that took so long
+			CAI_BaseNPC *pNPC = MyNPCPointer();
+			if (pNPC && pNPC->GetCurSchedule())
+			{
+				pNPC->ReportOverThinkLimit( time );
+			}
+			else
+#endif
+			{
+#ifdef WIN32
+				Msg( "CLIENT:  %s(%s) thinking for %.02f ms!!!\n", GetClassname(), typeid(this).raw_name(), time );
+#else
+				Msg( "CLIENT:  %s(%s) thinking for %.02f ms!!!\n", GetClassname(), typeid(this).name(), time );				
+#endif
+			}
+		}
+	}
+}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================

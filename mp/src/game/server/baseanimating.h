@@ -31,6 +31,14 @@ class CBaseAnimating : public CBaseEntity
 public:
 	DECLARE_CLASS( CBaseAnimating, CBaseEntity );
 
+// =======================================
+// PySource Additions
+// =======================================
+	DECLARE_PYSERVERCLASS( CBaseAnimating );
+// =======================================
+// END PySource Additions
+// =======================================
+
 	CBaseAnimating();
 	~CBaseAnimating();
 

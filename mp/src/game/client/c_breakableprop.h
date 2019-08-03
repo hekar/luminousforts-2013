@@ -18,6 +18,7 @@ class C_BreakableProp : public C_BaseAnimating
 	typedef C_BaseAnimating BaseClass;
 public:
 	DECLARE_CLIENTCLASS();
+	DECLARE_PYCLIENTCLASS( C_BreakableProp );
 
 	C_BreakableProp();
 	

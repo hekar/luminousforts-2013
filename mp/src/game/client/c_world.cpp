@@ -15,6 +15,17 @@
 #include "eventlist.h"
 // NVNT haptic include for notification of world precache
 #include "haptics/haptic_utils.h"
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	#include "srcpy.h"
+#endif // ENABLE_PYTHON && SRCPY_MOD_GAMERULES
+// =======================================
+// END PySource Additions
+// =======================================
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -82,6 +93,17 @@ bool C_World::Init( int entnum, int iSerialNum )
 void C_World::Release()
 {
 	ActivityList_Free();
+
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	g_bDoNotInitPythonClasses = true;
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 	Term();
 }
 
@@ -177,6 +199,18 @@ void C_World::Precache( void )
 	// NVNT notify system of precache
 	if (haptics)
 		haptics->WorldPrecache();
+		
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+	// Python classes init
+	g_bDoNotInitPythonClasses = false;
+	InitAllPythonEntities();
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
 }
 
 void C_World::Spawn( void )

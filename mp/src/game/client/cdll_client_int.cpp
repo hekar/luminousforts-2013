@@ -148,6 +148,16 @@
 #include "fbxsystem/fbxsystem.h"
 #endif
 
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+#include "srcpy.h"
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
+
 extern vgui::IInputInternal *g_InputInternal;
 
 //=============================================================================
@@ -1030,6 +1040,16 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	IGameSystem::Add( GetPredictionCopyTester() );
 #endif
 
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+	IGameSystem::Add( SrcPySystem() );
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
+
 	modemanager->Init( );
 
 	g_pClientMode->InitViewport();
@@ -1198,6 +1218,11 @@ void CHLClient::Shutdown( void )
 	IGameSystem::ShutdownAllSystems();
 	
 	gHUD.Shutdown();
+
+#ifdef ENABLE_PYTHON
+	SrcPySystem()->ShutdownInterpreter(); // before vgui, so we delete all python panels first
+#endif // ENABLE_PYTHON
+
 	VGui_Shutdown();
 	
 	ParticleMgr()->Term();

@@ -36,10 +36,42 @@ END_DATADESC()
 CServerNetworkProperty::CServerNetworkProperty()
 {
 	Init( NULL );
+	m_bDestroyed = false;
 }
 
 
 CServerNetworkProperty::~CServerNetworkProperty()
+{
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+	if( !m_bDestroyed )
+	{
+		DestroyNetworkProperty();
+	}
+#else
+	/* Free our transmit proxy.
+	if ( m_pTransmitProxy )
+	{
+		m_pTransmitProxy->Release();
+	}*/
+
+	engine->CleanUpEntityClusterList( &m_PVSInfo );
+
+	// remove the attached edict if it exists
+	DetachEdict();
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
+}
+
+// =======================================
+// PySource Additions
+// =======================================
+#ifdef ENABLE_PYTHON
+void CServerNetworkProperty::DestroyNetworkProperty()
 {
 	/* Free our transmit proxy.
 	if ( m_pTransmitProxy )
@@ -51,8 +83,13 @@ CServerNetworkProperty::~CServerNetworkProperty()
 
 	// remove the attached edict if it exists
 	DetachEdict();
-}
 
+	m_bDestroyed = true;
+}
+#endif // ENABLE_PYTHON
+// =======================================
+// END PySource Additions
+// =======================================
 
 //-----------------------------------------------------------------------------
 // Initialization

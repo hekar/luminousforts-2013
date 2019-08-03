@@ -149,6 +149,24 @@ const char *C_PlayerResource::GetPlayerName( int iIndex )
 	return m_szName[iIndex];
 }
 
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+boost::python::object C_PlayerResource::PyGetPlayerName( int index )
+{
+	const char *pPlayerName = GetPlayerName( index );
+	return boost::python::object(
+		boost::python::handle<>( 
+			PyUnicode_DecodeUTF8( pPlayerName, V_strlen( pPlayerName ), "ignore" )
+		)
+	);
+}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 bool C_PlayerResource::IsAlive(int iIndex )
 {
 	return m_bAlive[iIndex];

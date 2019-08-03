@@ -976,6 +976,84 @@ void CBaseEntity::PhysicsDispatchThink( BASEPTR thinkFunc )
 	VPROF_EXIT_SCOPE();
 }
 
+// =======================================
+// PySource Additions
+// =======================================
+#if defined(ENABLE_PYTHON) && defined(SRCPY_MOD_ENTITIES)
+//-----------------------------------------------------------------------------
+// Purpose: Python version of PhysicsDispatchThink. Only difference is the argument.
+//-----------------------------------------------------------------------------
+void CBaseEntity::PhysicsPyDispatchThink( boost::python::object thinkFunc )
+{
+	VPROF_ENTER_SCOPE( ( !vprof_scope_entity_thinks.GetBool() ) ? 
+						"CBaseEntity::PhysicsDispatchThink" : 
+						EntityFactoryDictionary()->GetCannonicalName( GetClassname() ) );
+
+	float thinkLimit = think_limit.GetFloat();
+	
+	// The thinkLimit stuff makes a LOT of calls to Sys_FloatTime, which winds up calling into
+	// VCR mode so much that the framerate becomes unusable.
+	if ( VCRGetMode() != VCR_Disabled )
+		thinkLimit = 0;
+
+	float startTime = 0.0;
+
+	if ( IsDormant() )
+	{
+		Warning( "Dormant entity %s (%s) is thinking!!\n", GetClassname(), GetDebugName() );
+		Assert(0);
+	}
+
+	if ( thinkLimit )
+	{
+		startTime = engine->Time();
+	}
+	
+	if ( thinkFunc.ptr() != Py_None )
+	{
+		MDLCACHE_CRITICAL_SECTION();
+		thinkFunc();
+	}
+
+	if ( thinkLimit )
+	{
+		// calculate running time of the AI in milliseconds
+		float time = ( engine->Time() - startTime ) * 1000.0f;
+		if ( time > thinkLimit )
+		{
+#if defined( _XBOX ) && !defined( _RETAIL )
+			if ( vprof_think_limit.GetBool() )
+			{
+				extern bool g_VProfSignalSpike;
+				g_VProfSignalSpike = true;
+			}
+#endif
+			// If its an NPC print out the shedule/task that took so long
+			CAI_BaseNPC *pNPC = MyNPCPointer();
+			if (pNPC && pNPC->GetCurSchedule())
+			{
+				pNPC->ReportOverThinkLimit( time );
+			}
+			else
+			{
+#ifdef _WIN32
+				Msg( "%s(%s) thinking for %.02f ms!!!\n", GetClassname(), typeid(this).raw_name(), time );
+#elif POSIX
+				Msg( "%s(%s) thinking for %.02f ms!!!\n", GetClassname(), typeid(this).name(), time );
+#else
+#error "typeinfo"
+#endif
+			}
+		}
+	}
+
+	VPROF_EXIT_SCOPE();
+}
+#endif // ENABLE_PYTHON && SRCPY_MOD_ENTITIES
+// =======================================
+// END PySource Additions
+// =======================================
+
 //-----------------------------------------------------------------------------
 // Purpose: Does not change the entities velocity at all
 // Input  : push - 
