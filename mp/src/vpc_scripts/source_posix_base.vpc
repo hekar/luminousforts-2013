@@ -43,18 +43,19 @@ $Configuration
 		$PreprocessorDefinitions		"$BASE;DEDICATED" [$DEDICATED]
 		// the 10240 in the following line is the output of `sysctl -n kern.maxfilesperproc`
 		$PreprocessorDefinitions		"$BASE;_OSX;OSX;_DARWIN_UNLIMITED_SELECT;FD_SETSIZE=10240;" [$OSXALL]
-		$PreprocessorDefinitions		"$BASE;OVERRIDE_V_DEFINES"	  [$OSXALL]						
+		$PreprocessorDefinitions		"$BASE;OVERRIDE_V_DEFINES"	  [$OSXALL]
 		$PreprocessorDefinitions		"$BASE;_LINUX;LINUX;" [$LINUXALL]
 		$PreprocessorDefinitions		"$BASE;PLATFORM_64BITS" [$LINUX64]
 		$SymbolVisibility				"hidden" 					[$POSIX]
 		$PreprocessorDefinitions		"$BASE;POSIX;_POSIX"		[$POSIX]
+		$GCC_ExtraCompilerFlags			"$BASE -fno-fast-math"		[$POSIX]
 
 		$PreprocessorDefinitions		"$BASE;PLATFORM_64BITS"		[$OSX64]
 		$GCC_ExtraCompilerFlags			"$BASE -arch x86_64"		[$OSX64]
 
 		$Create/UsePCHThroughFile	"stdafx.h"
 	}
-	
+
 	$Linker
 	{
 		$GCC_ExtraLinkerFlags			"$BASE -arch x86_64"		[$OSX64]
@@ -72,4 +73,4 @@ $Project
 		$ImpLib "$LIBPUBLIC\vstdlib"	[!$IS_LIB_PROJECT]
 	}
 }
-	
+
