@@ -1,7 +1,7 @@
 /* ***** BEGIN LICENSE BLOCK *****
 Version: MPL 1.1/LGPL 2.1/GPL 2.0
 
-The contents of this file are subject to the Mozilla Public License Version 
+The contents of this file are subject to the Mozilla Public License Version
 1.1 (the "License"); you may not use this file except in compliance with
 ...
 for the specific language governing rights and limitations under the
@@ -58,10 +58,10 @@ class CWeaponFreezer : public CBaseCombatWeapon
 {
 public:
 	DECLARE_CLASS(CWeaponFreezer, CBaseCombatWeapon);
-	DECLARE_NETWORKCLASS(); 
+	DECLARE_NETWORKCLASS();
 	DECLARE_PREDICTABLE();
 	DECLARE_ACTTABLE();
-	
+
 	CWeaponFreezer();
 
 	void PrimaryAttack( void );
@@ -76,7 +76,7 @@ public:
 
 #ifndef CLIENT_DLL
 	void GenerateSparks( const Vector& Position );
-#endif CLIENT_DLL
+#endif // CLIENT_DLL
 
 	virtual SDKWeaponID GetWeaponID( void ) const { return SF132_WEAPON_FREEZER; }
 	virtual int GetFireMode() const { return FM_SEMIAUTOMATIC; }
@@ -160,7 +160,7 @@ void CWeaponFreezer::SecondaryAttack()
 			}
 		}
 	}
-	
+
 	SendWeaponAnim( ACT_VM_DRYFIRE );
 	m_flNextSecondaryAttack = gpGlobals->curtime + UNFREEZE_DELAY;
 #endif
@@ -178,7 +178,7 @@ CBaseEntity *CWeaponFreezer::TraceItem( Vector *End )
 
 	// Set the freeze distance
 	vecEnd = vecSrc + vecDir * 1024;
-	
+
 	// Create the traceline
 	trace_t tr;
 	UTIL_TraceLine( vecSrc, vecEnd, MASK_SHOT, GetOwner( ), COLLISION_GROUP_NONE, &tr );
@@ -207,7 +207,7 @@ bool CWeaponFreezer::AllowFreeze( CBaseEntity *pEntity )
 void CWeaponFreezer::AddViewKick( void )
 {
 	CBasePlayer *pPlayer  = ToBasePlayer( GetOwner() );
-	
+
 	if ( pPlayer == NULL )
 		return;
 
@@ -236,7 +236,7 @@ void CWeaponFreezer::GenerateSparks( const Vector& Position )
 #endif // CLIENT_DLL
 
 //Tony; todo; add ACT_MP_PRONE* activities, so we have them.
-acttable_t CWeaponFreezer::m_acttable[] = 
+acttable_t CWeaponFreezer::m_acttable[] =
 {
 	{ ACT_MP_STAND_IDLE,				ACT_HL2MP_IDLE_PISTOL,					false },
 	{ ACT_MP_CROUCH_IDLE,				ACT_HL2MP_IDLE_CROUCH_PISTOL,			false },

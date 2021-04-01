@@ -1,0 +1,9 @@
+version: '3.9'
+
+services:
+  lf:
+    build: ./
+    command: ["/bin/bash"]
+    volumes:
+      - "./:/lf/"
+      - "~/.local/share/Steam/steamapps/sourcemods/luminousforts/:/game/"
