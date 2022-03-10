@@ -1,0 +1,7 @@
+{
+    "makefile.extensionOutputFolder": "./.vscode",
+    "makefile.makefilePath": "./games.mak",
+    "files.associations": {
+        "algorithm": "cpp"
+    }
+}

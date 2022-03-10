@@ -14,7 +14,9 @@
                 "sourcetest",
                 "-steam",
                 "-game",
-                "${env:HOME}/.local/share/Steam/steamapps/sourcemods/luminousforts"
+                "${env:HOME}/.local/share/Steam/steamapps/sourcemods/luminousforts",
+				"-debug",
+				"-sw"
             ],
             "stopAtEntry": false,
             "cwd": "${env:HOME}/.local/share/Steam/steamapps/common/Source SDK Base 2013 Multiplayer/",

@@ -1,0 +1,32 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "GWEN_GUI",
+                "GWEN_NO_ANIMATION",
+                "MOD_ALPHA",
+                "MOD_ALPHA_PLAYER",
+                "MOD_ALPHA_PLAYER_MOVEMENT",
+                "MOD_BETA",
+                "MOD_CLASSIC",
+                "MOD_CONSTRUCT_BLOCKS",
+                "MOD_CUSTOM",
+                "MOD_DEPRECATED",
+                "MOD_DEV",
+                "MOD_HAND_BLOCK_SPAWN",
+                "MOD_LATE",
+                "MOD_SF132",
+                "MOD_SF194"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c89",
+            "cppStandard": "c++03",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
