@@ -13,7 +13,7 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-CBaseRopePhysics::CBaseRopePhysics( CSimplePhysics::CNode *pNodes, int nNodes, CRopeSpring *pSprings, float *flSpringDistsSqr )
+CBaseRopePhysics::CBaseRopePhysics( CSimplePhysics::CNode *pNodes, int nNodes, CRopeSpring *pSprings, double *flSpringDistsSqr )
 {
 	m_pNodes = pNodes;
 	m_pSprings = pSprings;
@@ -58,9 +58,9 @@ void CBaseRopePhysics::Restart()
 }
 
 
-void CBaseRopePhysics::ResetSpringLength( float flSpringDist )
+void CBaseRopePhysics::ResetSpringLength( double flSpringDist )
 {
-	m_flSpringDist = max( flSpringDist, 0 );
+	m_flSpringDist = max( flSpringDist, 0.0 );
 	m_flSpringDistSqr = m_flSpringDist * m_flSpringDist;
 
 	for( int i=0; i < NumSprings(); i++ )
@@ -69,17 +69,17 @@ void CBaseRopePhysics::ResetSpringLength( float flSpringDist )
 	}
 }
 
-float CBaseRopePhysics::GetSpringLength() const
+double CBaseRopePhysics::GetSpringLength() const
 {
 	return m_flSpringDist;
 }
 
-void CBaseRopePhysics::ResetNodeSpringLength( int iStartNode, float flSpringDist )
+void CBaseRopePhysics::ResetNodeSpringLength( int iStartNode, double flSpringDist )
 {
 	m_flNodeSpringDistsSqr[iStartNode] = flSpringDist * flSpringDist;
 }
 
-void CBaseRopePhysics::SetupSimulation( float flSpringDist, CSimplePhysics::IHelper *pDelegate )
+void CBaseRopePhysics::SetupSimulation( double flSpringDist, CSimplePhysics::IHelper *pDelegate )
 {
 	ResetSpringLength( flSpringDist );
 	SetDelegate( pDelegate );
@@ -92,9 +92,9 @@ void CBaseRopePhysics::SetDelegate( CSimplePhysics::IHelper *pDelegate )
 }
 
 
-void CBaseRopePhysics::Simulate( float dt )
+void CBaseRopePhysics::Simulate( double dt )
 {
-	static float flEnergy = 0.98;
+	static double flEnergy = 0.98;
 	m_Physics.Simulate( m_pNodes, m_nNodes, this, dt, flEnergy );
 }
 
@@ -123,10 +123,10 @@ void CBaseRopePhysics::ApplyConstraints( CSimplePhysics::CNode *pNodes, int nNod
 
 			Vector vTo = *s->m_pNode1 - *s->m_pNode2;
 
-			float flDistSqr = vTo.LengthSqr();
+			double flDistSqr = vTo.LengthSqr();
 
 			// If we don't have an overall spring distance, see if we have a per-node one
-			float flSpringDist = m_flSpringDistSqr;
+			double flSpringDist = m_flSpringDistSqr;
 			if ( !flSpringDist )
 			{
 				// TODO: This still isn't enough. Ropes with different spring lengths
@@ -136,7 +136,7 @@ void CBaseRopePhysics::ApplyConstraints( CSimplePhysics::CNode *pNodes, int nNod
 
 			if( flDistSqr > flSpringDist )
 			{
-				float flDist = (float)sqrt( flDistSqr );
+				double flDist = (double)sqrt( flDistSqr );
 				vTo *= 1 - (m_flSpringDist / flDist);
 
 				*s->m_pNode1 -= vTo * 0.5f;

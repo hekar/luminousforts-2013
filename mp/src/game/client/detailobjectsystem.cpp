@@ -22,9 +22,7 @@
 #include "tier0/icommandline.h"
 #include "c_world.h"
 
-#include "tier0/valve_minmax_off.h"
 #include <algorithm>
-#include "tier0/valve_minmax_on.h"
 
 #if defined(DOD_DLL) || defined(CSTRIKE_DLL)
 #define USE_DETAIL_SHAPES

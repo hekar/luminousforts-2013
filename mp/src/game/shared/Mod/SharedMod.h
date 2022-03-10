@@ -83,7 +83,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #define NUKLEAR_GUI
 
-// #define GWEN_GUI
+#define GWEN_GUI
 
 #define GWEN_NO_ANIMATION
 

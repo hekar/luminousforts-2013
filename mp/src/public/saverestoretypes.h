@@ -63,9 +63,6 @@ public:
 	const char *StringFromSymbol( int token );
 
 private:
-#ifndef _WIN32
-	unsigned _rotr ( unsigned val, int shift);
-#endif
 	unsigned int HashString( const char *pszToken );
 	
 	//---------------------------------
@@ -510,27 +507,6 @@ inline const char *CSaveRestoreSegment::StringFromSymbol( int token )
 	Assert( 0 );
 	return "<<illegal>>";
 }
-
-#ifndef _WIN32
-inline unsigned CSaveRestoreSegment::_rotr ( unsigned val, int shift)
-{
-		unsigned lobit;        /* non-zero means lo bit set */
-		unsigned num = val;    /* number to rotate */
-
-		shift &= 0x1f;                  /* modulo 32 -- this will also make
-										   negative shifts work */
-
-		while (shift--) 
-		{
-				lobit = num & 1;        /* get high bit */
-				num >>= 1;              /* shift right one bit */
-				if (lobit)
-						num |= 0x80000000;  /* set hi bit if lo bit was set */
-		}
-
-		return num;
-}
-#endif
 
 inline unsigned int CSaveRestoreSegment::HashString( const char *pszToken )
 {

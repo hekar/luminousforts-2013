@@ -5,14 +5,13 @@
 */
 
 #include "cbase.h"
+#ifndef GWEN_NO_ANIMATION
 #ifdef GWEN_GUI
 #include "Gwen/Anim.h"
 #include "Gwen/Utility.h"
 #include <math.h>
 
 using namespace Gwen;
-
-#ifndef GWEN_NO_ANIMATION
 
 static Gwen::Anim::Animation::List	g_Animations;
 static Gwen::Anim::Animation::ChildList g_AnimationsListed;

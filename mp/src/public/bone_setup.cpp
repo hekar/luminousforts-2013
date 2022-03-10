@@ -2625,14 +2625,14 @@ public:
          X[i] = P[i];
       normalize(X);
 
-// Its y axis is perpendicular to P, so Y = unit( E - X(E·X) ).
+// Its y axis is perpendicular to P, so Y = unit( E - X(Eï¿½X) ).
 
       float dDOTx = dot(D,X);
       for (i = 0 ; i < 3 ; i++)
          Y[i] = D[i] - dDOTx * X[i];
       normalize(Y);
 
-// Its z axis is perpendicular to both X and Y, so Z = X×Y.
+// Its z axis is perpendicular to both X and Y, so Z = Xï¿½Y.
 
       cross(X,Y,Z);
 
@@ -3283,7 +3283,7 @@ void CIKContext::AddDependencies( mstudioseqdesc_t &seqdesc, int iSequence, floa
 		}
 		else
 		{
-			flCycle = max( 0.0, min( flCycle, 0.9999 ) );
+			flCycle = max( 0.0, min( (double)flCycle, 0.9999 ) );
 		}
 	}
 
@@ -4713,8 +4713,8 @@ void DoQuatInterpBone(
 	if (pProc && pbones[pProc->control].parent != -1)
 	{
 		Quaternion	src;
-		float		weight[32];
-		float		scale = 0.0;
+		double		weight[32];
+		double		scale = 0.0;
 		Quaternion	quat;
 		Vector		pos;
 
@@ -4732,7 +4732,7 @@ void DoQuatInterpBone(
 			// FIXME: a fast acos should be acceptable
 			dot = clamp( dot, -1.f, 1.f );
 			weight[i] = 1 - (2 * acos( dot ) * pProc->pTrigger( i )->inv_tolerance );
-			weight[i] = max( 0, weight[i] );
+			weight[i] = max( 0.0, weight[i] );
 			scale += weight[i];
 		}
 

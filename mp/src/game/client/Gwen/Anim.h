@@ -7,11 +7,12 @@
 #pragma once
 #ifndef GWEN_ANIM_H
 #define GWEN_ANIM_H
+
+#ifndef GWEN_NO_ANIMATION
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Platform.h"
 
-#ifndef GWEN_NO_ANIMATION
 
 namespace Gwen 
 {

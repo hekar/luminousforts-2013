@@ -103,11 +103,11 @@ void ScalableImagePanel::PaintBackground()
 	int x = 0;
 	int y = 0;
 
-	float uvx = 0;
-	float uvy = 0;
-	float uvw = 0, uvh = 0;
+	double uvx = 0;
+	double uvy = 0;
+	double uvw = 0, uvh = 0;
 
-	float drawW, drawH;
+	double drawW, drawH;
 
 	int row, col;
 	for ( row=0;row<3;row++ )
@@ -124,7 +124,7 @@ void ScalableImagePanel::PaintBackground()
 		else
 		{
 			//uvh - row 1, is tall - ( 2 * src_corner_height ) ( min 0 )
-			uvh = max( 1.0 - 2 * m_flCornerHeightPercent, 0.0f );
+			uvh = max( 1.0 - 2 * m_flCornerHeightPercent, 0.0 );
 			drawH = max( 0, ( tall - 2 * m_iCornerHeight ) );
 		}
 
@@ -139,7 +139,7 @@ void ScalableImagePanel::PaintBackground()
 			else
 			{
 				//uvw - col 1, is wide - ( 2 * src_corner_width ) ( min 0 )
-				uvw = max( 1.0 - 2 * m_flCornerWidthPercent, 0.0f );
+				uvw = max( (double)(1.0 - 2 * m_flCornerWidthPercent), 0.0 );
 				drawW = max( 0, ( wide - 2 * m_iCornerWidth ) );
 			}
 

@@ -33,7 +33,7 @@ public:
 						CSimplePhysics::CNode *pNodes, 
 						int nNodes, 
 						CRopeSpring *pSprings,
-						float *flSpringDistsSqr );
+						double *flSpringDistsSqr );
 
 	// nNodes should be less than or equal to what you passed into the constructor.
 	void			SetNumNodes( int nNodes );
@@ -41,18 +41,18 @@ public:
 	// Restart timers and such.
 	void			Restart();
 
-	void			ResetSpringLength(float flSpringDist );
-	float			GetSpringLength() const;
-	void			ResetNodeSpringLength( int iStartNode, float flSpringDist );
+	void			ResetSpringLength(double flSpringDist );
+	double			GetSpringLength() const;
+	void			ResetNodeSpringLength( int iStartNode, double flSpringDist );
 
 	// Set simulation parameters.
 	// If you pass in a delegate, you can be called to apply constraints.
-	void			SetupSimulation( float flSpringDist, CSimplePhysics::IHelper *pDelegate=0 );
+	void			SetupSimulation( double flSpringDist, CSimplePhysics::IHelper *pDelegate=0 );
 
 	// Set the physics delegate.
 	void			SetDelegate( CSimplePhysics::IHelper *pDelegate );
 
-	void			Simulate( float dt );
+	void			Simulate( double dt );
 	
 	int						NumNodes()				{ return m_nNodes; }
 	CSimplePhysics::CNode*	GetNode( int iNode )	{ return &m_pNodes[iNode]; }
@@ -81,11 +81,11 @@ protected:
 
 	CRopeSpring		*m_pSprings;
 
-  	float			m_flSpringDist;
-  	float			m_flSpringDistSqr;
+  	double			m_flSpringDist;
+  	double			m_flSpringDistSqr;
 
 	// Spring lengths per node
-	float			*m_flNodeSpringDistsSqr;
+	double			*m_flNodeSpringDistsSqr;
 
 	CSimplePhysics	m_Physics;
 };
@@ -103,7 +103,7 @@ public:
 
 	CSimplePhysics::CNode		m_Nodes[NUM_NODES];
 	CRopeSpring		m_Springs[NUM_NODES - 1];
-	float			m_SpringDistsSqr[NUM_NODES - 1];
+	double			m_SpringDistsSqr[NUM_NODES - 1];
 };
 
 

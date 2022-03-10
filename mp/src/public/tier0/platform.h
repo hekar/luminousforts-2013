@@ -73,8 +73,6 @@
 // need this for memset
 #include <string.h>
 
-#include "tier0/valve_minmax_on.h"	// GCC 4.2.2 headers screw up our min/max defs.
-
 #ifdef _RETAIL
 #define IsRetail() true
 #else

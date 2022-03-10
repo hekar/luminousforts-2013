@@ -8,11 +8,6 @@
 
 #include <stdlib.h>
 
-// #if (_MSC_VER >= 1200)
-#pragma intrinsic(_rotl)
-#pragma intrinsic(_rotr)
-// #endif
-
 #define rotlFixed(x, n) _rotl((x), (n))
 #define rotrFixed(x, n) _rotr((x), (n))
 

@@ -7,12 +7,9 @@
 
 #ifndef MINMAX_H
 #define MINMAX_H
+#include <algorithm>
 
-#ifndef min
-#define min(a,b)  (((a) < (b)) ? (a) : (b))
-#endif
-#ifndef max
-#define max(a,b)  (((a) > (b)) ? (a) : (b))
-#endif
+using std::max;
+using std::min;
 
 #endif // MINMAX_H
