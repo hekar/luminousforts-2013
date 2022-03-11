@@ -3,7 +3,7 @@
 	Copyright (c) 2010 Facepunch Studios
 	See license in Gwen.h
 */
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/CollapsibleCategory.h"
 #include "Gwen/Controls/CollapsibleList.h"
 
@@ -179,4 +179,3 @@ Button* CollapsibleCategory::GetSelected()
 
 	return NULL;
 }
-#endif

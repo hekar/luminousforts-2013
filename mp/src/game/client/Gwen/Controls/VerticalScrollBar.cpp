@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ScrollBar.h"
 #include "Gwen/Controls/VerticalScrollBar.h"
 
@@ -138,4 +138,3 @@ void VerticalScrollBar::OnBarMoved( Controls::Base* control )
 		InvalidateParent();
 	}
 }
-#endif

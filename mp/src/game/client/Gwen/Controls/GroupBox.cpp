@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/GroupBox.h"
 
 using namespace Gwen;
@@ -40,4 +40,3 @@ void GroupBox::Render( Skin::Base* skin )
 {
 	skin->DrawGroupBox( this, TextX(), TextHeight(), TextWidth() );
 }
-#endif

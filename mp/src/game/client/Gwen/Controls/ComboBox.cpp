@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ComboBox.h"
 #include "Gwen/Controls/Menu.h"
 
@@ -203,4 +203,3 @@ bool ComboBox::OnKeyDown( bool bDown )
 void ComboBox::RenderFocus( Gwen::Skin::Base* /*skin*/ )
 {
 }
-#endif

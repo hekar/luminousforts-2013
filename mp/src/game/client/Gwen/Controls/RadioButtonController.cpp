@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/RadioButtonController.h"
 #include "Gwen/Controls/RadioButton.h"
 #include "Gwen/Utility.h"
@@ -72,4 +72,3 @@ LabeledRadioButton* RadioButtonController::AddOption( const Gwen::UnicodeString&
 
 	return lrb;
 }
-#endif

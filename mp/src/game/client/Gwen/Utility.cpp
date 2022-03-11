@@ -5,7 +5,7 @@
 */
 
 #include "cbase.h"
-#ifdef GWEN_GUI
+
 #include "Gwen/ToolTip.h"
 #include "Gwen/Utility.h"
 #include "Gwen/TextObject.h"
@@ -152,4 +152,3 @@ void Gwen::Utility::Strings::Strip( Gwen::UnicodeString& str, const Gwen::Unicod
 	}
 }
 
-#endif

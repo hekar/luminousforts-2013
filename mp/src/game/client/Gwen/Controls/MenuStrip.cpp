@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/MenuStrip.h"
 #include "Gwen/Skin.h"
@@ -43,4 +43,3 @@ bool MenuStrip::ShouldHoverOpenMenu()
 {
 	return IsMenuOpen();
 }
-#endif

@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 #include "Gwen/Controls/DockedTabControl.h"
@@ -93,4 +93,3 @@ void DockedTabControl::MoveTabsTo( DockedTabControl* pTarget )
 	Invalidate();
 }
 
-#endif

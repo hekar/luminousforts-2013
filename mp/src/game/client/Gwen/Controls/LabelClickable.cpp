@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 #include "Gwen/Controls/LabelClickable.h"
@@ -23,4 +23,3 @@ void LabelClickable::Render( Skin::Base* /*skin*/ )
 {
 	//skin->DrawButton( this, IsDepressed(), IsToggle() && GetToggleState() );
 }
-#endif

@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ImagePanel.h"
 #include "Gwen/Controls/Label.h"
 #include "Gwen/Controls/ResizableControl.h"
@@ -110,4 +110,3 @@ void ResizableControl::OnResizedInternal( Controls::Base* /*pControl*/ )
 	onResize.Call( this );
 	OnResized();
 }
-#endif

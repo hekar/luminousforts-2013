@@ -47,7 +47,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "GUI_Message.h"
 #include "GUI_ReportBug.h"
 #ifdef GWEN_GUI
-#include "Mod/gwen/Gwen.h"
+#include "Mod/gwen/GwenStart.h"
 #include "Mod/gwen/Gwen_Update.h"
 #endif
 

@@ -596,8 +596,8 @@
       <File Name="Mod/GUI_Titlescreen.cpp"/>
       <File Name="Mod/GUI_Tutorial.cpp"/>
       <File Name="Mod/GUI_WebWindow.cpp"/>
-      <File Name="Mod/gwen/Gwen.cpp"/>
       <File Name="Mod/gwen/GwenFrame.cpp"/>
+      <File Name="Mod/gwen/GwenStart.cpp"/>
       <File Name="Mod/gwen/Gwen_Update.cpp"/>
       <File Name="Mod/HudH_MarkerTools.cpp"/>
       <File Name="Mod/HudH_Utils.cpp"/>
@@ -617,7 +617,6 @@
       <File Name="Mod/Hud_Notification.cpp"/>
       <File Name="Mod/Hud_PhaseTime.cpp"/>
       <File Name="Mod/Hud_Stamina.cpp"/>
-      <File Name="Mod/IRC_Client.cpp"/>
       <File Name="Mod/MGUI_Base.cpp"/>
       <File Name="Mod/MGUI_BorderLessButton.cpp"/>
       <File Name="Mod/MGUI_Button.cpp"/>

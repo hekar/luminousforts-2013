@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/Base.h"
 #include "Gwen/Controls/Label.h"
 #include "Gwen/Gwen.h"
@@ -1113,5 +1113,4 @@ void Base::Anim_HeightOut( float fLength, bool bHide, float fDelay, float fEase 
 	Gwen::Anim::Add( this, new Gwen::Anim::Size::Height( Height(), 0, fLength, bHide, fDelay, fEase ) );
 }
 
-#endif
 #endif

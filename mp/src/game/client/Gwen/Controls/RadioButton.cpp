@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/RadioButton.h"
 
 using namespace Gwen;
@@ -22,4 +22,3 @@ void RadioButton::Render( Skin::Base* skin )
 	skin->DrawRadioButton( this, IsChecked(), IsDepressed() );
 }
 
-#endif

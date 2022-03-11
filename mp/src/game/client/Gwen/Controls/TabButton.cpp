@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 #include "Gwen/Controls/TabButton.h"
@@ -110,4 +110,3 @@ void TabButton::UpdateColours()
 
 	SetTextColor( GetSkin()->Colors.Tab.Active.Normal );
 }
-#endif

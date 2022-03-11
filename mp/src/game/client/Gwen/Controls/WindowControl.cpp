@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/WindowControl.h"
 #include "Gwen/Controls/ImagePanel.h"
 #include "Gwen/Controls/Label.h"
@@ -177,4 +177,3 @@ void WindowControl::RenderFocus( Gwen::Skin::Base* /*skin*/ )
 {
 
 }
-#endif

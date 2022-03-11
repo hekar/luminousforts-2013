@@ -5,7 +5,7 @@
 */
 
 #include "cbase.h"
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include <math.h>
 
@@ -128,5 +128,3 @@ namespace Gwen
 		}
 	}
 }
-
-#endif // GWEN_GUI

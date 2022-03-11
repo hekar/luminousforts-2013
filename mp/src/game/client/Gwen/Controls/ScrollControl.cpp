@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ScrollControl.h"
 #include "Gwen/Controls/ScrollBar.h"
 #include "Gwen/Controls/VerticalScrollBar.h"
@@ -247,4 +247,3 @@ void ScrollControl::Clear()
 {
 	m_InnerPanel->RemoveAllChildren();
 }
-#endif

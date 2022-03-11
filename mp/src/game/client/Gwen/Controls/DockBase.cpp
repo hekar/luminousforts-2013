@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 #include "Gwen/Controls/DockBase.h"
@@ -336,4 +336,3 @@ void DockBase::RenderOver( Skin::Base* skin )
 	render->SetDrawColor( Gwen::Color( 255, 100, 255, 200 ) );
 	render->DrawLinedRect( m_HoverRect );
 }
-#endif

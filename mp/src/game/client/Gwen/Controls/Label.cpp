@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/Label.h"
 #include "Gwen/Utility.h"
@@ -67,4 +67,3 @@ Gwen::Point Label::GetCharacterPosition( int iChar )
 
 	return p;
 }
-#endif

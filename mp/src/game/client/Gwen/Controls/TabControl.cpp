@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 #include "Gwen/Controls/TabControl.h"
@@ -213,4 +213,3 @@ void TabControl::ScrollPressRight( Base* pFrom )
 {
 	m_iScrollOffset += 120;
 }
-#endif

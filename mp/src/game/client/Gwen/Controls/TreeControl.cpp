@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/TreeControl.h"
 #include "Gwen/Controls/ScrollControl.h"
 #include "Gwen/Utility.h"
@@ -72,4 +72,3 @@ void TreeControl::OnNodeSelection( Controls::Base* /*control*/ )
 	if ( !m_bAllowMultipleSelection || !Gwen::Input::IsKeyDown( Key::Control ) )
 		DeselectAll();
 }
-#endif

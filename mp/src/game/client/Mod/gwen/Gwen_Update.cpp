@@ -25,7 +25,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
 #include "cbase.h"
 #ifdef GWEN_GUI
-#include "BaseGUI.h"
+#include "Mod/BaseGUI.h"
 #include <vgui/IScheme.h>
 #include <vgui/ISurface.h>
 #include "Gwen_Update.h"

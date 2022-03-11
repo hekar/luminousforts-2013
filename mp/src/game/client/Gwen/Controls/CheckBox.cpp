@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/CheckBox.h"
 
 using namespace Gwen;
@@ -58,4 +58,3 @@ void CheckBox::SetChecked( bool bChecked )
 	m_bChecked = bChecked;
 	OnCheckStatusChanged();
 }
-#endif

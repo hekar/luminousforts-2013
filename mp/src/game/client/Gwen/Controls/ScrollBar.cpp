@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ScrollBar.h"
 #include "Gwen/Controls/ScrollBarButton.h"
 #include "Gwen/Controls/ScrollBarBar.h"
@@ -76,4 +76,3 @@ bool BaseScrollBar::SetScrolledAmount( float amount, bool forceUpdate )
 	return true;
 }
 
-#endif

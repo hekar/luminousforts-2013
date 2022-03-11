@@ -1,5 +1,5 @@
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/CrossSplitter.h"
 #include "Gwen/Controls/Button.h"
@@ -183,4 +183,3 @@ void CrossSplitter::UnZoom()
 	ZoomChanged();
 }
 
-#endif

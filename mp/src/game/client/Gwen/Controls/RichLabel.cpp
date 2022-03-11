@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/RichLabel.h"
 #include "Gwen/Controls/Label.h"
@@ -207,4 +207,3 @@ void RichLabel::Layout( Gwen::Skin::Base* skin )
 		Rebuild();
 	}
 }
-#endif

@@ -5,7 +5,7 @@
 */
 
 #include "cbase.h"
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -53,4 +53,3 @@ namespace Gwen
 	}
 
 }
-#endif

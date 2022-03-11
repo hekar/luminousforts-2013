@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ScrollBar.h"
 #include "Gwen/Controls/ScrollBarButton.h"
 
@@ -42,4 +42,3 @@ void ScrollBarButton::Render( Skin::Base* skin )
 {
 	skin->DrawScrollButton( this, m_iDirection, m_bDepressed, IsHovered(), IsDisabled() );
 }
-#endif

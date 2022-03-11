@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 #include "Gwen/Controls/Properties.h"
@@ -165,4 +165,3 @@ void PropertyRow::OnHoverChanged()
 {
 	m_Label->Redraw();
 }
-#endif

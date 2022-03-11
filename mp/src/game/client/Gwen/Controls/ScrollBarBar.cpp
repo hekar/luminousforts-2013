@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ScrollBar.h"
 #include "Gwen/Controls/ScrollBarBar.h"
 
@@ -55,4 +55,3 @@ void ScrollBarBar::MoveTo( int x, int y )
 {
 	BaseClass::MoveTo( x, y );
 }
-#endif

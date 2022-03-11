@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/Resizer.h"
 
 using namespace Gwen;
@@ -118,4 +118,3 @@ void Resizer::SetResizeDir( int dir )
 		return SetCursor( Gwen::CursorType::SizeNS );
 
 }
-#endif

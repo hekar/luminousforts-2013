@@ -81,12 +81,6 @@ the terms of any one of the MPL, the GPL or the LGPL.
 // Overlays an image over the titlescreen's background video.
 // #define MOD_BACKGROUND_IMAGE
 
-#define NUKLEAR_GUI
-
-#define GWEN_GUI
-
-#define GWEN_NO_ANIMATION
-
 //---------------------------------------------------------------
 // Gamemode Definitions just enable the gamemodes.
 // They do not effect entities.

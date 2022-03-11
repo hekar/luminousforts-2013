@@ -3,7 +3,7 @@
 	Copyright (c) 2010 Facepunch Studios
 	See license in Gwen.h
 */
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Platform.h"
 #include "Gwen/Controls/Dialogs/FileSave.h"
@@ -22,4 +22,3 @@ void Gwen::Dialogs::FileSaveEx( bool bUseSystem, const String& Name, const Strin
 	// TODO: SHOW GWEN FILE SELECTION DIALOG
 	//
 }
-#endif

@@ -32,11 +32,8 @@ the terms of any one of the MPL, the GPL or the LGPL.
 static CFileConfig g_Comm( "community", "config/gui/community.txt" );
 
 // Default routes if no configuration file is found
-#define LF_URL_NEWS "http://luminousforts.appspot.com/news/index"
-#define LF_URL_FORUMS "http://luminousforts.appspot.com/forum/index"
-#define LF_URL_FAQ "http://luminousforts.appspot.com/faq/index"
-#define LF_URL_IRC "http://mibbit.com/?channel=%23hlcoders&server=irc.gamesurge.net"
-#define LF_URL_DEV "http://luminousforts.appspot.com/dev/index"
+#define LF_URL_SITE "https://hekar.github.io/luminousforts-website/"
+#define LF_URL_DISCORD ""
 
 CREATE_GUI_INTERFACE( CommunityInterface, communitypanel );
 
@@ -99,35 +96,17 @@ void CGUICommunity::ShowPanel( bool bShow )
 ProtectedMethod void CGUICommunity::OnCommand( const char *command )
 {
 	// TODO: Fix
-	if ( !Q_strcmp( command, "news" ) )
+	if ( !Q_strcmp( command, "site" ) )
 	{
 		Close();
-		const char *url = g_Comm.All()->GetString( command, LF_URL_NEWS );
+		const char *url = g_Comm.All()->GetString( command, LF_URL_SITE );
 		OpenWebWindow( "#lf_community_news", url );
 	}
-	else if ( !Q_strcmp( command, "forums" ) )
+	else if ( !Q_strcmp( command, "discord" ) )
 	{
 		Close();
-		const char *url = g_Comm.All()->GetString( command, LF_URL_FORUMS );
-		OpenWebWindow( "#lf_community_forums", url );
-	}
-	else if ( !Q_strcmp( command, "irc" ) )
-	{
-		Close();
-		const char *url = g_Comm.All()->GetString( command, LF_URL_IRC );
+		const char *url = g_Comm.All()->GetString( command, LF_URL_DISCORD );
 		OpenWebWindow( "#lf_community_irc", url );
-	}
-	else if ( !Q_strcmp( command, "faq" ) )
-	{
-		Close();
-		const char *url = g_Comm.All()->GetString( command, LF_URL_FAQ );
-		OpenWebWindow( "#lf_community_faq", url );
-	}
-	else if ( !Q_strcmp( command, "dev" ) )
-	{
-		Close();
-		const char *url = g_Comm.All()->GetString( command, LF_URL_DEV );
-		OpenWebWindow( "#lf_community_dev", url );
 	}
 
 	BaseClass::OnCommand( command );

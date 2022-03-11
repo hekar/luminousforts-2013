@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Macros.h"
 #include "Gwen/Platform.h"
 
@@ -53,4 +53,3 @@ bool Gwen::Platform::FileSave( const String& Name, const String& StartPath, cons
 }
 
 #endif // ndef WIN32
-#endif

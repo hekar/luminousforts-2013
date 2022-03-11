@@ -30,8 +30,8 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #pragma once
 #endif // _WIN32
 
-#include "Gwen.h"
-#include "MGUI_Frame.h"
+#include "Mod/gwen/GwenStart.h"
+#include "Mod/MGUI_Frame.h"
 
 class CGwenFrame : public MFrame
 {

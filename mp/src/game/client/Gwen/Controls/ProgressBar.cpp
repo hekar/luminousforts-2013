@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ScrollControl.h"
 #include "Gwen/Controls/ProgressBar.h"
 #include "Gwen/Utility.h"
@@ -47,4 +47,3 @@ void ProgressBar::Render( Skin::Base* skin )
 {
 	skin->DrawProgressBar( this, m_bHorizontal, m_fProgress);
 }
-#endif

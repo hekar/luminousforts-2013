@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/TextBox.h"
 #include "Gwen/Skin.h"
@@ -73,4 +73,3 @@ float TextBoxNumeric::GetFloatFromText()
 	double temp = GwenUtil_WideStringToFloat( GetText().c_str() );
 	return temp;
 }
-#endif

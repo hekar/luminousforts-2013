@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ColorPicker.h"
 #include "Gwen/Controls/HorizontalSlider.h"
 #include "Gwen/Controls/GroupBox.h"
@@ -217,4 +217,3 @@ void ColorPicker::SetAlphaVisible( bool visible )
 	Invalidate();
 }
 
-#endif

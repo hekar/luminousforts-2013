@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Utility.h"
 #include "Gwen/Controls/ColorControls.h"
 
@@ -324,4 +324,3 @@ Gwen::Color ColorSlider::GetSelectedColor()
 {
 	return GetColorAtHeight( m_iSelectedDist );
 }
-#endif

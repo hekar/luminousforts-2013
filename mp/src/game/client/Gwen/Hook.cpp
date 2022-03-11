@@ -5,7 +5,7 @@
 */
 
 #include "cbase.h"
-#ifdef GWEN_GUI
+
 #include "Gwen/Hook.h"
 
 #ifdef GWEN_HOOKSYSTEM
@@ -30,5 +30,4 @@ HookList& Gwen::Hook::GetHookList()
 	return g_HookList;
 }
 
-#endif
 #endif

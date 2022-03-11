@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include <math.h>
 #include "Gwen/Controls/Slider.h"
 
@@ -102,4 +102,3 @@ void Slider::RenderFocus( Gwen::Skin::Base* skin )
 
 	skin->DrawKeyboardHighlight( this, GetRenderBounds(), 0 );
 }
-#endif

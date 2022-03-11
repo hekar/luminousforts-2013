@@ -5,7 +5,7 @@
 */
 
 #include "cbase.h"
-#ifdef GWEN_GUI
+
 #include "Gwen/InputHandler.h"
 #include "Gwen/Controls/Base.h"
 #include "Gwen/DragAndDrop.h"
@@ -368,4 +368,3 @@ bool Gwen::Input::OnKeyEvent( Controls::Base* pCanvas, int iKey, bool bDown )
 
 	return false;
 }
-#endif

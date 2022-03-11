@@ -5,7 +5,7 @@
 */
 
 #include "cbase.h"
-#ifdef GWEN_GUI
+
 #include "Gwen/ToolTip.h"
 #include "Gwen/Utility.h"
 
@@ -61,4 +61,3 @@ namespace ToolTip
 	}
 }
 
-#endif

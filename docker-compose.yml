@@ -5,5 +5,5 @@ services:
     build: ./
     command: ["/bin/bash"]
     volumes:
-      - "./:/lf/"
-      - "~/.local/share/Steam/steamapps/sourcemods/luminousforts/:/game/"
+      - ./:/lf/:z
+      - ~/.local/share/Steam/steamapps/sourcemods/luminousforts/:/game/:z

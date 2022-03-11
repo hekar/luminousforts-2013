@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/HSVColorPicker.h"
 #include "Gwen/Controls/ColorControls.h"
 #include "Gwen/Controls/ColorPicker.h"
@@ -172,4 +172,3 @@ void HSVColorPicker::ColorSliderChanged( Gwen::Controls::Base* /*pControl*/ )
 		m_LerpBox->SetColor( m_ColorSlider->GetSelectedColor(),  true );
 	Invalidate();
 }
-#endif

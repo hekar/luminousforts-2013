@@ -6,7 +6,7 @@
 
 #include "cbase.h"
 #ifndef GWEN_NO_ANIMATION
-#ifdef GWEN_GUI
+
 #include "Gwen/Anim.h"
 #include "Gwen/Utility.h"
 #include <math.h>
@@ -139,5 +139,4 @@ bool Gwen::Anim::TimedAnimation::Finished()
 	return m_bFinished;
 }
 
-#endif
 #endif

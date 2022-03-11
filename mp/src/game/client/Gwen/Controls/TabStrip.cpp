@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 #include "Gwen/Controls/TabStrip.h"
@@ -184,4 +184,3 @@ void TabStrip::SetTabPosition( int iPos )
 		SetPadding( Padding( 5, 0, 0, 0 ) );
 	}
 }
-#endif

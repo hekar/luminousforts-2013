@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/TextBox.h"
 #include "Gwen/Skin.h"
@@ -409,4 +409,3 @@ void TextBox::OnEnter()
 {
 	onReturnPressed.Call( this );
 }
-#endif

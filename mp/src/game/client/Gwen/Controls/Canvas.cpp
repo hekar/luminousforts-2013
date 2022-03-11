@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/Canvas.h"
 #include "Gwen/Skin.h"
@@ -232,4 +232,3 @@ bool Canvas::InputMouseWheel( int val )
 
 	return Gwen::HoveredControl->OnMouseWheeled( val );
 }
-#endif

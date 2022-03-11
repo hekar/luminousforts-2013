@@ -1,4 +1,4 @@
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/SplitterBar.h"
 
@@ -21,4 +21,3 @@ void SplitterBar::Layout( Skin::Base* /*skin*/ )
 {
 	MoveTo( X(), Y() );
 }
-#endif

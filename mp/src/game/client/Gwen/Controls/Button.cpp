@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Skin.h"
 #include "Gwen/Controls/Button.h"
@@ -211,4 +211,3 @@ void Button::OnMouseDoubleClickLeft( int x, int y )
 	OnMouseClickLeft( x, y, true );
 	onDoubleClick.Call( this );
 }
-#endif

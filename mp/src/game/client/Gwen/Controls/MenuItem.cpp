@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/MenuItem.h"
 #include "Gwen/Skin.h"
@@ -186,4 +186,3 @@ void MenuItem::SizeToContents()
 		SetWidth( Width() + m_Accelerator->Width() );
 	}
 }
-#endif

@@ -5,7 +5,7 @@
 */
 
 #include "cbase.h"
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/DragAndDrop.h"
 #include "Gwen/Utility.h"
@@ -237,4 +237,3 @@ void DragAndDrop::RenderOverlay( Gwen::Controls::Canvas* /*pCanvas*/, Skin::Base
 
 	skin->GetRender()->SetRenderOffset( pntOld );
 }
-#endif

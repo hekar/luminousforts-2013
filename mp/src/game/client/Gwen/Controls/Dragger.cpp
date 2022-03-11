@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/Dragger.h"
 
 using namespace Gwen;
@@ -58,4 +58,3 @@ void Dragger::Render( Skin::Base* /*skin*/ )
 	//skin->DrawButton(this,false,false);
 }
 
-#endif

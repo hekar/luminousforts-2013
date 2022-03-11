@@ -28,7 +28,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
 #include "vgui_controls/Panel.h"
 #include <vgui/ISurface.h>
 #include "Mod/BaseGUI.h"
-#include "Mod/gwen/Gwen.h"
+#include "Mod/gwen/GwenStart.h"
 
 static Gwen::Renderer::Base *g_pRenderer  = NULL;
 static Gwen::Skin::Base *g_pSkin = NULL;

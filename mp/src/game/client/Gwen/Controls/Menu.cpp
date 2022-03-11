@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Controls/Menu.h"
 #include "Gwen/Skin.h"
@@ -176,4 +176,3 @@ void MenuDivider::Render( Gwen::Skin::Base* skin )
 {
 	skin->DrawMenuDivider( this );
 }
-#endif

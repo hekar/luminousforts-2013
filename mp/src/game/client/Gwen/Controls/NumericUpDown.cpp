@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/Utility.h"
 #include "Gwen/Skin.h"
@@ -116,4 +116,3 @@ void NumericUpDown::OnEnter()
 	SyncNumberFromText();
 	SyncTextFromNumber();
 }
-#endif

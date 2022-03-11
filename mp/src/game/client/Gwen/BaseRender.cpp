@@ -5,7 +5,7 @@
 */
 
 #include "cbase.h"
-#ifdef GWEN_GUI
+
 #include "Gwen/Gwen.h"
 #include "Gwen/BaseRender.h"
 #include "Gwen/Utility.h"
@@ -220,4 +220,3 @@ namespace Gwen
 		}
 	}
 }
-#endif

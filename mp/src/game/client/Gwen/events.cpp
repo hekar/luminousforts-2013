@@ -5,7 +5,7 @@
 */
 
 #include "cbase.h"
-#ifdef GWEN_GUI
+
 #include "Gwen/Events.h"
 
 using namespace Gwen;
@@ -142,4 +142,3 @@ void Caller::RemoveHandler( Event::Handler* pObject )
 	}
 
 }
-#endif

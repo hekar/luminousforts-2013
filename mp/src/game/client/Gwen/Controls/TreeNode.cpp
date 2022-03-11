@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/TreeNode.h"
 #include "Gwen/Controls/TreeControl.h"
 #include "Gwen/Utility.h"
@@ -248,4 +248,3 @@ void TreeNode::DeselectAll()
 	}
 }
 
-#endif

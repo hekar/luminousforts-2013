@@ -4,7 +4,7 @@
 	See license in Gwen.h
 */
 
-#ifdef GWEN_GUI
+
 #include "Gwen/Controls/ListBox.h"
 #include "Gwen/Controls/ScrollControl.h"
 #include "Gwen/InputHandler.h"
@@ -166,4 +166,3 @@ void ListBox::SelectByString( const TextObject& strName, bool bClearOthers )
 			SetSelectedRow( pChild, false );
 	}
 }
-#endif
